@@ -1,0 +1,10 @@
+[package]
+name = "wechat_makepad"
+version = "0.1.0"
+edition = "2021"
+
+# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+
+[dependencies]
+makepad-platform = { path = "../makepad/platform", version = "0.3.0" }
+makepad-widgets = { path = "../makepad/widgets", version = "0.3.0" }
