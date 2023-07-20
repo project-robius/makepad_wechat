@@ -10,8 +10,9 @@ use makepad_widgets::*;
 // the runtime to automatically update the affected widgets.
 live_design!{
     import makepad_widgets::desktop_window::DesktopWindow
-    import makepad_widgets::frame::*;
-    import makepad_widgets::radio_button::RadioButton;
+    import makepad_widgets::frame::*
+    import makepad_widgets::radio_button::RadioButton
+    import wechat_makepad::contacts::Contacts
 
     ICON_CHAT = dep("crate://self/resources/chat.svg")
     ICON_CONTACTS = dep("crate://self/resources/contacts.svg")
@@ -32,7 +33,7 @@ live_design!{
             color_inactive: #fff,
         }
         draw_label: {
-            color_selected: #0f0,
+            color_selected: #0b0,
             color_unselected: #000,
             color_unselected_hover: #111,
             text_style: <H3_TEXT_REGULAR> {}
@@ -45,19 +46,6 @@ live_design!{
         draw_bg: {
             fn pixel(self) -> vec4 {
                 return mix(#xeeaa00, #0, self.geom_pos.x / 3);
-            }
-        }
-    }
-
-    Screen2 = <Frame> {
-        show_bg: true,
-        walk: {width: Fill, height: Fill}
-        draw_bg: {
-            fn pixel(self) -> vec4 {
-                // Gradient color effect starting from a yellow tone
-                // The final color would be black, however the x value is divided to 3
-                // so the color gets darker slower.
-                return mix(#x339900, #0, self.geom_pos.x / 3);
             }
         }
     }
@@ -99,7 +87,7 @@ live_design!{
                     layout: {padding: 0.0}
                     
                     tab1_frame = <Home> {}
-                    tab2_frame = <Screen2> {visible: false}
+                    tab2_frame = <Contacts> {visible: false}
                     tab3_frame = <Screen3> {visible: false}
                     tab4_frame = <Screen3> {visible: false}
                 }
@@ -123,13 +111,13 @@ live_design!{
                                 fn get_color(self) -> vec4 {
                                     return mix(
                                         #000,
-                                        #0f0,
+                                        #0b0,
                                         self.selected
                                     )
                                 }
                             }
                             walk: {width: Fill}
-                            icon_walk: {width: 30, height: 30}
+                            icon_walk: {width: 20, height: 20}
                             layout: {flow: Down, spacing: 5.0, align: {x: 0.5, y: 0.5}}
                         }
                         tab2 = <AppTab> {
@@ -139,13 +127,13 @@ live_design!{
                                 fn get_color(self) -> vec4 {
                                     return mix(
                                         #000,
-                                        #0f0,
+                                        #0b0,
                                         self.selected
                                     )
                                 }
                             }
                             walk: {width: Fill}
-                            icon_walk: {width: 30, height: 30}
+                            icon_walk: {width: 20, height: 20}
                             layout: {flow: Down, spacing: 5.0, align: {x: 0.5, y: 0.5}}
                         }
                         tab3 = <AppTab> {
@@ -155,13 +143,13 @@ live_design!{
                                 fn get_color(self) -> vec4 {
                                     return mix(
                                         #000,
-                                        #0f0,
+                                        #0b0,
                                         self.selected
                                     )
                                 }
                             }
                             walk: {width: Fill}
-                            icon_walk: {width: 30, height: 30}
+                            icon_walk: {width: 20, height: 20}
                             layout: {flow: Down, spacing: 5.0, align: {x: 0.5, y: 0.5}}
                         }
                         tab4 = <AppTab> {
@@ -171,13 +159,13 @@ live_design!{
                                 fn get_color(self) -> vec4 {
                                     return mix(
                                         #000,
-                                        #0f0,
+                                        #0b0,
                                         self.selected
                                     )
                                 }
                             }
                             walk: {width: Fill}
-                            icon_walk: {width: 30, height: 30}
+                            icon_walk: {width: 20, height: 20}
                             layout: {flow: Down, spacing: 5.0, align: {x: 0.5, y: 0.5}}
                         }
                     }
@@ -214,7 +202,7 @@ impl App {
 impl LiveHook for App {
     fn before_live_design(cx: &mut Cx) {
         crate::makepad_widgets::live_design(cx);
-        //crate::app_desktop::live_design(cx);
+        crate::contacts::live_design(cx);
     }
 }
 
