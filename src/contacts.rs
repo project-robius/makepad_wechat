@@ -12,10 +12,14 @@ live_design!{
         font: {path: dep("crate://makepad-widgets/resources/IBMPlexSans-Text.ttf")}
     }
 
-    SEARCH_TEXT = {
-        font_size: (10),
+    REGULAR_TEXT = {
+        font_size: (12),
         font: {path: dep("crate://makepad-widgets/resources/IBMPlexSans-Text.ttf")}
     }
+
+    IMG_NEW_FRIENDS = dep("crate://self/resources/new_friends.png")
+    IMG_GROUP_CHATS = dep("crate://self/resources/group_chats.png")
+    IMG_TAGS = dep("crate://self/resources/tags.png")
 
     Header = <Box> {
         walk: {width: Fill, height: Fit}
@@ -54,10 +58,10 @@ live_design!{
                 color: #fff
             }
             draw_label: {
-                text_style:<SEARCH_TEXT>{},
+                text_style:<REGULAR_TEXT>{},
 
                 fn get_color(self) -> vec4 {
-                    return #333
+                    return #ccc
                 }
             }
 
@@ -79,6 +83,7 @@ live_design!{
                 }
             }
 
+            // TODO find a way to override colors
             draw_select: {
                 instance hover: 0.0
                 instance focus: 0.0
@@ -99,14 +104,110 @@ live_design!{
         }
     }
 
-    Contacts = <Frame> {
-        show_bg: true,
+    Divider = <Frame> {
+        walk: {width: Fill, height: Fit}
+        layout: {flow: Down}
+        <Box> {
+            walk: {width: Fill, height: 1.}
+            draw_bg: {color: (#ccc)}
+        }
+    }
+
+    Options = <Frame> {
         walk: {width: Fill, height: Fill}
+        layout: {padding: 0, spacing: 0., flow: Down}
+
+        <Frame> {
+            walk: {width: Fit, height: Fit}
+            layout: {
+                padding: {left: 10., top: 10., bottom: 8.}
+                align: {x: 0.0, y: 0.5}, spacing: 10., flow: Right
+            }
+
+            <Image> {
+                image: (IMG_NEW_FRIENDS),
+                walk: {width: 36., height: 36.}
+                layout: {padding: 0}
+            }
+
+            <Label> {
+                walk: {width: Fit, height: Fit}
+                draw_label: {
+                    color: #000,
+                    text_style: <REGULAR_TEXT>{},
+                },
+                label: "New Friends"
+            }
+        }
+
+        <Divider> {
+            walk: {margin: {left: 50.0}}
+        }
+
+        <Frame> {
+            walk: {width: Fit, height: Fit}
+            layout: {
+                padding: {left: 10., top: 10., bottom: 8.}
+                align: {x: 0.0, y: 0.5}, spacing: 10., flow: Right
+            }
+
+            <Image> {
+                image: (IMG_GROUP_CHATS),
+                walk: {width: 36., height: 36.}
+                layout: {padding: 0}
+            }
+
+            <Label> {
+                walk: {width: Fit, height: Fit}
+                draw_label: {
+                    color: #000,
+                    text_style: <REGULAR_TEXT>{},
+                },
+                label: "Group Chats"
+            }
+        }
+
+        <Divider> {
+            walk: {margin: {left: 50.0}}
+        }
+
+        <Frame> {
+            walk: {width: Fit, height: Fit}
+            layout: {
+                padding: {left: 10., top: 10., bottom: 8.}
+                align: {x: 0.0, y: 0.5}, spacing: 10., flow: Right
+            }
+
+            <Image> {
+                image: (IMG_TAGS),
+                walk: {width: 36., height: 36.}
+                layout: {padding: 0}
+            }
+
+            <Label> {
+                walk: {width: Fit, height: Fit}
+                draw_label: {
+                    color: #000,
+                    text_style: <REGULAR_TEXT>{},
+                },
+                label: "Tags"
+            }
+        }
+
+        <Divider> {}
+    }
+
+    Contacts = <Frame> {
+        show_bg: true
+        walk: {width: Fill, height: Fill}
+        layout: {flow: Down}
+
         draw_bg: {
             color: #fff
         }
 
         <Header> {}
+        <Options> {}
     }
 }
 

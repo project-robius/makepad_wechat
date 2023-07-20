@@ -86,8 +86,8 @@ live_design!{
                     walk: {margin: 0.0}
                     layout: {padding: 0.0}
                     
-                    tab1_frame = <Home> {}
-                    tab2_frame = <Contacts> {visible: false}
+                    tab1_frame = <Home> {visible: false}
+                    tab2_frame = <Contacts> {visible: true}
                     tab3_frame = <Screen3> {visible: false}
                     tab4_frame = <Screen3> {visible: false}
                 }
@@ -104,7 +104,7 @@ live_design!{
                     
                     mobile_modes = <Frame> {
                         tab1 = <AppTab> {
-                            state: {selected = {default: on}},
+                            //state: {selected = {default: on}},
                             label: "Chat"
                             draw_icon: {
                                 svg_file: (ICON_CHAT),
@@ -121,6 +121,7 @@ live_design!{
                             layout: {flow: Down, spacing: 5.0, align: {x: 0.5, y: 0.5}}
                         }
                         tab2 = <AppTab> {
+                            state: {selected = {default: on}}
                             label: "Contacts",
                             draw_icon: {
                                 svg_file: (ICON_CONTACTS),
