@@ -20,6 +20,9 @@ live_design!{
     IMG_NEW_FRIENDS = dep("crate://self/resources/new_friends.png")
     IMG_GROUP_CHATS = dep("crate://self/resources/group_chats.png")
     IMG_TAGS = dep("crate://self/resources/tags.png")
+    IMG_DEFAULT_AVATAR = dep("crate://self/resources/default_avatar.png")
+    IMG_WECHAT_AVATAR = dep("crate://self/resources/wechat_avatar.png")
+    IMG_FILE_TRANSFER = dep("crate://self/resources/file_transfer_avatar.png")
 
     Header = <Box> {
         walk: {width: Fill, height: Fit}
@@ -109,28 +112,25 @@ live_design!{
         layout: {flow: Down}
         <Box> {
             walk: {width: Fill, height: 1.}
-            draw_bg: {color: (#ccc)}
+            draw_bg: {color: (#ddd)}
         }
     }
 
-    Options = <Frame> {
-        walk: {width: Fill, height: Fill}
-        layout: {padding: 0, spacing: 0., flow: Down}
+    OptionsItem = <Frame> {
+        walk: {width: Fill, height: Fit}
+        layout: {padding: {left: 10., top: 10., bottom: 8.}, spacing: 8., flow: Down}
 
-        <Frame> {
+        content = <Frame> {
             walk: {width: Fit, height: Fit}
-            layout: {
-                padding: {left: 10., top: 10., bottom: 8.}
-                align: {x: 0.0, y: 0.5}, spacing: 10., flow: Right
-            }
+            layout: {padding: 0, align: {x: 0.0, y: 0.5}, spacing: 10., flow: Right}
 
-            <Image> {
+            icon = <Image> {
                 image: (IMG_NEW_FRIENDS),
                 walk: {width: 36., height: 36.}
                 layout: {padding: 0}
             }
-
-            <Label> {
+    
+            label = <Label> {
                 walk: {width: Fit, height: Fit}
                 draw_label: {
                     color: #000,
@@ -140,67 +140,180 @@ live_design!{
             }
         }
 
-        <Divider> {
-            walk: {margin: {left: 50.0}}
+        divider = <Divider> {
+            walk: {margin: {left: 42.0}}
+        }
+    }
+
+    Options = <Frame> {
+        walk: {width: Fill, height: Fit, margin: {left: 6.0}}
+        layout: {padding: 0, spacing: 0., flow: Down}
+
+        <OptionsItem> {
+            content = {
+                icon = {
+                    image: (IMG_NEW_FRIENDS)
+                }
+
+                label = {
+                    label: "New Friends"
+                }
+            }
         }
 
-        <Frame> {
-            walk: {width: Fit, height: Fit}
-            layout: {
-                padding: {left: 10., top: 10., bottom: 8.}
-                align: {x: 0.0, y: 0.5}, spacing: 10., flow: Right
+        <OptionsItem> {
+            content = {
+                icon = {
+                    image: (IMG_GROUP_CHATS)
+                }
+
+                label = {
+                    label: "Group Chats"
+                }
+            }
+        }
+
+        <OptionsItem> {
+            content = {
+                icon = {
+                    image: (IMG_TAGS)
+                }
+
+                label = {
+                    label: "Tags"
+                }
             }
 
-            <Image> {
-                image: (IMG_GROUP_CHATS),
+            divider = <Divider> {}
+        }
+    }
+
+    ContactItem = <Frame> {
+        walk: {width: Fill, height: Fit}
+        layout: {padding: {left: 10., top: 10., bottom: 8.}, flow: Down}
+
+        content = <Frame> {
+            walk: {width: Fill, height: Fit}
+            layout: {padding: {top: 4., bottom: 8.}, align: {x: 0.0, y: 0.5}, spacing: 10., flow: Right}
+            avatar = <Image> {
+                image: (IMG_DEFAULT_AVATAR),
                 walk: {width: 36., height: 36.}
                 layout: {padding: 0}
             }
 
-            <Label> {
+            label = <Label> {
                 walk: {width: Fit, height: Fit}
                 draw_label: {
                     color: #000,
                     text_style: <REGULAR_TEXT>{},
-                },
-                label: "Group Chats"
-            }
-        }
-
-        <Divider> {
-            walk: {margin: {left: 50.0}}
-        }
-
-        <Frame> {
-            walk: {width: Fit, height: Fit}
-            layout: {
-                padding: {left: 10., top: 10., bottom: 8.}
-                align: {x: 0.0, y: 0.5}, spacing: 10., flow: Right
-            }
-
-            <Image> {
-                image: (IMG_TAGS),
-                walk: {width: 36., height: 36.}
-                layout: {padding: 0}
-            }
-
-            <Label> {
-                walk: {width: Fit, height: Fit}
-                draw_label: {
-                    color: #000,
-                    text_style: <REGULAR_TEXT>{},
-                },
-                label: "Tags"
+                }
             }
         }
 
         <Divider> {}
     }
 
+    ContactGroup = <Frame> {
+        walk: {width: Fill, height: Fit, margin: {left: 6.0}}
+        layout: {padding: {top: 20.}, spacing: 0., flow: Down}
+
+        header = <Frame> {
+            walk: {width: Fit, height: Fit}
+            layout: {
+                padding: {left: 10., top: 10., bottom: 0.}
+            }
+            label = <Label> {
+                walk: {width: Fit, height: Fit}
+                draw_label: {
+                    color: #777,
+                    text_style: <REGULAR_TEXT>{font_size: 10.},
+                }
+            }
+        }
+
+        // ContactItem
+        // ContactItem
+    }
+
+    ContactsList = <Frame> {
+        walk: {width: Fill, height: Fill}
+        layout: {flow: Down, spacing: 0.0}
+
+        <ContactGroup> {
+            header = {
+                label = {
+                    label: "F"
+                }
+            }
+
+           <ContactItem> {
+                content = {
+                    avatar = {
+                        image: (IMG_FILE_TRANSFER)
+                    }
+                    label = {
+                        label: "File Transfer"
+                    }
+                }
+            }
+        }
+
+        <ContactGroup> {
+            header = {
+                label = {
+                    label: "J"
+                }
+            }
+    
+            <ContactItem> {
+                content = {
+                    label = {
+                        label: "John Doe"
+                    }
+                }
+            }
+
+            <ContactItem> {
+                content = {
+                    label = {
+                        label: "Jorge Bejar"
+                    }
+                }
+            }
+
+            <ContactItem> {
+                content = {
+                    label = {
+                        label: "Julian Montes de Oca"
+                    }
+                }
+            }
+        }
+
+        <ContactGroup> {
+            header = {
+                label = {
+                    label: "W"
+                }
+            }
+    
+            <ContactItem> {
+                content = {
+                    avatar = {
+                        image: (IMG_WECHAT_AVATAR)
+                    }
+                    label = {
+                        label: "WeChat Team"
+                    }
+                }
+            }
+        }
+    }
+
     Contacts = <Frame> {
         show_bg: true
         walk: {width: Fill, height: Fill}
-        layout: {flow: Down}
+        layout: {flow: Down, spacing: 0.0}
 
         draw_bg: {
             color: #fff
@@ -208,6 +321,7 @@ live_design!{
 
         <Header> {}
         <Options> {}
+        <ContactsList> {}
     }
 }
 
