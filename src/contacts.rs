@@ -1,6 +1,7 @@
 use makepad_widgets::*;
 
 live_design!{
+    import makepad_widgets::scroll_bars::ScrollBars;
     import makepad_widgets::frame::*;
     import makepad_widgets::label::Label;
     import makepad_widgets::text_input::TextInput;
@@ -230,13 +231,10 @@ live_design!{
                 }
             }
         }
-
-        // ContactItem
-        // ContactItem
     }
 
     ContactsList = <Frame> {
-        walk: {width: Fill, height: Fill}
+        walk: {width: Fill, height: Fit}
         layout: {flow: Down, spacing: 0.0}
 
         <ContactGroup> {
@@ -293,6 +291,22 @@ live_design!{
         <ContactGroup> {
             header = {
                 label = {
+                    label: "R"
+                }
+            }
+
+           <ContactItem> {
+                content = {
+                    label = {
+                        label: "Rik Arends"
+                    }
+                }
+            }
+        }
+
+        <ContactGroup> {
+            header = {
+                label = {
                     label: "W"
                 }
             }
@@ -320,17 +334,38 @@ live_design!{
         }
 
         <Header> {}
-        <Options> {}
-        <ContactsList> {}
+
+        content = <Frame> {
+            walk: {height: Fill}, 
+            layout: {flow: Down, spacing: 0.0}
+            scroll_bars: <ScrollBars> {show_scroll_x: false, show_scroll_y: true}
+
+            <Options> {}
+            <ContactsList> {}
+
+            <Frame> {
+                walk: {width: Fill, height: Fit}
+                layout: {padding: {top: 14., bottom: 50.}, align: {x: 0.5, y: 0.}}
+
+                <Label> {
+                    walk: {width: Fit, height: Fit}
+                    draw_label: {
+                        color: #777,
+                        text_style: <REGULAR_TEXT>{},
+                    }
+                    label: "3 friends"
+                }
+            }
+        }
     }
 }
 
 #[derive(Live)]
 pub struct Contacts {
-    // It is mandatory to list here all the fields that are part of the live design block.
-    // You need to annotate them with `#[live]`
     #[live] walk: Walk,
     #[live] layout: Layout,
+
+    #[rust] area: Area,
 }
 
 impl LiveHook for Contacts {
@@ -340,20 +375,10 @@ impl LiveHook for Contacts {
 }
 
 impl Widget for Contacts {
-    fn handle_widget_event_with(
-        &mut self,
-        _cx: &mut Cx,
-        _event: &Event,
-        _dispatch_action: &mut dyn FnMut(&mut Cx, WidgetActionItem)
-    ) {
-        // self.handle_event_with(cx, event, &mut | cx, action | {
-        //     dispatch_action(cx, action);
-        // });
-    }
-
     fn get_walk(&self)->Walk{ self.walk }
 
-    fn redraw(&mut self, _cx:&mut Cx){
+    fn redraw(&mut self, cx:&mut Cx){
+        self.area.redraw(cx)
     }
 
     fn draw_walk_widget(&mut self, _cx: &mut Cx2d, _walk: Walk) -> WidgetDraw {
