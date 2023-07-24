@@ -203,6 +203,7 @@ impl App {
 impl LiveHook for App {
     fn before_live_design(cx: &mut Cx) {
         crate::makepad_widgets::live_design(cx);
+        crate::contacts::contacts_list::live_design(cx);
         crate::contacts::live_design(cx);
     }
 }

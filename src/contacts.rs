@@ -1,3 +1,5 @@
+pub mod contacts_list;
+
 use makepad_widgets::*;
 
 live_design!{
@@ -7,6 +9,8 @@ live_design!{
     import makepad_widgets::text_input::TextInput;
 
     import makepad_draw::shader::std::*;
+
+    import wechat_makepad::contacts::contacts_list::ContactsList
 
     TITLE_TEXT = {
         font_size: (14),
@@ -21,9 +25,6 @@ live_design!{
     IMG_NEW_FRIENDS = dep("crate://self/resources/new_friends.png")
     IMG_GROUP_CHATS = dep("crate://self/resources/group_chats.png")
     IMG_TAGS = dep("crate://self/resources/tags.png")
-    IMG_DEFAULT_AVATAR = dep("crate://self/resources/default_avatar.png")
-    IMG_WECHAT_AVATAR = dep("crate://self/resources/wechat_avatar.png")
-    IMG_FILE_TRANSFER = dep("crate://self/resources/file_transfer_avatar.png")
 
     Header = <Box> {
         walk: {width: Fill, height: Fit}
@@ -186,141 +187,6 @@ live_design!{
             }
 
             divider = <Divider> {}
-        }
-    }
-
-    ContactItem = <Frame> {
-        walk: {width: Fill, height: Fit}
-        layout: {padding: {left: 10., top: 10., bottom: 8.}, flow: Down}
-
-        content = <Frame> {
-            walk: {width: Fill, height: Fit}
-            layout: {padding: {top: 4., bottom: 8.}, align: {x: 0.0, y: 0.5}, spacing: 10., flow: Right}
-            avatar = <Image> {
-                image: (IMG_DEFAULT_AVATAR),
-                walk: {width: 36., height: 36.}
-                layout: {padding: 0}
-            }
-
-            label = <Label> {
-                walk: {width: Fit, height: Fit}
-                draw_label: {
-                    color: #000,
-                    text_style: <REGULAR_TEXT>{},
-                }
-            }
-        }
-
-        <Divider> {}
-    }
-
-    ContactGroup = <Frame> {
-        walk: {width: Fill, height: Fit, margin: {left: 6.0}}
-        layout: {padding: {top: 20.}, spacing: 0., flow: Down}
-
-        header = <Frame> {
-            walk: {width: Fit, height: Fit}
-            layout: {
-                padding: {left: 10., top: 10., bottom: 0.}
-            }
-            label = <Label> {
-                walk: {width: Fit, height: Fit}
-                draw_label: {
-                    color: #777,
-                    text_style: <REGULAR_TEXT>{font_size: 10.},
-                }
-            }
-        }
-    }
-
-    ContactsList = <Frame> {
-        walk: {width: Fill, height: Fit}
-        layout: {flow: Down, spacing: 0.0}
-
-        <ContactGroup> {
-            header = {
-                label = {
-                    label: "F"
-                }
-            }
-
-           <ContactItem> {
-                content = {
-                    avatar = {
-                        image: (IMG_FILE_TRANSFER)
-                    }
-                    label = {
-                        label: "File Transfer"
-                    }
-                }
-            }
-        }
-
-        <ContactGroup> {
-            header = {
-                label = {
-                    label: "J"
-                }
-            }
-    
-            <ContactItem> {
-                content = {
-                    label = {
-                        label: "John Doe"
-                    }
-                }
-            }
-
-            <ContactItem> {
-                content = {
-                    label = {
-                        label: "Jorge Bejar"
-                    }
-                }
-            }
-
-            <ContactItem> {
-                content = {
-                    label = {
-                        label: "Julian Montes de Oca"
-                    }
-                }
-            }
-        }
-
-        <ContactGroup> {
-            header = {
-                label = {
-                    label: "R"
-                }
-            }
-
-           <ContactItem> {
-                content = {
-                    label = {
-                        label: "Rik Arends"
-                    }
-                }
-            }
-        }
-
-        <ContactGroup> {
-            header = {
-                label = {
-                    label: "W"
-                }
-            }
-    
-            <ContactItem> {
-                content = {
-                    avatar = {
-                        image: (IMG_WECHAT_AVATAR)
-                    }
-                    label = {
-                        label: "WeChat Team"
-                    }
-                }
-            }
         }
     }
 
