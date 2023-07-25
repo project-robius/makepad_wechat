@@ -104,7 +104,6 @@ live_design!{
                     
                     mobile_modes = <Frame> {
                         tab1 = <AppTab> {
-                            //state: {selected = {default: on}},
                             label: "Chat"
                             draw_icon: {
                                 svg_file: (ICON_CHAT),

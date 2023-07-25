@@ -265,26 +265,3 @@ live_design!{
         }
     }
 }
-
-#[derive(Live)]
-pub struct Contacts {
-    #[live] walk: Walk,
-    #[live] layout: Layout,
-}
-
-impl LiveHook for Contacts {
-    fn before_live_design(cx:&mut Cx){
-        register_widget!(cx, Contacts);
-    }
-}
-
-impl Widget for Contacts {
-    fn get_walk(&self)->Walk{ self.walk }
-
-    fn redraw(&mut self, cx:&mut Cx){
-    }
-
-    fn draw_walk_widget(&mut self, _cx: &mut Cx2d, _walk: Walk) -> WidgetDraw {
-        WidgetDraw::done()
-    }
-}

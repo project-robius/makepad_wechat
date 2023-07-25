@@ -133,6 +133,7 @@ impl Widget for ContactsGroup {
     fn get_walk(&self)->Walk{ self.walk }
 
     fn redraw(&mut self, cx:&mut Cx){
+        self.header.redraw(cx);
     }
 
     fn draw_walk_widget(&mut self, cx: &mut Cx2d, walk: Walk) -> WidgetDraw {
