@@ -261,8 +261,6 @@ live_design!{
 pub struct Contacts {
     #[live] walk: Walk,
     #[live] layout: Layout,
-
-    #[rust] area: Area,
 }
 
 impl LiveHook for Contacts {
@@ -275,11 +273,9 @@ impl Widget for Contacts {
     fn get_walk(&self)->Walk{ self.walk }
 
     fn redraw(&mut self, cx:&mut Cx){
-        self.area.redraw(cx)
     }
 
     fn draw_walk_widget(&mut self, _cx: &mut Cx2d, _walk: Walk) -> WidgetDraw {
-        // let _ = self.draw_walk(cx, walk);
         WidgetDraw::done()
     }
 }

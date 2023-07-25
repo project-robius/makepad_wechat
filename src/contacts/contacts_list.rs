@@ -106,7 +106,6 @@ struct ContactInfo {
     kind: ContactKind
 }
 
-// #####################
 #[derive(Clone, Debug, Default, Eq, Hash, Copy, PartialEq, FromLiveId)]
 pub struct ContactItemId(pub LiveId);
 
@@ -119,8 +118,6 @@ pub struct ContactsGroup {
     #[live] people_contact_template: Option<LivePtr>,
     #[live] file_transfer_template: Option<LivePtr>,
     #[live] wechat_template: Option<LivePtr>,
-
-    #[rust] area: Area,
 
     #[rust] data: Vec<ContactInfo>,
     #[rust] contacts: ComponentMap<ContactItemId, FrameRef>,
@@ -136,7 +133,6 @@ impl Widget for ContactsGroup {
     fn get_walk(&self)->Walk{ self.walk }
 
     fn redraw(&mut self, cx:&mut Cx){
-        self.area.redraw(cx)
     }
 
     fn draw_walk_widget(&mut self, cx: &mut Cx2d, walk: Walk) -> WidgetDraw {
@@ -182,8 +178,6 @@ impl ContactsGroupRef {
         }
     }
 }
-
-// #####################
 
 #[derive(Clone, PartialEq, WidgetRef)]
 pub struct ContactsGroupRef(WidgetRef);
@@ -239,8 +233,6 @@ impl Widget for ContactsList {
 
 impl ContactsList {
     pub fn draw_walk(&mut self, cx: &mut Cx2d, walk: Walk) {
-        // This was needed to apply the layout defined for TodoList in the live design block.
-        // Otherwise, it is ignored.
         cx.begin_turtle(walk, self.layout);
 
         for group in self.group_by_first_letter().iter() {
@@ -260,9 +252,9 @@ impl ContactsList {
     }
 
     pub fn group_by_first_letter(&self) -> Vec<Vec<ContactInfo>> {
-        // We assume data is sorted by name
         let mut grouped_data: Vec<Vec<ContactInfo>> = vec![];
 
+        // We assume data is sorted by name
         for contact in self.data.iter() {
             let first_char = contact.name.chars().next().unwrap_or('\0');
 
