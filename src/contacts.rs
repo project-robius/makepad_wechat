@@ -120,7 +120,7 @@ live_design!{
 
     OptionsItem = <Frame> {
         walk: {width: Fill, height: Fit}
-        layout: {padding: {left: 10., top: 10., bottom: 8.}, spacing: 8., flow: Down}
+        layout: {padding: {left: 10., top: 10., bottom: 2.}, spacing: 8., flow: Down}
 
         content = <Frame> {
             walk: {width: Fit, height: Fit}

@@ -24,11 +24,11 @@ live_design!{
 
     ContactItem = <Frame> {
         walk: {width: Fill, height: Fit}
-        layout: {padding: {left: 10., top: 10., bottom: 8.}, flow: Down}
+        layout: {padding: {left: 10., top: 10., bottom: 4.}, flow: Down}
 
         content = <Frame> {
             walk: {width: Fill, height: Fit}
-            layout: {padding: {top: 4., bottom: 8.}, align: {x: 0.0, y: 0.5}, spacing: 10., flow: Right}
+            layout: {padding: {top: 4., bottom: 6.}, align: {x: 0.0, y: 0.5}, spacing: 10., flow: Right}
             avatar = <Image> {
                 image: (IMG_DEFAULT_AVATAR),
                 walk: {width: 36., height: 36.}
