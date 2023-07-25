@@ -6,6 +6,7 @@ live_design!{
     import makepad_widgets::scroll_bars::ScrollBars;
     import makepad_widgets::frame::*;
     import makepad_widgets::label::Label;
+    import makepad_widgets::button::Button;
     import makepad_widgets::text_input::TextInput;
 
     import makepad_draw::shader::std::*;
@@ -39,13 +40,43 @@ live_design!{
             layout: {flow: Right, spacing: 6.0, padding: 0}
         }
 
-        title = <Label> {
-            walk: { width: Fit, height: Fit },
-            draw_label: {
-                color: #000,
-                text_style: <TITLE_TEXT>{},
-            },
-            label: "Contacts"
+        <Frame> {
+            walk: {width: Fill, height: Fit}
+            layout: {flow: Overlay}
+
+            <Frame> {
+                walk: {width: Fill, height: Fit}
+                layout: {align: {x: 0.5, y: 0.0}}
+
+                title = <Label> {
+                    walk: {width: Fit, height: Fit},
+                    draw_label: {
+                        color: #000,
+                        text_style: <TITLE_TEXT>{},
+                    },
+                    label: "Contacts"
+                }
+            }
+
+            <Frame> {
+                // Filler frame. This frame is used to push the account icon to the right.
+                <Frame> {walk: {width: Fill, height: Fit}}
+                <Button> {
+                    walk: {width: Fit, height: 68}
+                    icon_walk: {width: 20, height: 68}
+                    draw_bg: {
+                        fn pixel(self) -> vec4 {
+                            let sdf = Sdf2d::viewport(self.pos * self.rect_size);
+                            return sdf.result
+                        }
+                    }
+                    draw_icon: {
+                        svg_file: dep("crate://self/resources/add_contact.svg")
+                        color: #000;
+                        brightness: 0.8;
+                    }
+                }
+            }
         }
 
         search = <TextInput> {
