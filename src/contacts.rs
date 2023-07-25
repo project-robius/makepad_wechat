@@ -27,11 +27,11 @@ live_design!{
     IMG_GROUP_CHATS = dep("crate://self/resources/group_chats.png")
     IMG_TAGS = dep("crate://self/resources/tags.png")
 
-    Header = <Box> {
-        walk: {width: Fill, height: Fit}
-        layout: {padding: 0, align: {x: 0.5, y: 0.0}, spacing: 6.0, flow: Down}
+    Header = <Frame>{
+        walk: {width: Fill, height: Fit, margin: 0}
+        layout: {padding: {bottom: 10.}, align: {x: 0.5, y: 0.0}, spacing: 6.0, flow: Down}
+        show_bg: true
         draw_bg: {
-            instance radius: 0.0,
             color: #ddd
         }
 
@@ -78,8 +78,16 @@ live_design!{
                 }
             }
         }
+    }
 
-        search = <TextInput> {
+    SearchBar = <Frame> {
+        walk: {width: Fill, height: Fit}
+        show_bg: true
+        draw_bg: {
+            color: #ddd;
+        }
+
+        <TextInput> {
             walk: {width: Fill, height: Fit, margin: {left: 5.0, right: 5.0, top: 5.0, bottom: 15.0}}
             layout: {
                 clip_x: true,
@@ -234,9 +242,10 @@ live_design!{
 
         content = <Frame> {
             walk: {height: Fill}, 
-            layout: {flow: Down, spacing: 0.0}
+            layout: {flow: Down, spacing: 0}
             scroll_bars: <ScrollBars> {show_scroll_x: false, show_scroll_y: true}
 
+            <SearchBar> {}
             <Options> {}
             <ContactsList> {}
 
