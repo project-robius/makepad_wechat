@@ -47,8 +47,8 @@ live_design!{
 
             <Frame> {
                 back_button = <Button> {
-                    walk: {width: Fit, height: 68}
-                    icon_walk: {width: 20, height: 68}
+                    walk: {width: Fit, height: 40}
+                    icon_walk: {width: 10, height: 40}
                     draw_bg: {
                         fn pixel(self) -> vec4 {
                             let sdf = Sdf2d::viewport(self.pos * self.rect_size);
@@ -56,7 +56,7 @@ live_design!{
                         }
                     }
                     draw_icon: {
-                        svg_file: dep("crate://self/resources/add_contact.svg")
+                        svg_file: dep("crate://self/resources/back.svg")
                         color: #000;
                         brightness: 0.8;
                     }
