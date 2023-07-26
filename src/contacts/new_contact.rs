@@ -9,58 +9,31 @@ live_design!{
 
     import makepad_draw::shader::std::*;
 
+    import wechat_makepad::contacts::header::*
+
     TITLE_TEXT = {
         font_size: (14),
         font: {path: dep("crate://makepad-widgets/resources/IBMPlexSans-Text.ttf")}
     }
 
-    Header = <Frame>{
-        walk: {width: Fill, height: Fit, margin: 0}
-        layout: {padding: {bottom: 10.}, align: {x: 0.5, y: 0.0}, spacing: 6.0, flow: Down}
-        show_bg: true
-        draw_bg: {
-            color: #ddd
-        }
-
-        os_header_placeholder = <Box> {
-            walk: {width: Fill, height: 50, margin: 0}
-            layout: {flow: Right, spacing: 6.0, padding: 0}
-        }
-
-        <Frame> {
-            walk: {width: Fill, height: Fit}
-            layout: {flow: Overlay}
-
-            <Frame> {
-                walk: {width: Fill, height: Fit}
-                layout: {align: {x: 0.5, y: 0.0}}
-
-                title = <Label> {
-                    walk: {width: Fit, height: Fit},
-                    draw_label: {
-                        color: #000,
-                        text_style: <TITLE_TEXT>{},
-                    },
+    NewContactHeader = <Header> {
+        content = {
+            title_container = {
+                title = {
                     label: "Add Contact"
                 }
             }
 
-            <Frame> {
-                back_button = <Button> {
-                    walk: {width: Fit, height: 40}
-                    icon_walk: {width: 10, height: 40}
-                    draw_bg: {
-                        fn pixel(self) -> vec4 {
-                            let sdf = Sdf2d::viewport(self.pos * self.rect_size);
-                            return sdf.result
-                        }
-                    }
+            button_container = {
+                left_button = {
+                    walk: {width: Fit}
+                    icon_walk: {width: 10}
                     draw_icon: {
                         svg_file: dep("crate://self/resources/back.svg")
-                        color: #000;
-                        brightness: 0.8;
                     }
                 }
+                // Disable the right button
+                right_button = <Frame> {}
             }
         }
     }
@@ -70,12 +43,14 @@ live_design!{
         walk: {width: Fill, height: Fill}
         frame: <Frame> {
             walk: {width: Fill, height: Fill}
+            layout: {flow: Down}
             show_bg: true
             draw_bg: {
                 color: #fff
             }
 
-            <Header> {}
+            <NewContactHeader> {}
+            <SearchBar> {}
         }
 
         offset: 500.0
@@ -144,7 +119,7 @@ impl NewContact {
 
         let actions = self.frame.handle_widget_event(cx, event);
         if actions.not_empty() {
-            if self.get_button(id!(back_button)).clicked(&actions) {
+            if self.get_button(id!(left_button)).clicked(&actions) {
                 self.animate_state(cx, id!(slide.hide));
             }
         }
