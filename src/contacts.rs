@@ -1,6 +1,9 @@
 pub mod contacts_list;
+pub mod new_contact;
 
 use makepad_widgets::*;
+use makepad_widgets::widget::WidgetCache;
+use crate::contacts::new_contact::NewContactRef;
 
 live_design!{
     import makepad_widgets::scroll_bars::ScrollBars;
@@ -12,6 +15,7 @@ live_design!{
     import makepad_draw::shader::std::*;
 
     import wechat_makepad::contacts::contacts_list::ContactsList
+    import wechat_makepad::contacts::new_contact::NewContact
 
     TITLE_TEXT = {
         font_size: (14),
@@ -61,7 +65,7 @@ live_design!{
             <Frame> {
                 // Filler frame. This frame is used to push the account icon to the right.
                 <Frame> {walk: {width: Fill, height: Fit}}
-                <Button> {
+                add_contact = <Button> {
                     walk: {width: Fit, height: 68}
                     icon_walk: {width: 20, height: 68}
                     draw_bg: {
@@ -229,7 +233,7 @@ live_design!{
         }
     }
 
-    Contacts = <Frame> {
+    ContactsBody = <Frame> {
         show_bg: true
         walk: {width: Fill, height: Fill}
         layout: {flow: Down, spacing: 0.0}
@@ -263,5 +267,55 @@ live_design!{
                 }
             }
         }
+    }
+
+    Contacts = {{Contacts}} {
+        frame: <Frame> {
+            layout: {flow: Overlay}
+
+            <ContactsBody> {}
+            new_contact = <NewContact> {}
+        }
+    }
+
+    ContactsScreen = <Frame> {
+        walk: {width: Fill, height: Fill}
+        <Contacts> {}
+    }
+}
+
+#[derive(Live)]
+pub struct Contacts {
+    #[live] frame: Frame
+}
+
+impl LiveHook for Contacts {
+    fn before_live_design(cx:&mut Cx){
+        register_widget!(cx, Contacts);
+    }
+}
+
+impl Widget for Contacts {
+    fn handle_widget_event_with(&mut self, cx: &mut Cx, event: &Event, dispatch_action: &mut dyn FnMut(&mut Cx, WidgetActionItem)) {
+        let actions = self.frame.handle_widget_event(cx, event);
+        if actions.not_empty() {
+            if self.get_button(id!(add_contact)).clicked(&actions) {
+                let mut new_contact_ref: NewContactRef = NewContactRef(self.get_widget(id!(new_contact)));
+                new_contact_ref.show(cx);
+            }
+        }
+    }
+
+    fn redraw(&mut self, cx:&mut Cx){
+        self.frame.redraw(cx);
+    }
+
+    fn find_widgets(&mut self, path: &[LiveId], cached: WidgetCache, results: &mut WidgetSet) {
+        self.frame.find_widgets(path, cached, results);
+    }
+
+    fn draw_walk_widget(&mut self, cx: &mut Cx2d, walk: Walk) -> WidgetDraw {
+        let _ = self.frame.draw_walk(cx, walk);
+        WidgetDraw::done()
     }
 }
