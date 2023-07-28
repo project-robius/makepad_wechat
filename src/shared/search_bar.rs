@@ -1,6 +1,6 @@
 use makepad_widgets::*;
 
-live_design!{
+live_design! {
     import makepad_draw::shader::std::*;
     import makepad_widgets::frame::*;
     import makepad_widgets::text_input::TextInput;

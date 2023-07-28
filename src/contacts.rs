@@ -2,7 +2,7 @@ pub mod contacts_list;
 
 use makepad_widgets::*;
 
-live_design!{
+live_design! {
     import makepad_draw::shader::std::*;
     import makepad_widgets::scroll_bars::ScrollBars;
     import makepad_widgets::frame::*;
@@ -64,7 +64,7 @@ live_design!{
                 walk: {width: 36., height: 36.}
                 layout: {padding: 0}
             }
-    
+
             label = <Label> {
                 walk: {width: Fit, height: Fit}
                 draw_label: {
@@ -135,7 +135,7 @@ live_design!{
         <Header> {}
 
         content = <Frame> {
-            walk: {height: Fill}, 
+            walk: {height: Fill},
             layout: {flow: Down, spacing: 0}
             scroll_bars: <ScrollBars> {show_scroll_x: false, show_scroll_y: true}
 
@@ -162,21 +162,24 @@ live_design!{
 
 #[derive(Live)]
 pub struct Contacts {
-    #[live] walk: Walk,
-    #[live] layout: Layout,
+    #[live]
+    walk: Walk,
+    #[live]
+    layout: Layout,
 }
 
 impl LiveHook for Contacts {
-    fn before_live_design(cx:&mut Cx){
+    fn before_live_design(cx: &mut Cx) {
         register_widget!(cx, Contacts);
     }
 }
 
 impl Widget for Contacts {
-    fn get_walk(&self)->Walk{ self.walk }
-
-    fn redraw(&mut self, _cx:&mut Cx){
+    fn get_walk(&self) -> Walk {
+        self.walk
     }
+
+    fn redraw(&mut self, _cx: &mut Cx) {}
 
     fn draw_walk_widget(&mut self, _cx: &mut Cx2d, _walk: Walk) -> WidgetDraw {
         WidgetDraw::done()

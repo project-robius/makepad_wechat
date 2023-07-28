@@ -1,6 +1,6 @@
 use makepad_widgets::*;
 
-live_design!{
+live_design! {
     import makepad_widgets::frame::*;
     import makepad_widgets::label::Label;
 
@@ -86,13 +86,13 @@ live_design!{
 enum ContactKind {
     People,
     FileTransfer,
-    WeChat
+    WeChat,
 }
 
 #[derive(Debug, Clone)]
 struct ContactInfo {
     name: String,
-    kind: ContactKind
+    kind: ContactKind,
 }
 
 #[derive(Clone, Debug, Default, Eq, Hash, Copy, PartialEq, FromLiveId)]
@@ -100,29 +100,38 @@ pub struct ContactItemId(pub LiveId);
 
 #[derive(Live)]
 pub struct ContactsGroup {
-    #[live] walk: Walk,
-    #[live] layout: Layout,
-    #[live] header: Frame,
-    
-    #[live] people_contact_template: Option<LivePtr>,
-    #[live] file_transfer_template: Option<LivePtr>,
-    #[live] wechat_template: Option<LivePtr>,
+    #[live]
+    walk: Walk,
+    #[live]
+    layout: Layout,
+    #[live]
+    header: Frame,
 
-    #[rust] data: Vec<ContactInfo>,
-    #[rust] contacts: ComponentMap<ContactItemId, FrameRef>,
+    #[live]
+    people_contact_template: Option<LivePtr>,
+    #[live]
+    file_transfer_template: Option<LivePtr>,
+    #[live]
+    wechat_template: Option<LivePtr>,
+
+    #[rust]
+    data: Vec<ContactInfo>,
+    #[rust]
+    contacts: ComponentMap<ContactItemId, FrameRef>,
 }
 
 impl LiveHook for ContactsGroup {
-    fn before_live_design(cx:&mut Cx){
+    fn before_live_design(cx: &mut Cx) {
         register_widget!(cx, ContactsGroup);
     }
 }
 
 impl Widget for ContactsGroup {
-    fn get_walk(&self)->Walk{ self.walk }
-
-    fn redraw(&mut self, cx:&mut Cx){
+    fn get_walk(&self) -> Walk {
+        self.walk
     }
+
+    fn redraw(&mut self, cx: &mut Cx) {}
 
     fn draw_walk_widget(&mut self, cx: &mut Cx2d, walk: Walk) -> WidgetDraw {
         let _ = self.draw_walk(cx, walk);
@@ -137,16 +146,18 @@ impl ContactsGroup {
 
         for contact in self.data.iter() {
             let contact_widget_id = LiveId::from_str(&contact.name).unwrap().into();
-            let current_contact = self.contacts.get_or_insert(cx, contact_widget_id, | cx | {
+            let current_contact = self.contacts.get_or_insert(cx, contact_widget_id, |cx| {
                 let template = match contact.kind {
                     ContactKind::People => self.people_contact_template,
                     ContactKind::FileTransfer => self.file_transfer_template,
-                    ContactKind::WeChat => self.wechat_template
+                    ContactKind::WeChat => self.wechat_template,
                 };
                 FrameRef::new_from_ptr(cx, template)
             });
 
-            current_contact.get_label(id!(content.label)).set_label(&contact.name);
+            current_contact
+                .get_label(id!(content.label))
+                .set_label(&contact.name);
             let _ = current_contact.draw_walk_widget(cx, walk);
         }
         cx.end_turtle();
@@ -179,38 +190,64 @@ pub struct ContactId(pub LiveId);
 
 #[derive(Live)]
 pub struct ContactsList {
-    #[live] walk: Walk,
-    #[live] layout: Layout,
+    #[live]
+    walk: Walk,
+    #[live]
+    layout: Layout,
 
-    #[live] group_template: Option<LivePtr>,
+    #[live]
+    group_template: Option<LivePtr>,
 
-    #[rust] area: Area,
+    #[rust]
+    area: Area,
 
-    #[rust] data: Vec<ContactInfo>,
-    #[rust] groups: ComponentMap<ContactsGroupId, ContactsGroupRef>,
+    #[rust]
+    data: Vec<ContactInfo>,
+    #[rust]
+    groups: ComponentMap<ContactsGroupId, ContactsGroupRef>,
 }
 
 impl LiveHook for ContactsList {
-    fn before_live_design(cx:&mut Cx){
+    fn before_live_design(cx: &mut Cx) {
         register_widget!(cx, ContactsList);
     }
 
     fn after_new_from_doc(&mut self, cx: &mut Cx) {
         self.data = vec![
-            ContactInfo { name: "File Transfer".to_string(), kind: ContactKind::FileTransfer },
-            ContactInfo { name: "John Doe".to_string(), kind: ContactKind::People },
-            ContactInfo { name: "Jorge Bejar".to_string(), kind: ContactKind::People },
-            ContactInfo { name: "Julian Montes de Oca".to_string(), kind: ContactKind::People },
-            ContactInfo { name: "Rik Arends".to_string(), kind: ContactKind::People },
-            ContactInfo { name: "WeChat Team".to_string(), kind: ContactKind::WeChat },
+            ContactInfo {
+                name: "File Transfer".to_string(),
+                kind: ContactKind::FileTransfer,
+            },
+            ContactInfo {
+                name: "John Doe".to_string(),
+                kind: ContactKind::People,
+            },
+            ContactInfo {
+                name: "Jorge Bejar".to_string(),
+                kind: ContactKind::People,
+            },
+            ContactInfo {
+                name: "Julian Montes de Oca".to_string(),
+                kind: ContactKind::People,
+            },
+            ContactInfo {
+                name: "Rik Arends".to_string(),
+                kind: ContactKind::People,
+            },
+            ContactInfo {
+                name: "WeChat Team".to_string(),
+                kind: ContactKind::WeChat,
+            },
         ];
     }
 }
 
 impl Widget for ContactsList {
-    fn get_walk(&self)->Walk{ self.walk }
+    fn get_walk(&self) -> Walk {
+        self.walk
+    }
 
-    fn redraw(&mut self, cx:&mut Cx){
+    fn redraw(&mut self, cx: &mut Cx) {
         self.area.redraw(cx)
     }
 
@@ -226,7 +263,7 @@ impl ContactsList {
 
         for group in self.group_by_first_letter().iter() {
             let group_widget_id = LiveId::from_str(&group[0].name).unwrap().into();
-            let current_group = self.groups.get_or_insert(cx, group_widget_id, | cx | {
+            let current_group = self.groups.get_or_insert(cx, group_widget_id, |cx| {
                 ContactsGroupRef::new_from_ptr(cx, self.group_template)
             });
 
@@ -250,7 +287,7 @@ impl ContactsList {
             match grouped_data.last_mut() {
                 Some(last_group) if last_group[0].name.starts_with(first_char) => {
                     last_group.push(contact.clone());
-                },
+                }
                 _ => {
                     grouped_data.push(vec![contact.clone()]);
                 }

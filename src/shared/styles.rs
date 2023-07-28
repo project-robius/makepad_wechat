@@ -15,12 +15,12 @@ live_design! {
         font_size: (FONT_SIZE_SUB),
         font: {path: dep("crate://makepad-widgets/resources/IBMPlexSans-SemiBold.ttf")}
     }
-    
+
     TEXT_P = {
         font_size: (FONT_SIZE_P),
         height_factor: 1.65,
         font: {path: dep("crate://makepad-widgets/resources/IBMPlexSans-Text.ttf")}
-    }    
+    }
 
     COLOR_PROFILE_CIRCLE = #xfff8ee
     COLOR_DIVIDER = #x00000018

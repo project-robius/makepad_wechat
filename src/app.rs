@@ -7,7 +7,7 @@ live_design! {
 
     import makepad_wechat::contacts::Contacts
     import makepad_wechat::home::chats::Chats
-    
+
     ICON_CHAT = dep("crate://self/resources/chat.svg")
     ICON_CONTACTS = dep("crate://self/resources/contacts.svg")
     ICON_DISCOVER = dep("crate://self/resources/discover.svg")

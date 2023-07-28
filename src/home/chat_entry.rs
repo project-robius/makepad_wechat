@@ -12,11 +12,11 @@ live_design! {
     ChatEntry = <Frame> {
         walk: {width: Fill, height: Fit, margin: 0.0}
         layout: {flow: Down, padding: 0.0, spacing: 0.0}
-        
+
         body = <Frame> {
             walk: {width: Fill, height: Fit}
             layout: {flow: Right, padding: 10.0, spacing: 10.0}
-            
+
             profile = <Frame> {
                 walk: {width: Fit, height: Fit, margin: {top: 7.5}}
                 layout: {flow: Down, padding: 0.0}
@@ -40,7 +40,7 @@ live_design! {
             content = <Frame> {
                 walk: {width: Fill, height: Fit}
                 layout: {flow: Down, padding: 0.0}
-                
+
                 meta = <Label> {
                     walk: {margin: {bottom: 10.0, top: 10.0}}
                     draw_label: {
@@ -49,7 +49,7 @@ live_design! {
                     }
                     label: "@username · 13h"
                 }
-                
+
                 text = <Label> {
                     walk:{width:Fill, height:Fit},
                     draw_label: {
@@ -59,13 +59,13 @@ live_design! {
                     }
                     label: "Never underestimate the resilience it takes to live in a desert. It's a testament to life's adaptability, endurance, and tenacity. The cacti, creatures, and people who call it home are nature's ultimate survivalists. #DesertStrong"
                 }
-                
+
                 <LineH> {
                     walk: {margin: {top: 10.0, bottom: 5.0}}
                 }
             }
         }
-        
+
         <LineH> {
             draw_bg: {color: (COLOR_DIVIDER_DARK)}
         }
