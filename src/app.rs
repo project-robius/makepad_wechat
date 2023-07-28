@@ -6,6 +6,7 @@ live_design! {
     import makepad_widgets::radio_button::RadioButton
 
     import makepad_wechat::contacts::Contacts
+    import makepad_wechat::home::chats::Chats
     
     ICON_CHAT = dep("crate://self/resources/chat.svg")
     ICON_CONTACTS = dep("crate://self/resources/contacts.svg")
@@ -33,16 +34,6 @@ live_design! {
         }
     }
 
-    Home = <Frame> {
-        show_bg: true,
-        walk: {width: Fill, height: Fill}
-        draw_bg: {
-            fn pixel(self) -> vec4 {
-                return mix(#xeeaa00, #0, self.geom_pos.x / 3);
-            }
-        }
-    }
-
     Screen3 = <Frame> {
         show_bg: true,
         walk: {width: Fill, height: Fill}
@@ -65,18 +56,18 @@ live_design! {
             <Frame> {
                 design_mode: false,
                 walk: {width: Fill, height: Fill}
-                layout: {padding: 0, align: {x: 0.0, y: 0.0}, spacing: 0., flow: Down}
+                layout: {padding: 0, align: {x: 0.0ß, y: 0.0}, spacing: 0., flow: Down}
 
                 application_pages = <Frame> {
                     walk: {margin: 0.0}
                     layout: {padding: 0.0}
-                    
-                    tab1_frame = <Home> {visible: false}
+
+                    tab1_frame = <Chats> {visible: false}
                     tab2_frame = <Contacts> {visible: true}
                     tab3_frame = <Screen3> {visible: false}
                     tab4_frame = <Screen3> {visible: false}
                 }
-                
+
                 mobile_menu = <Box> {
                     walk: {width: Fill, height: 80}
                     layout: {flow: Right, spacing: 6.0, padding: 10}
@@ -86,10 +77,10 @@ live_design! {
                         instance border_color: #aaa,
                         color: #fff
                     }
-                    
+
                     mobile_modes = <Frame> {
                         tab1 = <AppTab> {
-                            //state: {selected = {default: on}},
+                            // state: {selected = {default: on}},
                             label: "Chat"
                             draw_icon: {
                                 svg_file: (ICON_CHAT),
@@ -169,21 +160,29 @@ pub struct App {
     ui: WidgetRef,
 }
 
-impl App {
-}
+impl App {}
 
 impl LiveHook for App {
     fn before_live_design(cx: &mut Cx) {
         crate::makepad_widgets::live_design(cx);
+
+        // shared
+        crate::shared::styles::live_design(cx);
+        crate::shared::helpers::live_design(cx);
+        crate::shared::header::live_design(cx);
+        crate::shared::search_bar::live_design(cx);
+
+        // home - chats
+        crate::home::chats::live_design(cx);
+        crate::home::chat_entry::live_design(cx);
+
+        // contacts
         crate::contacts::contacts_list::live_design(cx);
         crate::contacts::live_design(cx);
     }
 }
 
-impl AppMain for App{
-    
-    // This function is used to handle any incoming events from the host system. It is called
-    // automatically by the code we generated with the call to the macro `main_app` above.
+impl AppMain for App {
     fn handle_event(&mut self, cx: &mut Cx, event: &Event) {
         if let Event::Draw(event) = event {
             return self.ui.draw_widget_all(&mut Cx2d::new(cx, event));
@@ -197,11 +196,17 @@ impl AppMain for App{
             mobile_modes.tab2,
             mobile_modes.tab3,
             mobile_modes.tab4,
-        )).selected_to_visible(cx, &ui, &actions, ids!(
-            application_pages.tab1_frame,
-            application_pages.tab2_frame,
-            application_pages.tab3_frame,
-            application_pages.tab4_frame,
-        ));
+        ))
+        .selected_to_visible(
+            cx,
+            &ui,
+            &actions,
+            ids!(
+                application_pages.tab1_frame,
+                application_pages.tab2_frame,
+                application_pages.tab3_frame,
+                application_pages.tab4_frame,
+            ),
+        );
     }
 }

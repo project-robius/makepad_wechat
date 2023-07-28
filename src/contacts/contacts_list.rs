@@ -4,23 +4,12 @@ live_design!{
     import makepad_widgets::frame::*;
     import makepad_widgets::label::Label;
 
+    import makepad_wechat::shared::styles::*;
+    import makepad_wechat::shared::helpers::Divider;
+
     IMG_DEFAULT_AVATAR = dep("crate://self/resources/default_avatar.png")
     IMG_FILE_TRANSFER_AVATAR = dep("crate://self/resources/file_transfer_avatar.png")
     IMG_WECHAT_AVATAR = dep("crate://self/resources/wechat_avatar.png")
-
-    REGULAR_TEXT = {
-        font_size: (12),
-        font: {path: dep("crate://makepad-widgets/resources/IBMPlexSans-Text.ttf")}
-    }
-
-    Divider = <Frame> {
-        walk: {width: Fill, height: Fit}
-        layout: {flow: Down}
-        <Box> {
-            walk: {width: Fill, height: 1.}
-            draw_bg: {color: (#ddd)}
-        }
-    }
 
     ContactItem = <Frame> {
         walk: {width: Fill, height: Fit}
