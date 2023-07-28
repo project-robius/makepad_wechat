@@ -101,7 +101,6 @@ impl Widget for NewContact {
     }
 
     fn handle_widget_event_with(&mut self, cx: &mut Cx, event: &Event, _dispatch_action: &mut dyn FnMut(&mut Cx, WidgetActionItem)) {
-        let uid = self.widget_uid();
         self.handle_event_with(cx, event);
     }
 

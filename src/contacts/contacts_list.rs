@@ -1,17 +1,32 @@
 use makepad_widgets::*;
+use crate::contacts::contact_info::*;
+use crate::contacts::contacts_group::ContactsGroup;
 
 live_design!{
     import makepad_widgets::frame::*;
     import makepad_widgets::label::Label;
+    import makepad_widgets::button::Button;
+    import makepad_widgets::text_input::TextInput;
+    import makepad_widgets::list_view::ListView;
 
-    IMG_DEFAULT_AVATAR = dep("crate://self/resources/default_avatar.png")
-    IMG_FILE_TRANSFER_AVATAR = dep("crate://self/resources/file_transfer_avatar.png")
-    IMG_WECHAT_AVATAR = dep("crate://self/resources/wechat_avatar.png")
+    import makepad_draw::shader::std::*;
+
+    import wechat_makepad::contacts::header::SearchBar
+    import wechat_makepad::contacts::contacts_group::ContactsGroup
+
+    TITLE_TEXT = {
+        font_size: (14),
+        font: {path: dep("crate://makepad-widgets/resources/IBMPlexSans-Text.ttf")}
+    }
 
     REGULAR_TEXT = {
         font_size: (12),
         font: {path: dep("crate://makepad-widgets/resources/IBMPlexSans-Text.ttf")}
     }
+
+    IMG_NEW_FRIENDS = dep("crate://self/resources/new_friends.png")
+    IMG_GROUP_CHATS = dep("crate://self/resources/group_chats.png")
+    IMG_TAGS = dep("crate://self/resources/tags.png")
 
     Divider = <Frame> {
         walk: {width: Fill, height: Fit}
@@ -22,184 +37,114 @@ live_design!{
         }
     }
 
-    ContactItem = <Frame> {
+    OptionsItem = <Frame> {
         walk: {width: Fill, height: Fit}
-        layout: {padding: {left: 10., top: 10., bottom: 4.}, flow: Down}
+        layout: {padding: {left: 10., top: 10., bottom: 2.}, spacing: 8., flow: Down}
 
         content = <Frame> {
-            walk: {width: Fill, height: Fit}
-            layout: {padding: {top: 4., bottom: 6.}, align: {x: 0.0, y: 0.5}, spacing: 10., flow: Right}
-            avatar = <Image> {
-                image: (IMG_DEFAULT_AVATAR),
+            walk: {width: Fit, height: Fit}
+            layout: {padding: 0, align: {x: 0.0, y: 0.5}, spacing: 10., flow: Right}
+
+            icon = <Image> {
+                image: (IMG_NEW_FRIENDS),
                 walk: {width: 36., height: 36.}
                 layout: {padding: 0}
             }
-
+    
             label = <Label> {
                 walk: {width: Fit, height: Fit}
                 draw_label: {
                     color: #000,
                     text_style: <REGULAR_TEXT>{},
-                }
+                },
+                label: "New Friends"
             }
         }
 
-        <Divider> {}
+        divider = <Divider> {
+            walk: {margin: {left: 42.0}}
+        }
     }
 
-    ContactsGroup = {{ContactsGroup}} {
+    Options = <Frame> {
         walk: {width: Fill, height: Fit, margin: {left: 6.0}}
-        layout: {padding: {top: 20.}, spacing: 0., flow: Down}
+        layout: {padding: 0, spacing: 0., flow: Down}
 
-        header: <Frame> {
-            walk: {width: Fit, height: Fit}
-            layout: {
-                padding: {left: 10., top: 10., bottom: 0.}
-            }
+        <OptionsItem> {
+            content = {
+                icon = {
+                    image: (IMG_NEW_FRIENDS)
+                }
 
-            label = <Label> {
-                walk: {width: Fit, height: Fit}
-                draw_label: {
-                    color: #777,
-                    text_style: <REGULAR_TEXT>{font_size: 10.},
+                label = {
+                    label: "New Friends"
                 }
             }
         }
 
-        people_contact_template: <ContactItem> {}
-
-        file_transfer_template: <ContactItem> {
+        <OptionsItem> {
             content = {
-                avatar = {
-                    image: (IMG_FILE_TRANSFER_AVATAR)
+                icon = {
+                    image: (IMG_GROUP_CHATS)
+                }
+
+                label = {
+                    label: "Group Chats"
                 }
             }
         }
 
-        wechat_template: <ContactItem> {
+        <OptionsItem> {
             content = {
-                avatar = {
-                    image: (IMG_WECHAT_AVATAR)
+                icon = {
+                    image: (IMG_TAGS)
+                }
+
+                label = {
+                    label: "Tags"
                 }
             }
+
+            divider = <Divider> {}
         }
     }
 
     ContactsList = {{ContactsList}} {
-        walk: {width: Fill, height: Fit}
-        layout: {flow: Down, spacing: 0.0, padding: {left: 6.}}
+        walk: {width: Fill, height: Fill}
+        layout: {flow: Down}
 
-        group_template: <ContactsGroup> {}
-    }
-}
+        list_view: <ListView> {
+            walk: {width: Fill, height: Fill}
+            layout: {flow: Down, spacing: 0.0}
 
-#[derive(Debug, Clone)]
-enum ContactKind {
-    People,
-    FileTransfer,
-    WeChat
-}
+            search_bar = <SearchBar> {}
+            options = <Options> {}
+            contacts_group = <ContactsGroup> {}
 
-#[derive(Debug, Clone)]
-struct ContactInfo {
-    name: String,
-    kind: ContactKind
-}
+            bottom = <Frame> {
+                walk: {width: Fill, height: Fit}
+                layout: {padding: {top: 14., bottom: 50.}, align: {x: 0.5, y: 0.}}
 
-#[derive(Clone, Debug, Default, Eq, Hash, Copy, PartialEq, FromLiveId)]
-pub struct ContactItemId(pub LiveId);
-
-#[derive(Live)]
-pub struct ContactsGroup {
-    #[live] walk: Walk,
-    #[live] layout: Layout,
-    #[live] header: Frame,
-    
-    #[live] people_contact_template: Option<LivePtr>,
-    #[live] file_transfer_template: Option<LivePtr>,
-    #[live] wechat_template: Option<LivePtr>,
-
-    #[rust] data: Vec<ContactInfo>,
-    #[rust] contacts: ComponentMap<ContactItemId, FrameRef>,
-}
-
-impl LiveHook for ContactsGroup {
-    fn before_live_design(cx:&mut Cx){
-        register_widget!(cx, ContactsGroup);
-    }
-}
-
-impl Widget for ContactsGroup {
-    fn get_walk(&self)->Walk{ self.walk }
-
-    fn redraw(&mut self, cx:&mut Cx){
-        self.header.redraw(cx);
-    }
-
-    fn draw_walk_widget(&mut self, cx: &mut Cx2d, walk: Walk) -> WidgetDraw {
-        let _ = self.draw_walk(cx, walk);
-        WidgetDraw::done()
-    }
-}
-
-impl ContactsGroup {
-    pub fn draw_walk(&mut self, cx: &mut Cx2d, walk: Walk) {
-        cx.begin_turtle(walk, self.layout);
-        let _ = self.header.draw_walk_widget(cx, walk);
-
-        for contact in self.data.iter() {
-            let contact_widget_id = LiveId::from_str(&contact.name).unwrap().into();
-            let current_contact = self.contacts.get_or_insert(cx, contact_widget_id, | cx | {
-                let template = match contact.kind {
-                    ContactKind::People => self.people_contact_template,
-                    ContactKind::FileTransfer => self.file_transfer_template,
-                    ContactKind::WeChat => self.wechat_template
-                };
-                FrameRef::new_from_ptr(cx, template)
-            });
-
-            current_contact.get_label(id!(content.label)).set_label(&contact.name);
-            let _ = current_contact.draw_walk_widget(cx, walk);
-        }
-        cx.end_turtle();
-    }
-}
-
-impl ContactsGroupRef {
-    pub fn set_header_label(&mut self, text: &str) {
-        if let Some(mut inner) = self.borrow_mut() {
-            let inner_label = inner.header.get_label(id!(label));
-            inner_label.set_label(text);
-        }
-    }
-
-    pub fn set_contacts(&mut self, data: Vec<ContactInfo>) {
-        if let Some(mut inner) = self.borrow_mut() {
-            inner.data = data;
+                <Label> {
+                    walk: {width: Fit, height: Fit}
+                    draw_label: {
+                        color: #777,
+                        text_style: <REGULAR_TEXT>{},
+                    }
+                    label: "3 friends"
+                }
+            }
         }
     }
 }
-
-#[derive(Clone, PartialEq, WidgetRef)]
-pub struct ContactsGroupRef(WidgetRef);
-
-#[derive(Clone, Debug, Default, Eq, Hash, Copy, PartialEq, FromLiveId)]
-pub struct ContactsGroupId(pub LiveId);
-
-#[derive(Clone, Debug, Default, Eq, Hash, Copy, PartialEq, FromLiveId)]
-pub struct ContactId(pub LiveId);
 
 #[derive(Live)]
 pub struct ContactsList {
     #[live] walk: Walk,
     #[live] layout: Layout,
 
-    #[live] group_template: Option<LivePtr>,
-
-    #[rust] area: Area,
-
+    #[live] list_view: ListView,
     #[rust] data: Vec<ContactInfo>,
-    #[rust] groups: ComponentMap<ContactsGroupId, ContactsGroupRef>,
 }
 
 impl LiveHook for ContactsList {
@@ -207,7 +152,7 @@ impl LiveHook for ContactsList {
         register_widget!(cx, ContactsList);
     }
 
-    fn after_new_from_doc(&mut self, cx: &mut Cx) {
+    fn after_new_from_doc(&mut self, _cx: &mut Cx) {
         self.data = vec![
             ContactInfo { name: "File Transfer".to_string(), kind: ContactKind::FileTransfer },
             ContactInfo { name: "John Doe".to_string(), kind: ContactKind::People },
@@ -220,10 +165,14 @@ impl LiveHook for ContactsList {
 }
 
 impl Widget for ContactsList {
+    fn handle_widget_event_with(&mut self, cx: &mut Cx, event: &Event, _dispatch_action: &mut dyn FnMut(&mut Cx, WidgetActionItem)) {
+        let _actions = self.list_view.handle_widget_event(cx, event);
+    }
+
     fn get_walk(&self)->Walk{ self.walk }
 
     fn redraw(&mut self, cx:&mut Cx){
-        self.area.redraw(cx)
+        self.list_view.redraw(cx)
     }
 
     fn draw_walk_widget(&mut self, cx: &mut Cx2d, walk: Walk) -> WidgetDraw {
@@ -234,22 +183,35 @@ impl Widget for ContactsList {
 
 impl ContactsList {
     pub fn draw_walk(&mut self, cx: &mut Cx2d, walk: Walk) {
+        let grouped_data = self.group_by_first_letter();
+        let groups_count: u64 = grouped_data.len() as u64;
+
         cx.begin_turtle(walk, self.layout);
+        self.list_view.set_item_range(0, groups_count + 3, 1);
 
-        for group in self.group_by_first_letter().iter() {
-            let group_widget_id = LiveId::from_str(&group[0].name).unwrap().into();
-            let current_group = self.groups.get_or_insert(cx, group_widget_id, | cx | {
-                ContactsGroupRef::new_from_ptr(cx, self.group_template)
-            });
+        while let Some(_) = self.list_view.draw_widget(cx).hook_widget() {
+            while let Some(item_id) = self.list_view.next_visible_item(cx){
+                let template = match item_id{
+                    0 => id!(search_bar),
+                    1 => id!(options),
+                    x if x == groups_count + 2 => id!(bottom),
+                    _=> id!(contacts_group)
+                };
+                let item = self.list_view.get_item(cx, item_id, template).unwrap();
 
-            current_group.set_header_label(&group[0].name[0..1]);
-            current_group.set_contacts(group.to_vec());
+                if item_id >= 2 && item_id < groups_count + 2 {
+                    let group = &grouped_data[(item_id-2) as usize];
+                    if let Some(mut group_widget) = item.borrow_mut::<ContactsGroup>() {
+                        group_widget.set_header_label(&group[0].name[0..1]);
+                        group_widget.set_contacts(group.to_vec());
+                    }
+                }
 
-            let _ = current_group.draw_walk_widget(cx, walk);
+                item.draw_widget_all(cx);
+            }
         }
 
         cx.end_turtle();
-        self.groups.retain_visible();
     }
 
     pub fn group_by_first_letter(&self) -> Vec<Vec<ContactInfo>> {

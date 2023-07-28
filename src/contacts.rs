@@ -1,5 +1,7 @@
+pub mod contact_info;
 pub mod header;
 pub mod contacts_list;
+pub mod contacts_group;
 pub mod new_contact;
 
 use makepad_widgets::*;
@@ -144,30 +146,7 @@ live_design!{
         }
 
         <ContactsHeader> {}
-
-        content = <Frame> {
-            walk: {height: Fill}, 
-            layout: {flow: Down, spacing: 0}
-            scroll_bars: <ScrollBars> {show_scroll_x: false, show_scroll_y: true}
-
-            <SearchBar> {}
-            <Options> {}
-            <ContactsList> {}
-
-            <Frame> {
-                walk: {width: Fill, height: Fit}
-                layout: {padding: {top: 14., bottom: 50.}, align: {x: 0.5, y: 0.}}
-
-                <Label> {
-                    walk: {width: Fit, height: Fit}
-                    draw_label: {
-                        color: #777,
-                        text_style: <REGULAR_TEXT>{},
-                    }
-                    label: "3 friends"
-                }
-            }
-        }
+        <ContactsList> {}
     }
 
     Contacts = {{Contacts}} {
@@ -197,7 +176,7 @@ impl LiveHook for Contacts {
 }
 
 impl Widget for Contacts {
-    fn handle_widget_event_with(&mut self, cx: &mut Cx, event: &Event, dispatch_action: &mut dyn FnMut(&mut Cx, WidgetActionItem)) {
+    fn handle_widget_event_with(&mut self, cx: &mut Cx, event: &Event, _dispatch_action: &mut dyn FnMut(&mut Cx, WidgetActionItem)) {
         let actions = self.frame.handle_widget_event(cx, event);
         if actions.not_empty() {
             if self.get_button(id!(right_button)).clicked(&actions) {
