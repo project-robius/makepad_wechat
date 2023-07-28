@@ -12,8 +12,9 @@ live_design!{
     import makepad_widgets::desktop_window::DesktopWindow
     import makepad_widgets::frame::*
     import makepad_widgets::radio_button::RadioButton
-    import wechat_makepad::contacts::Contacts
 
+    import makepad_wechat::contacts::Contacts
+    
     ICON_CHAT = dep("crate://self/resources/chat.svg")
     ICON_CONTACTS = dep("crate://self/resources/contacts.svg")
     ICON_DISCOVER = dep("crate://self/resources/discover.svg")

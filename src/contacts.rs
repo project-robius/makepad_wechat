@@ -11,17 +11,7 @@ live_design!{
 
     import makepad_draw::shader::std::*;
 
-    import wechat_makepad::contacts::contacts_list::ContactsList
-
-    TITLE_TEXT = {
-        font_size: (14),
-        font: {path: dep("crate://makepad-widgets/resources/IBMPlexSans-Text.ttf")}
-    }
-
-    REGULAR_TEXT = {
-        font_size: (12),
-        font: {path: dep("crate://makepad-widgets/resources/IBMPlexSans-Text.ttf")}
-    }
+    import makepad_wechat::contacts::contacts_list::ContactsList
 
     IMG_NEW_FRIENDS = dep("crate://self/resources/new_friends.png")
     IMG_GROUP_CHATS = dep("crate://self/resources/group_chats.png")

@@ -162,7 +162,7 @@ dependencies = [
 ]
 
 [[package]]
-name = "wechat_makepad"
+name = "makepad_wechat"
 version = "0.1.0"
 dependencies = [
  "makepad-platform",
