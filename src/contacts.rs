@@ -153,7 +153,7 @@ live_design!{
         frame: <Frame> {
             layout: {flow: Overlay}
 
-            <ContactsBody> {}
+            contacts_body = <ContactsBody> {}
             new_contact = <NewContact> {}
         }
     }
@@ -166,24 +166,44 @@ live_design!{
 
 #[derive(Live)]
 pub struct Contacts {
-    #[live] frame: Frame
+    #[live] frame: Frame,
+    #[rust] new_contact_active: bool
 }
 
 impl LiveHook for Contacts {
     fn before_live_design(cx:&mut Cx){
         register_widget!(cx, Contacts);
     }
+
+    fn after_new_from_doc(&mut self, _cx: &mut Cx) {
+        self.new_contact_active = false;
+    }
 }
 
 impl Widget for Contacts {
     fn handle_widget_event_with(&mut self, cx: &mut Cx, event: &Event, _dispatch_action: &mut dyn FnMut(&mut Cx, WidgetActionItem)) {
-        let actions = self.frame.handle_widget_event(cx, event);
-        if actions.not_empty() {
-            if self.get_button(id!(right_button)).clicked(&actions) {
-                let mut new_contact_ref: NewContactRef = NewContactRef(self.get_widget(id!(new_contact)));
-                new_contact_ref.show(cx);
+        let mut new_contact_ref: NewContactRef = NewContactRef(self.get_widget(id!(new_contact)));
+
+        if self.new_contact_active {
+            let actions = self.frame.get_widget(id!(new_contact)).handle_widget_event(cx, event);
+
+            if !new_contact_ref.is_showing(cx) {
+                self.new_contact_active = false;
+            }
+        } else {
+            let actions = self.frame.get_widget(id!(contacts_body)).handle_widget_event(cx, event);
+            if actions.not_empty() {
+                if self.get_button(id!(right_button)).clicked(&actions) {
+                    new_contact_ref.show(cx);
+                    self.new_contact_active = true;
+
+                    // Make sure to pass this event, so `new_contact` fires animation
+                    self.frame.get_widget(id!(new_contact)).handle_widget_event(cx, event);
+                }
             }
         }
+
+        self.redraw(cx);
     }
 
     fn redraw(&mut self, cx:&mut Cx){

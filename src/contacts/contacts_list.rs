@@ -165,8 +165,12 @@ impl LiveHook for ContactsList {
 }
 
 impl Widget for ContactsList {
-    fn handle_widget_event_with(&mut self, cx: &mut Cx, event: &Event, _dispatch_action: &mut dyn FnMut(&mut Cx, WidgetActionItem)) {
+    fn handle_widget_event_with(&mut self, cx: &mut Cx, event: &Event, dispatch_action: &mut dyn FnMut(&mut Cx, WidgetActionItem)) {
         let _actions = self.list_view.handle_widget_event(cx, event);
+
+        for action in _actions {
+            dispatch_action(cx, action);
+        }
     }
 
     fn get_walk(&self)->Walk{ self.walk }

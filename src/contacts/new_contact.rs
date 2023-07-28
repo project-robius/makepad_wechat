@@ -100,8 +100,8 @@ impl Widget for NewContact {
         self.frame.find_widgets(path, cached, results);
     }
 
-    fn handle_widget_event_with(&mut self, cx: &mut Cx, event: &Event, _dispatch_action: &mut dyn FnMut(&mut Cx, WidgetActionItem)) {
-        self.handle_event_with(cx, event);
+    fn handle_widget_event_with(&mut self, cx: &mut Cx, event: &Event, dispatch_action: &mut dyn FnMut(&mut Cx, WidgetActionItem)) {
+        self.handle_event_with(cx, event, dispatch_action);
     }
 
     fn draw_walk_widget(&mut self, cx: &mut Cx2d, walk: Walk) -> WidgetDraw {
@@ -111,16 +111,18 @@ impl Widget for NewContact {
 }
 
 impl NewContact {
-    pub fn handle_event_with(&mut self, cx: &mut Cx, event: &Event) {
+    pub fn handle_event_with(&mut self, cx: &mut Cx, event: &Event, dispatch_action: &mut dyn FnMut(&mut Cx, WidgetActionItem)) {
         if self.state_handle_event(cx, event).is_animating() {
             self.frame.redraw(cx);
         }
 
         let actions = self.frame.handle_widget_event(cx, event);
-        if actions.not_empty() {
-            if self.get_button(id!(left_button)).clicked(&actions) {
-                self.animate_state(cx, id!(slide.hide));
-            }
+        if self.get_button(id!(left_button)).clicked(&actions) {
+            self.animate_state(cx, id!(slide.hide));
+        }
+
+        for action in actions.into_iter() {
+            dispatch_action(cx, action);
         }
     }
 }
@@ -132,6 +134,15 @@ impl NewContactRef {
     pub fn show(&mut self, cx: &mut Cx) {
         if let Some(mut inner) = self.borrow_mut() {
             inner.animate_state(cx, id!(slide.show));
+        }
+    }
+
+    pub fn is_showing(&self, cx: &mut Cx) -> bool {
+        if let Some(inner) = self.borrow() {
+            inner.state.is_in_state(cx, id!(slide.show))
+                || inner.state.is_track_animating(cx, id!(slide))
+        } else {
+            false
         }
     }
 }
