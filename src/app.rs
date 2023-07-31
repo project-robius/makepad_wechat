@@ -5,8 +5,8 @@ live_design! {
     import makepad_widgets::frame::*
     import makepad_widgets::radio_button::RadioButton
 
-    import makepad_wechat::home::chats::Chats
-    import makepad_wechat::contacts::ContactsScreen
+    import crate::home::home_screen::HomeScreen
+    import crate::contacts::contacts_screen::ContactsScreen
 
     ICON_CHAT = dep("crate://self/resources/chat.svg")
     ICON_CONTACTS = dep("crate://self/resources/contacts.svg")
@@ -62,7 +62,7 @@ live_design! {
                     walk: {margin: 0.0}
                     layout: {padding: 0.0}
 
-                    tab1_frame = <Chats> {visible: false}
+                    tab1_frame = <HomeScreen> {visible: false}
                     tab2_frame = <ContactsScreen> {visible: true}
                     tab3_frame = <Screen3> {visible: false}
                     tab4_frame = <Screen3> {visible: false}
@@ -172,14 +172,14 @@ impl LiveHook for App {
         crate::shared::search_bar::live_design(cx);
 
         // home - chats
-        crate::home::chats::live_design(cx);
+        crate::home::home_screen::live_design(cx);
         crate::home::chat_entry::live_design(cx);
 
         // contacts
+        crate::contacts::contacts_screen::live_design(cx);
         crate::contacts::contacts_group::live_design(cx);
         crate::contacts::contacts_list::live_design(cx);
         crate::contacts::new_contact::live_design(cx);
-        crate::contacts::live_design(cx);
     }
 }
 

@@ -6,8 +6,8 @@ live_design! {
     import makepad_widgets::label::Label;
     import makepad_widgets::button::Button;
 
-    import makepad_wechat::shared::styles::*;
-    import makepad_wechat::shared::helpers::FillerX;
+    import crate::shared::styles::*;
+    import crate::shared::helpers::FillerX;
 
     Header = <Frame> {
         walk: {width: Fill, height: Fit, margin: 0}

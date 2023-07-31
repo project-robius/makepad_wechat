@@ -1,8 +1,3 @@
-pub mod contact_info;
-pub mod contacts_group;
-pub mod contacts_list;
-pub mod new_contact;
-
 use crate::contacts::new_contact::NewContactRef;
 use makepad_widgets::widget::WidgetCache;
 use makepad_widgets::*;
@@ -15,12 +10,12 @@ live_design! {
     import makepad_widgets::button::Button;
     import makepad_widgets::text_input::TextInput;
 
-    import makepad_wechat::shared::styles::*;
-    import makepad_wechat::shared::header::Header;
-    import makepad_wechat::shared::search_bar::SearchBar;
+    import crate::shared::styles::*;
+    import crate::shared::header::Header;
+    import crate::shared::search_bar::SearchBar;
 
-    import makepad_wechat::contacts::new_contact::NewContact
-    import makepad_wechat::contacts::contacts_list::ContactsList
+    import crate::contacts::new_contact::NewContact
+    import crate::contacts::contacts_list::ContactsList
 
     IMG_NEW_FRIENDS = dep("crate://self/resources/new_friends.png")
     IMG_GROUP_CHATS = dep("crate://self/resources/group_chats.png")
