@@ -43,7 +43,7 @@ live_design! {
                         font_size: 10.5
                     },
                 }
-                label: "hi there! I'm using Makepad"
+                label: "Hi there! I'm using WeChat"
             }
         }
 
@@ -153,7 +153,7 @@ impl LiveHook for Chats {
             },
             ChatPreview {
                 username: "WeChat Team".to_string(),
-                latest_message: MessagePreview::Text("Hi!".to_string()),
+                latest_message: MessagePreview::Text("Welcome to WeChat!".to_string()),
                 direction: MessageDirection::Incoming,
                 is_read: false,
                 timestamp: "18:45".to_string(),
@@ -193,9 +193,10 @@ impl Widget for Chats {
 impl Chats {
     pub fn draw_walk(&mut self, cx: &mut Cx2d, walk: Walk) {
         // todo: sort by newest incoming?
+        let chat_entries_count = self.chat_list.len() as u64;
+
         cx.begin_turtle(walk, self.layout);
-        self.list_view
-            .set_item_range(0, self.chat_list.len() as u64, 1);
+        self.list_view.set_item_range(0, chat_entries_count + 1, 1);
 
         while self.list_view.draw_widget(cx).hook_widget().is_some() {
             while let Some(item_id) = self.list_view.next_visible_item(cx) {
@@ -203,14 +204,20 @@ impl Chats {
                     0 => id!(search_bar),
                     _ => id!(chat),
                 };
+
                 let item = self.list_view.get_item(cx, item_id, template).unwrap();
 
-                item.get_label(id!(preview.username))
-                    .set_label(&self.chat_list[item_id as usize].username);
-                item.get_label(id!(preview.content))
-                    .set_label(self.chat_list[item_id as usize].latest_message.text());
-                item.get_label(id!(timestamp))
-                    .set_label(&self.chat_list[item_id as usize].timestamp);
+                if item_id >= 1 && item_id < chat_entries_count + 1 {
+                    let item_index = item_id as usize - 1; // offset by 1 to account for the search bar
+                    let item_content = &self.chat_list[item_index];
+
+                    item.get_label(id!(preview.username))
+                        .set_label(&item_content.username);
+                    item.get_label(id!(preview.content))
+                        .set_label(item_content.latest_message.text());
+                    item.get_label(id!(timestamp))
+                        .set_label(&item_content.timestamp);
+                }
 
                 item.draw_widget_all(cx);
             }
