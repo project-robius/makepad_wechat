@@ -163,6 +163,7 @@ impl App {}
 
 impl LiveHook for App {
     fn before_live_design(cx: &mut Cx) {
+        // TODO: should we make each module call live_design on its submodules (instead of here)?
         makepad_widgets::live_design(cx);
 
         // shared
@@ -174,7 +175,7 @@ impl LiveHook for App {
 
         // home - chats
         crate::home::home_screen::live_design(cx);
-        crate::home::chat_entry::live_design(cx);
+        crate::home::chat_list::live_design(cx);
 
         // contacts
         crate::contacts::contacts_screen::live_design(cx);

@@ -1,2 +1,2 @@
-pub mod chat_entry;
+pub mod chat_list;
 pub mod home_screen;
