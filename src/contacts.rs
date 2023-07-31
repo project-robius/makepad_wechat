@@ -1,5 +1,10 @@
+pub mod contact_info;
+pub mod contacts_group;
 pub mod contacts_list;
+pub mod new_contact;
 
+use crate::contacts::new_contact::NewContactRef;
+use makepad_widgets::widget::WidgetCache;
 use makepad_widgets::*;
 
 live_design! {
@@ -14,6 +19,7 @@ live_design! {
     import makepad_wechat::shared::header::Header;
     import makepad_wechat::shared::search_bar::SearchBar;
 
+    import makepad_wechat::contacts::new_contact::NewContact
     import makepad_wechat::contacts::contacts_list::ContactsList
 
     IMG_NEW_FRIENDS = dep("crate://self/resources/new_friends.png")
@@ -123,7 +129,7 @@ live_design! {
         }
     }
 
-    Contacts = <Frame> {
+    ContactsBody = <Frame> {
         show_bg: true
         walk: {width: Fill, height: Fill}
         layout: {flow: Down, spacing: 0.0}
@@ -132,56 +138,89 @@ live_design! {
             color: #fff
         }
 
-        <Header> {}
+        <ContactsHeader> {}
+        <ContactsList> {}
+    }
 
-        content = <Frame> {
-            walk: {height: Fill},
-            layout: {flow: Down, spacing: 0}
-            scroll_bars: <ScrollBars> {show_scroll_x: false, show_scroll_y: true}
+    Contacts = {{Contacts}} {
+        frame: <Frame> {
+            layout: {flow: Overlay}
 
-            <SearchBar> {}
-            <Options> {}
-            <ContactsList> {}
-
-            <Frame> {
-                walk: {width: Fill, height: Fit}
-                layout: {padding: {top: 14., bottom: 50.}, align: {x: 0.5, y: 0.}}
-
-                <Label> {
-                    walk: {width: Fit, height: Fit}
-                    draw_label: {
-                        color: #777,
-                        text_style: <REGULAR_TEXT>{},
-                    }
-                    label: "3 friends"
-                }
-            }
+            contacts_body = <ContactsBody> {}
+            new_contact = <NewContact> {}
         }
+    }
+
+    ContactsScreen = <Frame> {
+        walk: {width: Fill, height: Fill}
+        <Contacts> {}
     }
 }
 
 #[derive(Live)]
 pub struct Contacts {
     #[live]
-    walk: Walk,
-    #[live]
-    layout: Layout,
+    frame: Frame,
+    #[rust]
+    new_contact_active: bool,
 }
 
 impl LiveHook for Contacts {
     fn before_live_design(cx: &mut Cx) {
         register_widget!(cx, Contacts);
     }
+
+    fn after_new_from_doc(&mut self, _cx: &mut Cx) {
+        self.new_contact_active = false;
+    }
 }
 
 impl Widget for Contacts {
-    fn get_walk(&self) -> Walk {
-        self.walk
+    fn handle_widget_event_with(
+        &mut self,
+        cx: &mut Cx,
+        event: &Event,
+        _dispatch_action: &mut dyn FnMut(&mut Cx, WidgetActionItem),
+    ) {
+        let mut new_contact_ref: NewContactRef = NewContactRef(self.get_widget(id!(new_contact)));
+
+        if self.new_contact_active {
+            self.frame
+                .get_widget(id!(new_contact))
+                .handle_widget_event(cx, event);
+
+            if !new_contact_ref.is_showing(cx) {
+                self.new_contact_active = false;
+            }
+        } else {
+            let actions = self
+                .frame
+                .get_widget(id!(contacts_body))
+                .handle_widget_event(cx, event);
+            if actions.not_empty() && self.get_button(id!(right_button)).clicked(&actions) {
+                new_contact_ref.show(cx);
+                self.new_contact_active = true;
+
+                // Make sure to pass this event, so `new_contact` fires animation
+                self.frame
+                    .get_widget(id!(new_contact))
+                    .handle_widget_event(cx, event);
+            }
+        }
+
+        self.redraw(cx);
     }
 
-    fn redraw(&mut self, _cx: &mut Cx) {}
+    fn redraw(&mut self, cx: &mut Cx) {
+        self.frame.redraw(cx);
+    }
 
-    fn draw_walk_widget(&mut self, _cx: &mut Cx2d, _walk: Walk) -> WidgetDraw {
+    fn find_widgets(&mut self, path: &[LiveId], cached: WidgetCache, results: &mut WidgetSet) {
+        self.frame.find_widgets(path, cached, results);
+    }
+
+    fn draw_walk_widget(&mut self, cx: &mut Cx2d, walk: Walk) -> WidgetDraw {
+        let _ = self.frame.draw_walk(cx, walk);
         WidgetDraw::done()
     }
 }
