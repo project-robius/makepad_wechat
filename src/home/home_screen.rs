@@ -5,15 +5,15 @@ live_design! {
     import makepad_widgets::frame::*;
     import makepad_widgets::list_view::ListView;
 
-    import makepad_wechat::shared::styles::*;
-    import makepad_wechat::shared::header::Header;
-    import makepad_wechat::shared::search_bar::SearchBar;
+    import crate::shared::styles::*;
+    import crate::shared::header::Header;
+    import crate::shared::search_bar::SearchBar;
 
-    import makepad_wechat::home::chat_entry::ChatEntry;
+    import crate::home::chat_entry::ChatEntry;
 
     // WIP: making this into a widget
 
-    Chats = <Frame> {
+    HomeScreen = <Frame> {
         show_bg: true,
         walk: {width: Fill, height: Fill}
         layout: {flow: Down}

@@ -5,7 +5,7 @@ live_design! {
     import makepad_widgets::frame::*;
     import makepad_widgets::text_input::TextInput;
 
-    import makepad_wechat::shared::styles::*;
+    import crate::shared::styles::*;
 
     SearchBar = <Frame> {
         walk: {width: Fill, height: Fit}

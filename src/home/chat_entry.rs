@@ -4,8 +4,8 @@ live_design! {
     import makepad_widgets::frame::*;
     import makepad_widgets::label::Label;
 
-    import makepad_wechat::shared::styles::*;
-    import makepad_wechat::shared::helpers::LineH;
+    import crate::shared::styles::*;
+    import crate::shared::helpers::LineH;
 
     IMG_PROFILE_A = dep("crate://self/resources/profile_1.jpg")
 

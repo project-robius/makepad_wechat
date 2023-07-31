@@ -8,8 +8,8 @@ live_design! {
 
     import makepad_draw::shader::std::*;
 
-    import makepad_wechat::shared::search_bar::SearchBar;
-    import makepad_wechat::shared::header::Header;
+    import crate::shared::search_bar::SearchBar;
+    import crate::shared::header::Header;
 
     TITLE_TEXT = {
         font_size: (14),

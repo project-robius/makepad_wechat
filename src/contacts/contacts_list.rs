@@ -10,11 +10,11 @@ live_design! {
     import makepad_widgets::text_input::TextInput;
     import makepad_widgets::list_view::ListView;
 
-    import makepad_wechat::shared::styles::*;
-    import makepad_wechat::shared::helpers::Divider;
-    import makepad_wechat::shared::search_bar::SearchBar;
+    import crate::shared::styles::*;
+    import crate::shared::helpers::Divider;
+    import crate::shared::search_bar::SearchBar;
 
-    import makepad_wechat::contacts::contacts_group::ContactsGroup
+    import crate::contacts::contacts_group::ContactsGroup
 
     IMG_NEW_FRIENDS = dep("crate://self/resources/new_friends.png")
     IMG_GROUP_CHATS = dep("crate://self/resources/group_chats.png")
