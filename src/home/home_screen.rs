@@ -106,7 +106,7 @@ pub struct Chats {
     #[live]
     list_view: ListView,
     #[rust]
-    chat_list: Vec<ChatPreview>,
+    chat_list: Vec<ChatEntry>,
 }
 
 impl LiveHook for Chats {
@@ -116,42 +116,42 @@ impl LiveHook for Chats {
 
     fn after_new_from_doc(&mut self, _cx: &mut Cx) {
         self.chat_list = vec![
-            ChatPreview {
+            ChatEntry {
                 username: "Rik Arends".to_string(),
                 latest_message: MessagePreview::Text("Hi!".to_string()),
                 direction: MessageDirection::Incoming,
                 is_read: false,
                 timestamp: "yesterday".to_string(),
             },
-            ChatPreview {
+            ChatEntry {
                 username: "John Doe".to_string(),
                 latest_message: MessagePreview::Image,
                 direction: MessageDirection::Incoming,
                 is_read: false,
                 timestamp: "18/09".to_string(),
             },
-            ChatPreview {
+            ChatEntry {
                 username: "Jorge Bejar".to_string(),
                 latest_message: MessagePreview::Audio,
                 direction: MessageDirection::Incoming,
                 is_read: false,
                 timestamp: "thursday".to_string(),
             },
-            ChatPreview {
+            ChatEntry {
                 username: "Julian Montes de Oca".to_string(),
                 latest_message: MessagePreview::Video,
                 direction: MessageDirection::Outgoing,
                 is_read: false,
                 timestamp: "14:05".to_string(),
             },
-            ChatPreview {
+            ChatEntry {
                 username: "Edward Tan".to_string(),
                 latest_message: MessagePreview::Text("thanks ed, see you there.".to_string()),
                 direction: MessageDirection::Incoming,
                 is_read: false,
                 timestamp: "yesterday".to_string(),
             },
-            ChatPreview {
+            ChatEntry {
                 username: "WeChat Team".to_string(),
                 latest_message: MessagePreview::Text("Welcome to WeChat!".to_string()),
                 direction: MessageDirection::Incoming,
@@ -227,7 +227,7 @@ impl Chats {
     }
 }
 
-pub struct ChatPreview {
+pub struct ChatEntry {
     username: String,
     latest_message: MessagePreview,
     direction: MessageDirection,
