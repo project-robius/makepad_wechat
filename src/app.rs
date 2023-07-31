@@ -56,7 +56,7 @@ live_design! {
             <Frame> {
                 design_mode: false,
                 walk: {width: Fill, height: Fill}
-                layout: {padding: 0, align: {x: 0.0ß, y: 0.0}, spacing: 0., flow: Down}
+                layout: {padding: 0, align: {x: 0.0, y: 0.0}, spacing: 0., flow: Down}
 
                 application_pages = <Frame> {
                     walk: {margin: 0.0}
