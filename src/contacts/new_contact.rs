@@ -9,7 +9,8 @@ live_design!{
 
     import makepad_draw::shader::std::*;
 
-    import wechat_makepad::contacts::header::*
+    import makepad_wechat::shared::search_bar::SearchBar;
+    import makepad_wechat::shared::header::Header;
 
     TITLE_TEXT = {
         font_size: (14),

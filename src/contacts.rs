@@ -1,5 +1,4 @@
 pub mod contact_info;
-pub mod header;
 pub mod contacts_list;
 pub mod contacts_group;
 pub mod new_contact;
@@ -8,34 +7,26 @@ use makepad_widgets::*;
 use makepad_widgets::widget::WidgetCache;
 use crate::contacts::new_contact::NewContactRef;
 
-live_design!{
+live_design! {
+    import makepad_draw::shader::std::*;
     import makepad_widgets::scroll_bars::ScrollBars;
     import makepad_widgets::frame::*;
     import makepad_widgets::label::Label;
     import makepad_widgets::button::Button;
     import makepad_widgets::text_input::TextInput;
 
-    import makepad_draw::shader::std::*;
+    import makepad_wechat::shared::styles::*;
+    import makepad_wechat::shared::header::Header;
+    import makepad_wechat::shared::search_bar::SearchBar;
 
-    import wechat_makepad::contacts::header::*
-    import wechat_makepad::contacts::contacts_list::ContactsList
-    import wechat_makepad::contacts::new_contact::NewContact
-
-    TITLE_TEXT = {
-        font_size: (14),
-        font: {path: dep("crate://makepad-widgets/resources/IBMPlexSans-Text.ttf")}
-    }
-
-    REGULAR_TEXT = {
-        font_size: (12),
-        font: {path: dep("crate://makepad-widgets/resources/IBMPlexSans-Text.ttf")}
-    }
+    import makepad_wechat::contacts::new_contact::NewContact
+    import makepad_wechat::contacts::contacts_list::ContactsList
 
     IMG_NEW_FRIENDS = dep("crate://self/resources/new_friends.png")
     IMG_GROUP_CHATS = dep("crate://self/resources/group_chats.png")
     IMG_TAGS = dep("crate://self/resources/tags.png")
 
-    ContactsHeader = <Header>{
+    ContactsHeader = <Header> {
         content = {
             title_container = {
                 title = {
@@ -54,6 +45,8 @@ live_design!{
             }
         }
     }
+
+    <SearchBar> {}
 
     Divider = <Frame> {
         walk: {width: Fill, height: Fit}
@@ -77,7 +70,7 @@ live_design!{
                 walk: {width: 36., height: 36.}
                 layout: {padding: 0}
             }
-    
+
             label = <Label> {
                 walk: {width: Fit, height: Fit}
                 draw_label: {
@@ -171,7 +164,7 @@ pub struct Contacts {
 }
 
 impl LiveHook for Contacts {
-    fn before_live_design(cx:&mut Cx){
+    fn before_live_design(cx: &mut Cx) {
         register_widget!(cx, Contacts);
     }
 

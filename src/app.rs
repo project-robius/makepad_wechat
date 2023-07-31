@@ -1,18 +1,12 @@
 use makepad_widgets::*;
 
-// The live_design macro generates a function that registers a DSL code block with the global
-// context object (`Cx`).
-//
-// DSL code blocks are used in Makepad to facilitate live design. A DSL code block defines
-// structured data that describes the styling of the UI. The Makepad runtime automatically
-// initializes widgets from their corresponding DSL objects. Moreover, external programs (such
-// as a code editor) can notify the Makepad runtime that a DSL code block has been changed, allowing
-// the runtime to automatically update the affected widgets.
-live_design!{
+live_design! {
     import makepad_widgets::desktop_window::DesktopWindow
     import makepad_widgets::frame::*
     import makepad_widgets::radio_button::RadioButton
-    import wechat_makepad::contacts::ContactsScreen
+
+    import makepad_wechat::home::chats::Chats
+    import makepad_wechat::contacts::ContactsScreen
 
     ICON_CHAT = dep("crate://self/resources/chat.svg")
     ICON_CONTACTS = dep("crate://self/resources/contacts.svg")
@@ -40,16 +34,6 @@ live_design!{
         }
     }
 
-    Home = <Frame> {
-        show_bg: true,
-        walk: {width: Fill, height: Fill}
-        draw_bg: {
-            fn pixel(self) -> vec4 {
-                return mix(#xeeaa00, #0, self.geom_pos.x / 3);
-            }
-        }
-    }
-
     Screen3 = <Frame> {
         show_bg: true,
         walk: {width: Fill, height: Fill}
@@ -63,15 +47,7 @@ live_design!{
         }
     }
 
-    // The `{{App}}` syntax is used to inherit a DSL object from a Rust struct. This tells the
-    // Makepad runtime that our DSL object corresponds to a Rust struct named `App`. Whenever an
-    // instance of `App` is initialized, the Makepad runtime will obtain its initial values from
-    // this DSL object.
     App = {{App}} {
-        // The `ui` field on the struct `App` defines a frame widget. Frames are used as containers
-        // for other widgets. Since the `ui` property on the DSL object `App` corresponds with the
-        // `ui` field on the Rust struct `App`, the latter will be initialized from the DSL object
-        // here below.
         ui: <DesktopWindow> {
             window: {position: vec2(0, 0), inner_size: vec2(400, 800)},
             pass: {clear_color: #2A}
@@ -86,12 +62,12 @@ live_design!{
                     walk: {margin: 0.0}
                     layout: {padding: 0.0}
                     
-                    tab1_frame = <Home> {visible: false}
+                    tab1_frame = <Chats> {visible: false}
                     tab2_frame = <ContactsScreen> {visible: true}
                     tab3_frame = <Screen3> {visible: false}
                     tab4_frame = <Screen3> {visible: false}
                 }
-                
+
                 mobile_menu = <Box> {
                     walk: {width: Fill, height: 80}
                     layout: {flow: Right, spacing: 6.0, padding: 10}
@@ -101,7 +77,7 @@ live_design!{
                         instance border_color: #aaa,
                         color: #fff
                     }
-                    
+
                     mobile_modes = <Frame> {
                         tab1 = <AppTab> {
                             label: "Chat"
@@ -175,34 +151,31 @@ live_design!{
     }
 }
 
-// This app_main macro generates the code necessary to initialize and run your application.
-//
-// This code is almost always the same between different applications, so it is convenient to use a
-// macro for it. The two main tasks that this code needs to carry out are: initializing both the
-// main application struct (`App`) and the global context object (`Cx`), and setting up event
-// handling. On desktop, this means creating and running our own event loop. On web, this means
-// creating an event handler function that the browser event loop can call into.
 app_main!(App);
 
-// The main application struct.
-//
-// The #[derive(Live, LiveHook)] attribute implements a bunch of traits for this struct that enable
-// it to interact with the Makepad runtime. Among other things, this enables the Makepad runtime to
-// initialize the struct from a DSL object.
 #[derive(Live)]
 pub struct App {
-    // A chromeless window for our application. Used to contain our frame widget.
-    // A frame widget. Used to contain our button and label.
-    #[live] ui: WidgetRef,
+    #[live]
+    ui: WidgetRef,
 }
 
-impl App {
-}
+impl App {}
 
 impl LiveHook for App {
     fn before_live_design(cx: &mut Cx) {
         crate::makepad_widgets::live_design(cx);
-        crate::contacts::header::live_design(cx);
+        
+        // shared
+        crate::shared::styles::live_design(cx);
+        crate::shared::helpers::live_design(cx);
+        crate::shared::header::live_design(cx);
+        crate::shared::search_bar::live_design(cx);
+
+        // home - chats
+        crate::home::chats::live_design(cx);
+        crate::home::chat_entry::live_design(cx);
+
+        // contacts
         crate::contacts::contacts_group::live_design(cx);
         crate::contacts::contacts_list::live_design(cx);
         crate::contacts::new_contact::live_design(cx);
@@ -210,13 +183,9 @@ impl LiveHook for App {
     }
 }
 
-impl AppMain for App{
-    
-    // This function is used to handle any incoming events from the host system. It is called
-    // automatically by the code we generated with the call to the macro `main_app` above.
+impl AppMain for App {
     fn handle_event(&mut self, cx: &mut Cx, event: &Event) {
         if let Event::Draw(event) = event {
-            // This is a draw event, so create a draw context and use that to draw our application.
             return self.ui.draw_widget_all(&mut Cx2d::new(cx, event));
         }
 
@@ -228,11 +197,17 @@ impl AppMain for App{
             mobile_modes.tab2,
             mobile_modes.tab3,
             mobile_modes.tab4,
-        )).selected_to_visible(cx, &ui, &actions, ids!(
-            application_pages.tab1_frame,
-            application_pages.tab2_frame,
-            application_pages.tab3_frame,
-            application_pages.tab4_frame,
-        ));
+        ))
+        .selected_to_visible(
+            cx,
+            &ui,
+            &actions,
+            ids!(
+                application_pages.tab1_frame,
+                application_pages.tab2_frame,
+                application_pages.tab3_frame,
+                application_pages.tab4_frame,
+            ),
+        );
     }
 }

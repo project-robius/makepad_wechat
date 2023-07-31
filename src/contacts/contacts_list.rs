@@ -2,40 +2,23 @@ use makepad_widgets::*;
 use crate::contacts::contact_info::*;
 use crate::contacts::contacts_group::ContactsGroup;
 
-live_design!{
+live_design! {
+    import makepad_draw::shader::std::*;
     import makepad_widgets::frame::*;
     import makepad_widgets::label::Label;
     import makepad_widgets::button::Button;
     import makepad_widgets::text_input::TextInput;
     import makepad_widgets::list_view::ListView;
 
-    import makepad_draw::shader::std::*;
+    import makepad_wechat::shared::styles::*;
+    import makepad_wechat::shared::helpers::Divider;
+    import makepad_wechat::shared::search_bar::SearchBar;
 
-    import wechat_makepad::contacts::header::SearchBar
-    import wechat_makepad::contacts::contacts_group::ContactsGroup
-
-    TITLE_TEXT = {
-        font_size: (14),
-        font: {path: dep("crate://makepad-widgets/resources/IBMPlexSans-Text.ttf")}
-    }
-
-    REGULAR_TEXT = {
-        font_size: (12),
-        font: {path: dep("crate://makepad-widgets/resources/IBMPlexSans-Text.ttf")}
-    }
+    import makepad_wechat::contacts::contacts_group::ContactsGroup
 
     IMG_NEW_FRIENDS = dep("crate://self/resources/new_friends.png")
     IMG_GROUP_CHATS = dep("crate://self/resources/group_chats.png")
     IMG_TAGS = dep("crate://self/resources/tags.png")
-
-    Divider = <Frame> {
-        walk: {width: Fill, height: Fit}
-        layout: {flow: Down}
-        <Box> {
-            walk: {width: Fill, height: 1.}
-            draw_bg: {color: (#ddd)}
-        }
-    }
 
     OptionsItem = <Frame> {
         walk: {width: Fill, height: Fit}
@@ -140,26 +123,46 @@ live_design!{
 
 #[derive(Live)]
 pub struct ContactsList {
-    #[live] walk: Walk,
-    #[live] layout: Layout,
+    #[live]
+    walk: Walk,
+    #[live]
+    layout: Layout,
 
     #[live] list_view: ListView,
     #[rust] data: Vec<ContactInfo>,
 }
 
 impl LiveHook for ContactsList {
-    fn before_live_design(cx:&mut Cx){
+    fn before_live_design(cx: &mut Cx) {
         register_widget!(cx, ContactsList);
     }
 
     fn after_new_from_doc(&mut self, _cx: &mut Cx) {
         self.data = vec![
-            ContactInfo { name: "File Transfer".to_string(), kind: ContactKind::FileTransfer },
-            ContactInfo { name: "John Doe".to_string(), kind: ContactKind::People },
-            ContactInfo { name: "Jorge Bejar".to_string(), kind: ContactKind::People },
-            ContactInfo { name: "Julian Montes de Oca".to_string(), kind: ContactKind::People },
-            ContactInfo { name: "Rik Arends".to_string(), kind: ContactKind::People },
-            ContactInfo { name: "WeChat Team".to_string(), kind: ContactKind::WeChat },
+            ContactInfo {
+                name: "File Transfer".to_string(),
+                kind: ContactKind::FileTransfer,
+            },
+            ContactInfo {
+                name: "John Doe".to_string(),
+                kind: ContactKind::People,
+            },
+            ContactInfo {
+                name: "Jorge Bejar".to_string(),
+                kind: ContactKind::People,
+            },
+            ContactInfo {
+                name: "Julian Montes de Oca".to_string(),
+                kind: ContactKind::People,
+            },
+            ContactInfo {
+                name: "Rik Arends".to_string(),
+                kind: ContactKind::People,
+            },
+            ContactInfo {
+                name: "WeChat Team".to_string(),
+                kind: ContactKind::WeChat,
+            },
         ];
     }
 }
@@ -228,7 +231,7 @@ impl ContactsList {
             match grouped_data.last_mut() {
                 Some(last_group) if last_group[0].name.starts_with(first_char) => {
                     last_group.push(contact.clone());
-                },
+                }
                 _ => {
                     grouped_data.push(vec![contact.clone()]);
                 }
