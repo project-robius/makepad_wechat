@@ -192,7 +192,7 @@ impl Widget for ContactsList {
     }
 
     fn draw_walk_widget(&mut self, cx: &mut Cx2d, walk: Walk) -> WidgetDraw {
-        let _ = self.draw_walk(cx, walk);
+        self.draw_walk(cx, walk);
         WidgetDraw::done()
     }
 }
@@ -205,7 +205,7 @@ impl ContactsList {
         cx.begin_turtle(walk, self.layout);
         self.list_view.set_item_range(0, groups_count + 3, 1);
 
-        while let Some(_) = self.list_view.draw_widget(cx).hook_widget() {
+        while self.list_view.draw_widget(cx).hook_widget().is_some() {
             while let Some(item_id) = self.list_view.next_visible_item(cx) {
                 let template = match item_id {
                     0 => id!(search_bar),

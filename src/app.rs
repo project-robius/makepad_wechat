@@ -163,7 +163,7 @@ impl App {}
 
 impl LiveHook for App {
     fn before_live_design(cx: &mut Cx) {
-        crate::makepad_widgets::live_design(cx);
+        makepad_widgets::live_design(cx);
 
         // shared
         crate::shared::styles::live_design(cx);

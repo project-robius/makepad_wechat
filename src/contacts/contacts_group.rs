@@ -128,7 +128,7 @@ impl Widget for ContactsGroup {
     }
 
     fn draw_walk_widget(&mut self, cx: &mut Cx2d, walk: Walk) -> WidgetDraw {
-        let _ = self.draw_walk(cx, walk);
+        self.draw_walk(cx, walk);
         WidgetDraw::done()
     }
 }

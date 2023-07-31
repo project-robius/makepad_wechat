@@ -185,8 +185,7 @@ impl Widget for Contacts {
         let mut new_contact_ref: NewContactRef = NewContactRef(self.get_widget(id!(new_contact)));
 
         if self.new_contact_active {
-            let actions = self
-                .frame
+            self.frame
                 .get_widget(id!(new_contact))
                 .handle_widget_event(cx, event);
 
@@ -198,16 +197,14 @@ impl Widget for Contacts {
                 .frame
                 .get_widget(id!(contacts_body))
                 .handle_widget_event(cx, event);
-            if actions.not_empty() {
-                if self.get_button(id!(right_button)).clicked(&actions) {
-                    new_contact_ref.show(cx);
-                    self.new_contact_active = true;
+            if actions.not_empty() && self.get_button(id!(right_button)).clicked(&actions) {
+                new_contact_ref.show(cx);
+                self.new_contact_active = true;
 
-                    // Make sure to pass this event, so `new_contact` fires animation
-                    self.frame
-                        .get_widget(id!(new_contact))
-                        .handle_widget_event(cx, event);
-                }
+                // Make sure to pass this event, so `new_contact` fires animation
+                self.frame
+                    .get_widget(id!(new_contact))
+                    .handle_widget_event(cx, event);
             }
         }
 
