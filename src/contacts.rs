@@ -1,11 +1,11 @@
 pub mod contact_info;
-pub mod contacts_list;
 pub mod contacts_group;
+pub mod contacts_list;
 pub mod new_contact;
 
-use makepad_widgets::*;
-use makepad_widgets::widget::WidgetCache;
 use crate::contacts::new_contact::NewContactRef;
+use makepad_widgets::widget::WidgetCache;
+use makepad_widgets::*;
 
 live_design! {
     import makepad_draw::shader::std::*;
@@ -159,8 +159,10 @@ live_design! {
 
 #[derive(Live)]
 pub struct Contacts {
-    #[live] frame: Frame,
-    #[rust] new_contact_active: bool
+    #[live]
+    frame: Frame,
+    #[rust]
+    new_contact_active: bool,
 }
 
 impl LiveHook for Contacts {
@@ -174,24 +176,37 @@ impl LiveHook for Contacts {
 }
 
 impl Widget for Contacts {
-    fn handle_widget_event_with(&mut self, cx: &mut Cx, event: &Event, _dispatch_action: &mut dyn FnMut(&mut Cx, WidgetActionItem)) {
+    fn handle_widget_event_with(
+        &mut self,
+        cx: &mut Cx,
+        event: &Event,
+        _dispatch_action: &mut dyn FnMut(&mut Cx, WidgetActionItem),
+    ) {
         let mut new_contact_ref: NewContactRef = NewContactRef(self.get_widget(id!(new_contact)));
 
         if self.new_contact_active {
-            let actions = self.frame.get_widget(id!(new_contact)).handle_widget_event(cx, event);
+            let actions = self
+                .frame
+                .get_widget(id!(new_contact))
+                .handle_widget_event(cx, event);
 
             if !new_contact_ref.is_showing(cx) {
                 self.new_contact_active = false;
             }
         } else {
-            let actions = self.frame.get_widget(id!(contacts_body)).handle_widget_event(cx, event);
+            let actions = self
+                .frame
+                .get_widget(id!(contacts_body))
+                .handle_widget_event(cx, event);
             if actions.not_empty() {
                 if self.get_button(id!(right_button)).clicked(&actions) {
                     new_contact_ref.show(cx);
                     self.new_contact_active = true;
 
                     // Make sure to pass this event, so `new_contact` fires animation
-                    self.frame.get_widget(id!(new_contact)).handle_widget_event(cx, event);
+                    self.frame
+                        .get_widget(id!(new_contact))
+                        .handle_widget_event(cx, event);
                 }
             }
         }
@@ -199,7 +214,7 @@ impl Widget for Contacts {
         self.redraw(cx);
     }
 
-    fn redraw(&mut self, cx:&mut Cx){
+    fn redraw(&mut self, cx: &mut Cx) {
         self.frame.redraw(cx);
     }
 

@@ -1,7 +1,7 @@
-use makepad_widgets::*;
 use crate::contacts::contact_info::*;
+use makepad_widgets::*;
 
-live_design!{
+live_design! {
     import makepad_widgets::frame::*;
     import makepad_widgets::label::Label;
 
@@ -92,28 +92,38 @@ pub struct ContactItemId(pub LiveId);
 
 #[derive(Live)]
 pub struct ContactsGroup {
-    #[live] walk: Walk,
-    #[live] layout: Layout,
-    #[live] header: Frame,
-    
-    #[live] people_contact_template: Option<LivePtr>,
-    #[live] file_transfer_template: Option<LivePtr>,
-    #[live] wechat_template: Option<LivePtr>,
+    #[live]
+    walk: Walk,
+    #[live]
+    layout: Layout,
+    #[live]
+    header: Frame,
 
-    #[rust] data: Vec<ContactInfo>,
-    #[rust] contacts: ComponentMap<ContactItemId, FrameRef>,
+    #[live]
+    people_contact_template: Option<LivePtr>,
+    #[live]
+    file_transfer_template: Option<LivePtr>,
+    #[live]
+    wechat_template: Option<LivePtr>,
+
+    #[rust]
+    data: Vec<ContactInfo>,
+    #[rust]
+    contacts: ComponentMap<ContactItemId, FrameRef>,
 }
 
 impl LiveHook for ContactsGroup {
-    fn before_live_design(cx:&mut Cx){
+    fn before_live_design(cx: &mut Cx) {
         register_widget!(cx, ContactsGroup);
     }
 }
 
 impl Widget for ContactsGroup {
-    fn get_walk(&self)->Walk{ self.walk }
+    fn get_walk(&self) -> Walk {
+        self.walk
+    }
 
-    fn redraw(&mut self, cx:&mut Cx){
+    fn redraw(&mut self, cx: &mut Cx) {
         self.header.redraw(cx);
     }
 
@@ -130,16 +140,18 @@ impl ContactsGroup {
 
         for contact in self.data.iter() {
             let contact_widget_id = LiveId::from_str(&contact.name).unwrap().into();
-            let current_contact = self.contacts.get_or_insert(cx, contact_widget_id, | cx | {
+            let current_contact = self.contacts.get_or_insert(cx, contact_widget_id, |cx| {
                 let template = match contact.kind {
                     ContactKind::People => self.people_contact_template,
                     ContactKind::FileTransfer => self.file_transfer_template,
-                    ContactKind::WeChat => self.wechat_template
+                    ContactKind::WeChat => self.wechat_template,
                 };
                 FrameRef::new_from_ptr(cx, template)
             });
 
-            current_contact.get_label(id!(content.label)).set_label(&contact.name);
+            current_contact
+                .get_label(id!(content.label))
+                .set_label(&contact.name);
             let _ = current_contact.draw_walk_widget(cx, walk);
         }
         cx.end_turtle();

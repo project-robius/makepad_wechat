@@ -1,6 +1,6 @@
-use makepad_widgets::*;
 use crate::contacts::contact_info::*;
 use crate::contacts::contacts_group::ContactsGroup;
+use makepad_widgets::*;
 
 live_design! {
     import makepad_draw::shader::std::*;
@@ -33,7 +33,7 @@ live_design! {
                 walk: {width: 36., height: 36.}
                 layout: {padding: 0}
             }
-    
+
             label = <Label> {
                 walk: {width: Fit, height: Fit}
                 draw_label: {
@@ -128,8 +128,10 @@ pub struct ContactsList {
     #[live]
     layout: Layout,
 
-    #[live] list_view: ListView,
-    #[rust] data: Vec<ContactInfo>,
+    #[live]
+    list_view: ListView,
+    #[rust]
+    data: Vec<ContactInfo>,
 }
 
 impl LiveHook for ContactsList {
@@ -168,7 +170,12 @@ impl LiveHook for ContactsList {
 }
 
 impl Widget for ContactsList {
-    fn handle_widget_event_with(&mut self, cx: &mut Cx, event: &Event, dispatch_action: &mut dyn FnMut(&mut Cx, WidgetActionItem)) {
+    fn handle_widget_event_with(
+        &mut self,
+        cx: &mut Cx,
+        event: &Event,
+        dispatch_action: &mut dyn FnMut(&mut Cx, WidgetActionItem),
+    ) {
         let _actions = self.list_view.handle_widget_event(cx, event);
 
         for action in _actions {
@@ -176,9 +183,11 @@ impl Widget for ContactsList {
         }
     }
 
-    fn get_walk(&self)->Walk{ self.walk }
+    fn get_walk(&self) -> Walk {
+        self.walk
+    }
 
-    fn redraw(&mut self, cx:&mut Cx){
+    fn redraw(&mut self, cx: &mut Cx) {
         self.list_view.redraw(cx)
     }
 
@@ -197,17 +206,17 @@ impl ContactsList {
         self.list_view.set_item_range(0, groups_count + 3, 1);
 
         while let Some(_) = self.list_view.draw_widget(cx).hook_widget() {
-            while let Some(item_id) = self.list_view.next_visible_item(cx){
-                let template = match item_id{
+            while let Some(item_id) = self.list_view.next_visible_item(cx) {
+                let template = match item_id {
                     0 => id!(search_bar),
                     1 => id!(options),
                     x if x == groups_count + 2 => id!(bottom),
-                    _=> id!(contacts_group)
+                    _ => id!(contacts_group),
                 };
                 let item = self.list_view.get_item(cx, item_id, template).unwrap();
 
                 if item_id >= 2 && item_id < groups_count + 2 {
-                    let group = &grouped_data[(item_id-2) as usize];
+                    let group = &grouped_data[(item_id - 2) as usize];
                     if let Some(mut group_widget) = item.borrow_mut::<ContactsGroup>() {
                         group_widget.set_header_label(&group[0].name[0..1]);
                         group_widget.set_contacts(group.to_vec());

@@ -2,11 +2,11 @@
 pub enum ContactKind {
     People,
     FileTransfer,
-    WeChat
+    WeChat,
 }
 
 #[derive(Debug, Clone)]
 pub struct ContactInfo {
     pub name: String,
-    pub kind: ContactKind
+    pub kind: ContactKind,
 }

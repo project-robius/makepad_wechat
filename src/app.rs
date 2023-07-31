@@ -61,7 +61,7 @@ live_design! {
                 application_pages = <Frame> {
                     walk: {margin: 0.0}
                     layout: {padding: 0.0}
-                    
+
                     tab1_frame = <Chats> {visible: false}
                     tab2_frame = <ContactsScreen> {visible: true}
                     tab3_frame = <Screen3> {visible: false}
@@ -164,7 +164,7 @@ impl App {}
 impl LiveHook for App {
     fn before_live_design(cx: &mut Cx) {
         crate::makepad_widgets::live_design(cx);
-        
+
         // shared
         crate::shared::styles::live_design(cx);
         crate::shared::helpers::live_design(cx);

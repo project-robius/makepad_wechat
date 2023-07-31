@@ -1,8 +1,7 @@
-use makepad_widgets::*;
 use makepad_widgets::widget::WidgetCache;
+use makepad_widgets::*;
 
-
-live_design!{
+live_design! {
     import makepad_widgets::frame::*;
     import makepad_widgets::label::Label;
     import makepad_widgets::button::Button;
@@ -75,25 +74,32 @@ live_design!{
 
 #[derive(Live)]
 pub struct NewContact {
-    #[live] walk: Walk,
-    #[live] layout: Layout,
+    #[live]
+    walk: Walk,
+    #[live]
+    layout: Layout,
 
-    #[live] frame: Frame,
-    #[live] offset: f64,
+    #[live]
+    frame: Frame,
+    #[live]
+    offset: f64,
 
-    #[state] state: LiveState,
+    #[state]
+    state: LiveState,
 }
 
 impl LiveHook for NewContact {
-    fn before_live_design(cx:&mut Cx){
+    fn before_live_design(cx: &mut Cx) {
         register_widget!(cx, NewContact);
     }
 }
 
 impl Widget for NewContact {
-    fn get_walk(&self)->Walk{ self.walk }
+    fn get_walk(&self) -> Walk {
+        self.walk
+    }
 
-    fn redraw(&mut self, cx:&mut Cx){
+    fn redraw(&mut self, cx: &mut Cx) {
         self.frame.redraw(cx)
     }
 
@@ -101,18 +107,34 @@ impl Widget for NewContact {
         self.frame.find_widgets(path, cached, results);
     }
 
-    fn handle_widget_event_with(&mut self, cx: &mut Cx, event: &Event, dispatch_action: &mut dyn FnMut(&mut Cx, WidgetActionItem)) {
+    fn handle_widget_event_with(
+        &mut self,
+        cx: &mut Cx,
+        event: &Event,
+        dispatch_action: &mut dyn FnMut(&mut Cx, WidgetActionItem),
+    ) {
         self.handle_event_with(cx, event, dispatch_action);
     }
 
     fn draw_walk_widget(&mut self, cx: &mut Cx2d, walk: Walk) -> WidgetDraw {
-        let _ = self.frame.draw_walk_widget(cx, walk.with_abs_pos(DVec2 {x: self.offset, y: 0.}));
+        let _ = self.frame.draw_walk_widget(
+            cx,
+            walk.with_abs_pos(DVec2 {
+                x: self.offset,
+                y: 0.,
+            }),
+        );
         WidgetDraw::done()
     }
 }
 
 impl NewContact {
-    pub fn handle_event_with(&mut self, cx: &mut Cx, event: &Event, dispatch_action: &mut dyn FnMut(&mut Cx, WidgetActionItem)) {
+    pub fn handle_event_with(
+        &mut self,
+        cx: &mut Cx,
+        event: &Event,
+        dispatch_action: &mut dyn FnMut(&mut Cx, WidgetActionItem),
+    ) {
         if self.state_handle_event(cx, event).is_animating() {
             self.frame.redraw(cx);
         }
