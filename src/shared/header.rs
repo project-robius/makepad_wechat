@@ -9,7 +9,7 @@ live_design! {
     import crate::shared::styles::*;
     import crate::shared::helpers::FillerX;
 
-    Header = <Frame> {
+    SimpleHeader = <Frame> {
         walk: {width: Fill, height: Fit, margin: 0}
         layout: {padding: {bottom: 10.}, align: {x: 0.5, y: 0.0}, spacing: 6.0, flow: Down}
         show_bg: true
@@ -24,7 +24,6 @@ live_design! {
 
         content = <Frame> {
             walk: {width: Fill, height: Fit}
-            layout: {flow: Overlay}
 
             title_container = <Frame> {
                 walk: {width: Fill, height: Fit}
@@ -39,6 +38,12 @@ live_design! {
                     label: "WeChat"
                 }
             }
+        }
+    }
+
+    HeaderWithLeftActionButton = <SimpleHeader> {
+        content = {
+            layout: {flow: Overlay}
 
             button_container = <Frame> {
                 left_button = <Button> {
@@ -56,6 +61,30 @@ live_design! {
                     }
                 }
                 divider = <Frame> {walk: {width: Fill, height: Fit}}
+                right_button = <Button> {
+                    walk: {width: Fit, height: 68}
+                    icon_walk: {width: 20, height: 68}
+                    draw_bg: {
+                        fn pixel(self) -> vec4 {
+                            let sdf = Sdf2d::viewport(self.pos * self.rect_size);
+                            return sdf.result
+                        }
+                    }
+                    draw_icon: {
+                        color: #000;
+                        brightness: 0.8;
+                    }
+                }
+            }
+        }
+    }
+
+    HeaderWithRightActionButton = <SimpleHeader> {
+        content = {
+            layout: {flow: Overlay}
+
+            button_container = <Frame> {
+                spacer = <Frame> {walk: {width: Fill, height: Fit}}
                 right_button = <Button> {
                     walk: {width: Fit, height: 68}
                     icon_walk: {width: 20, height: 68}

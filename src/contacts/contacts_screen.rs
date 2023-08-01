@@ -11,7 +11,7 @@ live_design! {
     import makepad_widgets::text_input::TextInput;
 
     import crate::shared::styles::*;
-    import crate::shared::header::Header;
+    import crate::shared::header::HeaderWithRightActionButton;
     import crate::shared::search_bar::SearchBar;
 
     import crate::contacts::new_contact::NewContact
@@ -21,7 +21,7 @@ live_design! {
     IMG_GROUP_CHATS = dep("crate://self/resources/group_chats.png")
     IMG_TAGS = dep("crate://self/resources/tags.png")
 
-    ContactsHeader = <Header> {
+    ContactsHeader = <HeaderWithRightActionButton> {
         content = {
             title_container = {
                 title = {
@@ -30,8 +30,6 @@ live_design! {
             }
 
             button_container = {
-                // Disable the left button
-                left_button = <Frame>{}
                 right_button = {
                     draw_icon: {
                         svg_file: dep("crate://self/resources/add_contact.svg")
