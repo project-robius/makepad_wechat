@@ -32,7 +32,7 @@ live_design! {
             button_container = {
                 right_button = {
                     draw_icon: {
-                        svg_file: dep("crate://self/resources/add_contact.svg")
+                        svg_file: dep("crate://self/resources/search.svg")
                     }
                 }
             }
