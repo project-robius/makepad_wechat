@@ -3,7 +3,7 @@ use makepad_widgets::*;
 live_design! {
     import makepad_widgets::frame::*;
 
-    import crate::shared::header::Header;
+    import crate::shared::header::SimpleHeader;
     import crate::shared::dropdown_menu::DropDownMenu;
     import crate::home::chat_list::ChatList;
 
@@ -15,7 +15,7 @@ live_design! {
             color: #fff
         }
         // WIP: need to rework header layout, later on the dropdown menu will be in the header by default.
-        <Header> {
+        <SimpleHeader> {
             button_container = <DropDownMenu> {
                 walk: {height: Fit, width: Fit}
                 dropdown = {

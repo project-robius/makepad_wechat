@@ -9,14 +9,14 @@ live_design! {
     import makepad_draw::shader::std::*;
 
     import crate::shared::search_bar::SearchBar;
-    import crate::shared::header::Header;
+    import crate::shared::header::HeaderWithLeftActionButton;
 
     TITLE_TEXT = {
         font_size: (14),
         font: {path: dep("crate://makepad-widgets/resources/IBMPlexSans-Text.ttf")}
     }
 
-    NewContactHeader = <Header> {
+    NewContactHeader = <HeaderWithLeftActionButton> {
         content = {
             title_container = {
                 title = {
@@ -32,8 +32,6 @@ live_design! {
                         svg_file: dep("crate://self/resources/back.svg")
                     }
                 }
-                // Disable the right button
-                right_button = <Frame> {}
             }
         }
     }
