@@ -28,6 +28,7 @@ live_design! {
     StackNavigationView = {{StackNavigationView}} {
         walk: {width: Fill, height: Fill}
         frame: <Frame> {
+            visible: false
             walk: {width: Fill, height: Fill}
             layout: {flow: Down}
             show_bg: true
@@ -38,18 +39,20 @@ live_design! {
             header = <Header> {}
         }
 
-        offset: 500.0
+        // TBD Adjust this based on actual screen size
+        offset: 1000.0
 
         state: {
             slide = {
                 default: hide,
                 hide = {
-                    from: {all: Forward {duration: 0.2}}
-                    apply: {offset: 500.0}
+                    from: {all: Forward {duration: 0.6}}
+                    // Bug: Constants are not working as part of an live state value
+                    apply: {offset: 1000.0}
                 }
 
                 show = {
-                    from: {all: Forward {duration: 0.2}}
+                    from: {all: Forward {duration: 0.6}}
                     apply: {offset: 0.0}
                 }
             }
@@ -141,6 +144,11 @@ impl StackNavigationView {
         for action in actions.into_iter() {
             dispatch_action(cx, action);
         }
+
+        if self.state.is_in_state(cx, id!(slide.hide)) &&
+            !self.state.is_track_animating(cx, id!(slide)) {
+                self.apply_over(cx, live!{frame: {visible: false}});
+        }
     }
 }
 
@@ -150,6 +158,7 @@ pub struct StackNavigationViewRef(pub WidgetRef);
 impl StackNavigationViewRef {
     pub fn show(&mut self, cx: &mut Cx) {
         if let Some(mut inner) = self.borrow_mut() {
+            inner.apply_over(cx, live!{frame: {visible: true}});
             inner.animate_state(cx, id!(slide.show));
         }
     }
