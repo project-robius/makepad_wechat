@@ -6,6 +6,7 @@ live_design! {
     import makepad_widgets::button::Button;
     import makepad_draw::shader::std::*;
 
+    import crate::shared::helpers::FillerX;
     import crate::shared::helpers::Divider;
     import crate::shared::styles::*;
 
@@ -17,10 +18,10 @@ live_design! {
 
     OptionsItem = <Frame> {
         walk: {width: Fill, height: Fit}
-        layout: {padding: {left: 10., top: 10., bottom: 2.}, spacing: 8., flow: Down}
+        layout: {padding: {left: 10., top: 10., right: 20. bottom: 2.}, spacing: 8., flow: Down}
 
         content = <Frame> {
-            walk: {width: Fit, height: Fit}
+            walk: {width: Fill, height: Fit}
             layout: {padding: 0, align: {x: 0.0, y: 0.5}, spacing: 10., flow: Right}
 
             icon = <Image> {
@@ -34,6 +35,17 @@ live_design! {
                     color: #000,
                     text_style: <REGULAR_TEXT>{},
                 },
+            }
+
+            <FillerX> {}
+
+            action_icon = <Label> {
+                walk: {width: Fit, height: Fit}
+                label: ">"
+                draw_label: {
+                    color: #6a
+                    text_style: <REGULAR_TEXT>{font_size: 16},
+                }
             }
         }
 
