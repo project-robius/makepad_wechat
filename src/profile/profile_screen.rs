@@ -15,6 +15,16 @@ live_design! {
     IMG_MY_POSTS = dep("crate://self/resources/my-posts.png")
     IMG_STICKER_GALLERY = dep("crate://self/resources/sticker-gallery.png")
     IMG_SETTINGS = dep("crate://self/resources/settings.png")
+    IMG_QR = dep("crate://self/resources/qr_icon.png")
+
+    ActionIcon = <Label> {
+        walk: {width: Fit, height: Fit}
+        label: ">"
+        draw_label: {
+            color: #b4
+            text_style: <REGULAR_TEXT>{font_size: 16},
+        }
+    }
 
     OptionsItem = <Frame> {
         walk: {width: Fill, height: Fit}
@@ -39,14 +49,7 @@ live_design! {
 
             <FillerX> {}
 
-            action_icon = <Label> {
-                walk: {width: Fit, height: Fit}
-                label: ">"
-                draw_label: {
-                    color: #6a
-                    text_style: <REGULAR_TEXT>{font_size: 16},
-                }
-            }
+            action_icon = <ActionIcon> {}
         }
 
         show_bg: true
@@ -92,7 +95,7 @@ live_design! {
 
             <Frame> {
                 walk: {width: Fill, height: Fit}
-                layout: {flow: Down, align: {x: 0}, padding: {top: 5., left: 10.}, spacing: 20.}
+                layout: {flow: Down, align: {x: 0, y: 0.5}, padding: {top: 5., left: 10.}, spacing: 20.}
 
                 username = <Label> {
                     draw_label: {
@@ -104,29 +107,46 @@ live_design! {
 
                 <Frame> {
                     walk: {width: Fill, height: Fit}
-                    layout: {flow: Right, spacing: 5.}
+                    layout: {flow: Right, spacing: 5., align: {y: 0.5}}
 
-                    wechat_id_prefix = <Label> {
-                        draw_label: {
-                            color: #6a6a6a,
-                            text_style: <REGULAR_TEXT>{font_size: 11.},
+                    <Frame> {
+                        walk: {width: Fill, height: Fit}
+                        layout: {flow: Down, spacing: 5.}
+
+                        wechat_id_prefix = <Label> {
+                            draw_label: {
+                                color: #6a6a6a,
+                                text_style: <REGULAR_TEXT>{font_size: 11.},
+                            }
+                            label: "WeChat ID:"
                         }
-                        label: "WeChat ID:"
+
+                        wechat_id = <Label> {
+                            draw_label: {
+                                color: #6a6a6a,
+                                text_style: <REGULAR_TEXT>{font_size: 11.},
+                            }
+                            label: "wxid_123n43kjl123hjg"
+                        }
                     }
 
-                    wechat_id = <Label> {
-                        draw_label: {
-                            color: #6a6a6a,
-                            text_style: <REGULAR_TEXT>{font_size: 11.},
+                    // <FillerX> {}
+
+                    <Frame> {
+                        walk: {width: Fit, height: Fit}
+                        layout: {align: {y: 0.5}}
+
+                        qr_icon = <Image> {
+                            image: (IMG_QR),
+                            walk: {width: 50., height: 50.}
                         }
-                        label: "wxid_123n43kjl123hjg"
-                    }
+                        action_icon =  <ActionIcon> {}
+                   }
                 }
 
                 <Frame> {
                     walk: {width: Fit, height: Fit}
                     layout: {flow: Right}
-
 
                     meatball_menu_button = <Button> {
                         walk: {width: Fit, height: 34.}
