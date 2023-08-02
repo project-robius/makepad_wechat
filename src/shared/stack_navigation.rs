@@ -3,27 +3,16 @@ use makepad_widgets::*;
 
 live_design! {
     import makepad_widgets::frame::*;
-    import makepad_widgets::label::Label;
-    import makepad_widgets::button::Button;
-
-    import makepad_draw::shader::std::*;
-
-    import crate::shared::search_bar::SearchBar;
     import crate::shared::header::HeaderWithLeftActionButton;
 
-    TITLE_TEXT = {
-        font_size: (14),
-        font: {path: dep("crate://makepad-widgets/resources/IBMPlexSans-Text.ttf")}
-    }
-
-    NewContactHeader = <HeaderWithLeftActionButton> {
+    Header = <HeaderWithLeftActionButton> {
         content = {
             title_container = {
                 title = {
-                    label: "Add Contact"
+                    label: "My Stack View"
                 }
             }
-
+  
             button_container = {
                 left_button = {
                     walk: {width: Fit}
@@ -35,9 +24,8 @@ live_design! {
             }
         }
     }
-
-
-    NewContact = {{NewContact}} {
+  
+    StackNavigationView = {{StackNavigationView}} {
         walk: {width: Fill, height: Fill}
         frame: <Frame> {
             walk: {width: Fill, height: Fill}
@@ -47,8 +35,7 @@ live_design! {
                 color: #fff
             }
 
-            <NewContactHeader> {}
-            <SearchBar> {}
+            header = <Header> {}
         }
 
         offset: 500.0
@@ -68,10 +55,19 @@ live_design! {
             }
         }
     }
+
+    StackNavigation = {{StackNavigation}} {
+        frame: <Frame> {
+            layout: {flow: Overlay}
+
+            root_view = <Frame> {}
+            stack_view = <StackNavigationView> {}
+        }
+    }
 }
 
 #[derive(Live)]
-pub struct NewContact {
+pub struct StackNavigationView {
     #[live]
     walk: Walk,
     #[live]
@@ -86,13 +82,13 @@ pub struct NewContact {
     state: LiveState,
 }
 
-impl LiveHook for NewContact {
+impl LiveHook for StackNavigationView {
     fn before_live_design(cx: &mut Cx) {
-        register_widget!(cx, NewContact);
+        register_widget!(cx, StackNavigationView);
     }
 }
 
-impl Widget for NewContact {
+impl Widget for StackNavigationView {
     fn get_walk(&self) -> Walk {
         self.walk
     }
@@ -126,7 +122,7 @@ impl Widget for NewContact {
     }
 }
 
-impl NewContact {
+impl StackNavigationView {
     pub fn handle_event_with(
         &mut self,
         cx: &mut Cx,
@@ -149,9 +145,9 @@ impl NewContact {
 }
 
 #[derive(Clone, PartialEq, WidgetRef)]
-pub struct NewContactRef(pub WidgetRef);
+pub struct StackNavigationViewRef(pub WidgetRef);
 
-impl NewContactRef {
+impl StackNavigationViewRef {
     pub fn show(&mut self, cx: &mut Cx) {
         if let Some(mut inner) = self.borrow_mut() {
             inner.animate_state(cx, id!(slide.show));
@@ -165,5 +161,78 @@ impl NewContactRef {
         } else {
             false
         }
+    }
+}
+
+#[derive(Live)]
+pub struct StackNavigation {
+    #[live]
+    frame: Frame,
+    #[rust]
+    stack_view_active: bool,
+}
+
+impl LiveHook for StackNavigation {
+    fn before_live_design(cx: &mut Cx) {
+        register_widget!(cx, StackNavigation);
+    }
+
+    fn after_new_from_doc(&mut self, _cx: &mut Cx) {
+        self.stack_view_active = false;
+    }
+}
+
+impl Widget for StackNavigation {
+    fn handle_widget_event_with(
+        &mut self,
+        cx: &mut Cx,
+        event: &Event,
+        dispatch_action: &mut dyn FnMut(&mut Cx, WidgetActionItem),
+    ) {
+        let mut stack_view_ref: StackNavigationViewRef = StackNavigationViewRef(self.get_widget(id!(stack_view)));
+        let mut actions = vec![];
+
+        if self.stack_view_active {
+            actions = self
+                .frame
+                .get_widget(id!(stack_view))
+                .handle_widget_event(cx, event);
+
+            if !stack_view_ref.is_showing(cx) {
+                self.stack_view_active = false;
+            }
+        } else {
+            actions = self
+                .frame
+                .get_widget(id!(root_view))
+                .handle_widget_event(cx, event);
+        }
+
+        for action in actions.into_iter() {
+            dispatch_action(cx, action);
+        }
+
+        self.redraw(cx);
+    }
+
+    fn redraw(&mut self, cx: &mut Cx) {
+        self.frame.redraw(cx);
+    }
+
+    fn find_widgets(&mut self, path: &[LiveId], cached: WidgetCache, results: &mut WidgetSet) {
+        self.frame.find_widgets(path, cached, results);
+    }
+
+    fn draw_walk_widget(&mut self, cx: &mut Cx2d, walk: Walk) -> WidgetDraw {
+        let _ = self.frame.draw_walk(cx, walk);
+        WidgetDraw::done()
+    }
+}
+
+impl StackNavigation {
+    pub fn show_stack_view(&mut self, cx: &mut Cx) {
+        let mut stack_view_ref: StackNavigationViewRef = StackNavigationViewRef(self.get_widget(id!(stack_view)));
+        stack_view_ref.show(cx);
+        self.stack_view_active = true;
     }
 }
