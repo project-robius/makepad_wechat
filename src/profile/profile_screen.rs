@@ -3,6 +3,7 @@ use makepad_widgets::*;
 live_design! {
     import makepad_widgets::frame::*;
     import makepad_widgets::label::Label;
+    import makepad_widgets::button::Button;
     import makepad_draw::shader::std::*;
 
     import crate::shared::helpers::Divider;
@@ -61,7 +62,7 @@ live_design! {
 
         ProfileInfo = <Frame> {
             walk: {width: Fill, height: Fit}
-            layout: {flow: Right, spacing: 10., padding: {top: 100., bottom: 20., right: 20., left: 20.}}
+            layout: {flow: Right, spacing: 10., padding: {top: 100., bottom: 30., right: 20., left: 20.}}
 
             show_bg: true
             draw_bg: {
@@ -74,15 +75,14 @@ live_design! {
                 avatar = <Image> {
                     image: (IMG_DEFAULT_AVATAR),
                     walk: {width: 80., height: 80.}
-                    layout: {padding: 0}
                 }
             }
 
             <Frame> {
-                layout: {flow: Down, align: {x: 0}, padding: {top: 5., left: 10.}, spacing: 25.}
+                walk: {width: Fill, height: Fit}
+                layout: {flow: Down, align: {x: 0}, padding: {top: 5., left: 10.}, spacing: 15.}
 
                 username = <Label> {
-                    layout: {flow: Right, align: {x: 0}}
                     draw_label: {
                         color: #000,
                         text_style: <TEXT_SUB>{font_size: 20.},
@@ -91,21 +91,21 @@ live_design! {
                 }
 
                 <Frame> {
-                    layout: {flow: Down}
+                    walk: {width: Fill, height: Fit}
+                    layout: {flow: Right, spacing: 5.}
+
                     wechat_id_prefix = <Label> {
-                        layout: {flow: Right, align: {x: 0}}
                         draw_label: {
                             color: #6a6a6a,
-                            text_style: <REGULAR_TEXT>{font_size: 14.},
+                            text_style: <REGULAR_TEXT>{font_size: 11.},
                         }
                         label: "WeChat ID:"
                     }
 
                     wechat_id = <Label> {
-                        layout: {flow: Right, align: {x: 0}}
                         draw_label: {
                             color: #6a6a6a,
-                            text_style: <REGULAR_TEXT>{font_size: 14.},
+                            text_style: <REGULAR_TEXT>{font_size: 11.},
                         }
                         label: "wxid_123n43kjl123hjg"
                     }
@@ -118,7 +118,6 @@ live_design! {
 
                     }
                 }
-
 
             }
         }
