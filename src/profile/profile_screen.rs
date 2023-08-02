@@ -80,7 +80,7 @@ live_design! {
 
             <Frame> {
                 walk: {width: Fill, height: Fit}
-                layout: {flow: Down, align: {x: 0}, padding: {top: 5., left: 10.}, spacing: 15.}
+                layout: {flow: Down, align: {x: 0}, padding: {top: 5., left: 10.}, spacing: 20.}
 
                 username = <Label> {
                     draw_label: {
@@ -112,10 +112,74 @@ live_design! {
                 }
 
                 <Frame> {
+                    walk: {width: Fit, height: Fit}
                     layout: {flow: Right}
 
-                    status_button = <Button> {
 
+                    meatball_menu_button = <Button> {
+                        walk: {width: Fit, height: 34.}
+                        label: "+ Status"
+                        draw_label: {
+                            text_style: <REGULAR_TEXT>{font_size: 12.},
+                            fn get_color(self) -> vec4 {
+                                return #6a
+                            }
+                        }
+                        draw_bg: {
+                            border_radius: 8.
+                            fn pixel(self) -> vec4 {
+                                let border_color = #b4b4b4;
+                                let border_width = 0.5;
+                                let sdf = Sdf2d::viewport(self.pos * self.rect_size);
+                                let body = mix(mix(#f, #f0, self.hover), #d1, self.pressed);
+
+                                sdf.box(
+                                    1.,
+                                    1.,
+                                    self.rect_size.x - 2.0,
+                                    self.rect_size.y - 2.0,
+                                    self.border_radius
+                                )
+                                sdf.fill_keep(body)
+
+                                sdf.stroke(
+                                    border_color,
+                                    border_width
+                                )
+                                return sdf.result
+                            }
+                        }
+                    }
+
+                    status_button = <Button> {
+                        walk: {width: Fit, height: 34}
+                        label: "..."
+                        draw_label: {
+                            text_style: <TEXT_SUB>{font_size: 14.},
+                            fn get_color(self) -> vec4 {
+                                return #6a
+                            }
+                        }
+                        draw_bg: {
+                            fn pixel(self) -> vec4 {
+                                let border_color = #b4b4b4;
+                                let border_width = 0.5;
+                                let sdf = Sdf2d::viewport(self.pos * self.rect_size);
+                                let body = mix(mix(#f, #f0, self.hover), #d1, self.pressed);
+
+                                let radius = min(self.rect_size.x, self.rect_size.y) / 2.0 - 1.;
+
+                                sdf.circle(self.rect_size.x / 2.0, self.rect_size.y / 2.0, radius)
+
+                                sdf.fill_keep(body)
+
+                                sdf.stroke(
+                                    border_color,
+                                    border_width
+                                )
+                                return sdf.result
+                            }
+                        }
                     }
                 }
 
