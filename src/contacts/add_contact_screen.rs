@@ -61,7 +61,7 @@ live_design! {
             }
 
             action_icon = <ActionIcon> {
-                walk: {margin: {right: 10.}}
+                walk: {margin: {right: 20.}}
             }
         }
 
