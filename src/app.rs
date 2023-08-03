@@ -7,6 +7,7 @@ live_design! {
 
     import crate::home::home_screen::HomeScreen
     import crate::contacts::contacts_screen::ContactsScreen
+    import crate::discover::discover_screen::DiscoverScreen
     import crate::profile::profile_screen::ProfileScreen
 
     ICON_CHAT = dep("crate://self/resources/chat.svg")
@@ -65,7 +66,7 @@ live_design! {
 
                     tab1_frame = <HomeScreen> {visible: false}
                     tab2_frame = <ContactsScreen> {visible: true}
-                    tab3_frame = <Screen3> {visible: false}
+                    tab3_frame = <DiscoverScreen> {visible: false}
                     tab4_frame = <ProfileScreen> {visible: false}
                 }
 
@@ -184,6 +185,9 @@ impl LiveHook for App {
         crate::contacts::contacts_group::live_design(cx);
         crate::contacts::contacts_list::live_design(cx);
         crate::contacts::add_contact_screen::live_design(cx);
+
+        // discover
+        crate::discover::discover_screen::live_design(cx);
 
         // profile
         crate::profile::profile_screen::live_design(cx);
