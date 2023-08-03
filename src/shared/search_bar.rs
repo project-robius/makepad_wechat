@@ -14,7 +14,7 @@ live_design! {
             color: #ddd;
         }
 
-        <TextInput> {
+        input = <TextInput> {
             walk: {width: Fill, height: Fit, margin: {left: 5.0, right: 5.0, top: 5.0, bottom: 15.0}}
             layout: {
                 clip_x: true,
