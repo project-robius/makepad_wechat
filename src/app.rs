@@ -187,6 +187,7 @@ impl LiveHook for App {
 
         // profile
         crate::profile::profile_screen::live_design(cx);
+        crate::profile::my_profile_screen::live_design(cx);
     }
 }
 

@@ -1,3 +1,5 @@
+use crate::shared::stack_navigation::StackNavigation;
+use makepad_widgets::widget::WidgetCache;
 use makepad_widgets::*;
 
 live_design! {
@@ -8,7 +10,9 @@ live_design! {
 
     import crate::shared::helpers::FillerX;
     import crate::shared::helpers::Divider;
+    import crate::shared::stack_navigation::StackNavigation;
     import crate::shared::styles::*;
+    import crate::profile::my_profile_screen::MyProfileScreen;
 
     IMG_DEFAULT_AVATAR = dep("crate://self/resources/default_avatar.png")
     IMG_FAVORITES = dep("crate://self/resources/favorites.png")
@@ -21,14 +25,18 @@ live_design! {
         walk: {width: Fit, height: Fit}
         label: ">"
         draw_label: {
-            color: #b4
+            color: #b4,
             text_style: <REGULAR_TEXT>{font_size: 16},
         }
     }
 
     OptionsItem = <Frame> {
         walk: {width: Fill, height: Fit}
-        layout: {padding: {left: 10., top: 10., right: 20. bottom: 2.}, spacing: 8., flow: Down}
+        layout: {padding: {left: 10., top: 10., right: 10. bottom: 2.}, spacing: 8., flow: Down}
+        show_bg: true
+        draw_bg: {
+            color: #fff
+        }
 
         content = <Frame> {
             walk: {width: Fill, height: Fit}
@@ -52,10 +60,6 @@ live_design! {
             action_icon = <ActionIcon> {}
         }
 
-        show_bg: true
-        draw_bg: {
-            color: #fff
-        }
         divider = <Divider> {
             walk: {margin: {left: 42.0}}
         }
@@ -66,7 +70,7 @@ live_design! {
         layout: {padding: 0, spacing: 0., flow: Down}
     }
 
-    ProfileScreen = <Frame> {
+    ProfileBody = <Frame> {
         walk: {width: Fill, height: Fill}
         layout: {flow: Down, spacing: 10.}
         show_bg: true,
@@ -74,10 +78,9 @@ live_design! {
             color: #eee
         }
 
-
         ProfileInfo = <Frame> {
             walk: {width: Fill, height: Fit}
-            layout: {flow: Right, spacing: 10., padding: {top: 100., bottom: 30., right: 20., left: 20.}}
+            layout: {flow: Right, spacing: 10., padding: {top: 100., bottom: 30., right: 10., left: 20.}}
 
             show_bg: true
             draw_bg: {
@@ -130,17 +133,30 @@ live_design! {
                         }
                     }
 
-                    // <FillerX> {}
-
                     <Frame> {
                         walk: {width: Fit, height: Fit}
                         layout: {align: {y: 0.5}}
 
                         qr_icon = <Image> {
                             image: (IMG_QR),
-                            walk: {width: 50., height: 50.}
+                            walk: {width: 20., height: 20.}
                         }
-                        action_icon =  <ActionIcon> {}
+
+                        my_profile_button = <Button> {
+                            walk: {width: Fit, height: Fit}
+                            label: ">"
+                            draw_label: {
+                                text_style: <REGULAR_TEXT>{font_size: 16},
+                                fn get_color(self) -> vec4 {
+                                    return #b4
+                                }
+                            }
+                            draw_bg: {
+                                fn pixel(self) -> vec4 {
+                                    return #fff
+                                }
+                            }
+                        }
                    }
                 }
 
@@ -148,7 +164,7 @@ live_design! {
                     walk: {width: Fit, height: Fit}
                     layout: {flow: Right}
 
-                    meatball_menu_button = <Button> {
+                    status_button = <Button> {
                         walk: {width: Fit, height: 34.}
                         label: "+ Status"
                         draw_label: {
@@ -183,7 +199,7 @@ live_design! {
                         }
                     }
 
-                    status_button = <Button> {
+                    meatball_menu_button = <Button> {
                         walk: {width: Fit, height: 34}
                         label: "..."
                         draw_label: {
@@ -275,5 +291,82 @@ live_design! {
             }
         }
 
+    }
+
+    Profile = {{Profile}} {
+        navigation: <StackNavigation> {
+            frame: {
+                root_view = {
+                    profile_body = <ProfileBody> {}
+                }
+                stack_view = {
+                    frame: {
+                        header = {
+                            content = {
+                                title_container = {
+                                    title = {
+                                        label: "My Profile"
+                                    }
+                                }
+                            }
+                        }
+                        <MyProfileScreen> {}
+                    }
+                }
+            }
+        }
+    }
+
+    ProfileScreen = <Frame> {
+        walk: {width: Fill, height: Fill}
+        <Profile> {}
+    }
+}
+
+#[derive(Live)]
+pub struct Profile {
+    #[live]
+    navigation: StackNavigation,
+}
+
+impl LiveHook for Profile {
+    fn before_live_design(cx: &mut Cx) {
+        register_widget!(cx, Profile);
+    }
+}
+
+impl Widget for Profile {
+    fn handle_widget_event_with(
+        &mut self,
+        cx: &mut Cx,
+        event: &Event,
+        _dispatch_action: &mut dyn FnMut(&mut Cx, WidgetActionItem),
+    ) {
+        let actions = self.navigation.handle_widget_event(cx, event);
+
+        if actions.not_empty() {
+            let profile_body_ref = self.navigation.get_widget(id!(root_view.profile_body));
+
+            if profile_body_ref
+                .get_button(id!(my_profile_button))
+                .clicked(&actions)
+            {
+                self.navigation.show_stack_view(cx);
+                self.redraw(cx);
+            }
+        }
+    }
+
+    fn redraw(&mut self, cx: &mut Cx) {
+        self.navigation.redraw(cx);
+    }
+
+    fn find_widgets(&mut self, path: &[LiveId], cached: WidgetCache, results: &mut WidgetSet) {
+        self.navigation.find_widgets(path, cached, results);
+    }
+
+    fn draw_walk_widget(&mut self, cx: &mut Cx2d, walk: Walk) -> WidgetDraw {
+        let _ = self.navigation.draw_walk_widget(cx, walk);
+        WidgetDraw::done()
     }
 }
