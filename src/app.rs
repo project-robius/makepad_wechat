@@ -1,4 +1,5 @@
 use makepad_widgets::*;
+use crate::discover::discover_screen::*;
 
 live_design! {
     import makepad_widgets::desktop_window::DesktopWindow
@@ -188,6 +189,7 @@ impl LiveHook for App {
 
         // discover
         crate::discover::discover_screen::live_design(cx);
+        //crate::discover::moments_screen::live_design(cx);
 
         // profile
         crate::profile::profile_screen::live_design(cx);
@@ -220,5 +222,15 @@ impl AppMain for App {
                 application_pages.tab4_frame,
             ),
         );
+
+        for action in actions {
+            match action.action() {
+                DiscoveryAction::OpenMoments => {
+                    println!("Open moments");
+                    // Display moments screen
+                },
+                _ => {}
+            }
+        }
     }
 }

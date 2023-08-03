@@ -1,3 +1,4 @@
+use makepad_widgets::widget::WidgetCache;
 use makepad_widgets::*;
 
 live_design! {
@@ -61,6 +62,100 @@ live_design! {
         }
     }
 
+    Discover = {{Discover}} {
+        frame: <Frame> {
+            walk: {width: Fill, height: Fill}
+            layout: {flow: Down, spacing: 0.0}
+
+            <Options> {
+                moments_link = <OptionsItem> {
+                    content = {
+                        icon = {
+                            image: (IMG_MOMENTS)
+                        }
+
+                        label = {
+                            label: "Moments"
+                        }
+                    }
+                }
+            }
+    
+            <Options> {
+                <OptionsItem> {
+                    content = {
+                        icon = {
+                            image: (IMG_SCAN)
+                        }
+    
+                        label = {
+                            label: "Scan"
+                        }
+                    }
+    
+                    divider = <Divider> {
+                        walk: {margin: {left: 42.0}}
+                    }
+                }
+    
+                <OptionsItem> {
+                    content = {
+                        icon = {
+                            image: (IMG_SHAKE)
+                        }
+    
+                        label = {
+                            label: "Shake"
+                        }
+    
+                    }
+                }
+            }
+    
+            <Options> {
+                <OptionsItem> {
+                    content = {
+                        icon = {
+                            image: (IMG_SEARCH)
+                        }
+    
+                        label = {
+                            label: "Search"
+                        }
+                    }
+                }
+            }
+    
+            <Options> {
+                <OptionsItem> {
+                    content = {
+                        icon = {
+                            image: (IMG_PEOPLE_NEARBY)
+                        }
+    
+                        label = {
+                            label: "People Nearby"
+                        }
+                    }
+                }
+            }
+    
+            <Options> {
+                <OptionsItem> {
+                    content = {
+                        icon = {
+                            image: (IMG_MINI_PROGRAMS)
+                        }
+    
+                        label = {
+                            label: "Mini Programs"
+                        }
+                    }
+                }
+            }
+        }
+    }
+
     DiscoverScreen = <Frame> {
         walk: {width: Fill, height: Fill}
         layout: {flow: Down, spacing: 0.0}
@@ -80,91 +175,70 @@ live_design! {
             }
         }
 
-        <Options> {
-            <OptionsItem> {
-                content = {
-                    icon = {
-                        image: (IMG_MOMENTS)
-                    }
+        <Discover> {}
+    }
+}
 
-                    label = {
-                        label: "Moments"
-                    }
-                }
-            }
-        }
+#[derive(Live)]
+pub struct Discover {
+    #[live]
+    frame: Frame,
+}
 
-        <Options> {
-            <OptionsItem> {
-                content = {
-                    icon = {
-                        image: (IMG_SCAN)
-                    }
+impl LiveHook for Discover {
+    fn before_live_design(cx: &mut Cx) {
+        register_widget!(cx, Discover);
+    }
+}
 
-                    label = {
-                        label: "Scan"
-                    }
-                }
+#[derive(Clone, WidgetAction)]
+pub enum DiscoveryAction {
+    None,
+    OpenMoments,
+} 
 
-                divider = <Divider> {
-                    walk: {margin: {left: 42.0}}
-                }
-            }
+impl Widget for Discover {
+    fn handle_widget_event_with(
+        &mut self,
+        cx: &mut Cx,
+        event: &Event,
+        dispatch_action: &mut dyn FnMut(&mut Cx, WidgetActionItem),
+    ) {
+        let uid = self.widget_uid();
+        self.handle_event_with(cx, event, &mut | cx, action | {
+            dispatch_action(cx, WidgetActionItem::new(action.into(), uid));
+        });       
+    }
 
-            <OptionsItem> {
-                content = {
-                    icon = {
-                        image: (IMG_SHAKE)
-                    }
+    fn redraw(&mut self, cx: &mut Cx) {
+        self.frame.redraw(cx);
+    }
 
-                    label = {
-                        label: "Shake"
-                    }
+    fn find_widgets(&mut self, path: &[LiveId], cached: WidgetCache, results: &mut WidgetSet) {
+        self.frame.find_widgets(path, cached, results);
+    }
 
-                }
-            }
-        }
+    fn draw_walk_widget(&mut self, cx: &mut Cx2d, walk: Walk) -> WidgetDraw {
+        let _ = self.frame.draw_walk_widget(cx, walk);
+        WidgetDraw::done()
+    }
+}
 
-        <Options> {
-            <OptionsItem> {
-                content = {
-                    icon = {
-                        image: (IMG_SEARCH)
-                    }
-
-                    label = {
-                        label: "Search"
-                    }
-                }
-            }
-        }
-
-        <Options> {
-            <OptionsItem> {
-                content = {
-                    icon = {
-                        image: (IMG_PEOPLE_NEARBY)
-                    }
-
-                    label = {
-                        label: "People Nearby"
-                    }
-                }
-            }
-        }
-
-        <Options> {
-            <OptionsItem> {
-                content = {
-                    icon = {
-                        image: (IMG_MINI_PROGRAMS)
-                    }
-
-                    label = {
-                        label: "Mini Programs"
-                    }
-                }
-            }
+impl Discover {
+    fn handle_event_with(&mut self, cx: &mut Cx, event: &Event, dispatch_action: &mut dyn FnMut(&mut Cx, DiscoveryAction)) {
+        match event.hits(cx, self.get_frame(id!(moments_link)).area()) {
+            Hit::FingerUp(fe) => if fe.is_over {
+                dispatch_action(cx, DiscoveryAction::OpenMoments);
+            },
+            Hit::FingerHoverIn(_) => {
+                cx.set_cursor(MouseCursor::Hand);
+                //self.animate_state(cx, id!(hover.on));
+            },
+            Hit::FingerHoverOut(_) => {
+                cx.set_cursor(MouseCursor::Arrow);
+                //self.animate_state(cx, id!(hover.off));
+            },
+            _ => ()
         }
     }
 }
