@@ -67,11 +67,6 @@ live_design! {
     ClickableOptions = <ClickableFrame> {
         walk: {width: Fill, height: Fit, margin: {top: 10., bottom: 10.}}
         layout: {padding: {bottom: 10.}, spacing: 0., flow: Down}
-
-        show_bg: true
-        draw_bg: {
-            color: #f00
-        }
     }
 
     Discover = {{Discover}} {

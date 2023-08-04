@@ -245,3 +245,14 @@ impl StackNavigation {
         self.stack_view_active = true;
     }
 }
+
+#[derive(Clone, PartialEq, WidgetRef)]
+pub struct StackNavigationRef(pub WidgetRef);
+
+impl StackNavigationRef {
+    pub fn show_stack_view(&mut self, cx: &mut Cx) {
+        if let Some(mut inner) = self.borrow_mut() {
+            inner.show_stack_view(cx);
+        }
+    }
+}
