@@ -1,6 +1,7 @@
 use makepad_widgets::widget::WidgetCache;
 use makepad_widgets::*;
 use crate::shared::stack_navigation::StackNavigation;
+use crate::shared::stack_view_action::StackViewAction;
 
 live_design! {
     import makepad_draw::shader::std::*;
@@ -136,26 +137,10 @@ live_design! {
     }
 
     Contacts = {{Contacts}} {
-        navigation: <StackNavigation> {
-            frame: {
-                root_view = {
-                    contacts_body = <ContactsBody> {}
-                }
-                stack_view = {
-                    frame: {
-                        header = {
-                            content = {
-                                title_container = {
-                                    title = {
-                                        label: "Add Contact"
-                                    }
-                                }
-                            }
-                        }
-                        <AddContactScreen> {}
-                    }
-                }
-            }
+        frame: <Frame> {
+            walk: {width: Fill, height: Fill}
+            layout: {flow: Down, spacing: 0.0}
+            <ContactsBody> {}
         }
     }
 
@@ -168,7 +153,7 @@ live_design! {
 #[derive(Live)]
 pub struct Contacts {
     #[live]
-    navigation: StackNavigation,
+    frame: Frame,
 }
 
 impl LiveHook for Contacts {
@@ -182,32 +167,27 @@ impl Widget for Contacts {
         &mut self,
         cx: &mut Cx,
         event: &Event,
-        _dispatch_action: &mut dyn FnMut(&mut Cx, WidgetActionItem),
+        dispatch_action: &mut dyn FnMut(&mut Cx, WidgetActionItem),
     ) {
-        let actions = self.navigation.handle_widget_event(cx, event);
+        let actions = self.frame.handle_widget_event(cx, event);
 
-        if actions.not_empty() {
-            let contacts_body_ref = self
-                .navigation
-                .get_widget(id!(root_view.contacts_body));
-
-            if contacts_body_ref.get_button(id!(right_button)).clicked(&actions) {
-                self.navigation.show_stack_view(cx);
-                self.redraw(cx);
-            }
+        if self.get_button(id!(right_button)).clicked(&actions) {
+            let uid = self.widget_uid();
+            dispatch_action(cx, WidgetActionItem::new(StackViewAction::ShowAddContact.into(), uid));
+            self.redraw(cx);
         }
     }
 
     fn redraw(&mut self, cx: &mut Cx) {
-        self.navigation.redraw(cx);
+        self.frame.redraw(cx);
     }
 
     fn find_widgets(&mut self, path: &[LiveId], cached: WidgetCache, results: &mut WidgetSet) {
-        self.navigation.find_widgets(path, cached, results);
+        self.frame.find_widgets(path, cached, results);
     }
 
     fn draw_walk_widget(&mut self, cx: &mut Cx2d, walk: Walk) -> WidgetDraw {
-        let _ = self.navigation.draw_walk_widget(cx, walk);
+        let _ = self.frame.draw_walk_widget(cx, walk);
         WidgetDraw::done()
     }
 }

@@ -1,5 +1,7 @@
 use makepad_widgets::*;
 use crate::shared::stack_navigation::*;
+use crate::shared::stack_view_action::StackViewAction;
+use crate::contacts::contacts_screen::*;
 use crate::discover::discover_screen::*;
 use crate::discover::moments_screen::*;
 
@@ -10,13 +12,13 @@ live_design! {
 
     import crate::home::home_screen::HomeScreen
     import crate::contacts::contacts_screen::ContactsScreen
-    //import crate::contacts::add_contact_screen::AddContactScreen
+    import crate::contacts::add_contact_screen::AddContactScreen
     import crate::discover::discover_screen::DiscoverScreen
     import crate::discover::moments_screen::MomentsScreen
     import crate::profile::profile_screen::ProfileScreen
 
     import crate::shared::clickable_frame::ClickableFrame
-    import crate::shared::stack_navigation::StackNavigation;
+    import crate::shared::stack_navigation::*;
 
     ICON_CHAT = dep("crate://self/resources/chat.svg")
     ICON_CONTACTS = dep("crate://self/resources/contacts.svg")
@@ -162,7 +164,7 @@ live_design! {
                         }
                     }
 
-                    stack_view = {
+                    moments_stack_view = <StackNavigationView> {
                         frame: {
                             header = {
                                 content = {
@@ -174,6 +176,21 @@ live_design! {
                                 }
                             }
                             <MomentsScreen> {}
+                        }
+                    }
+
+                    add_contact_stack_view = <StackNavigationView> {
+                        frame: {
+                            header = {
+                                content = {
+                                    title_container = {
+                                        title = {
+                                            label: "Add Contact"
+                                        }
+                                    }
+                                }
+                            }
+                            <AddContactScreen> {}
                         }
                     }
                 }
@@ -254,8 +271,13 @@ impl AppMain for App {
 
         for action in actions {
             match action.action() {
-                DiscoveryAction::OpenMoments => {
-                    ui.get_stack_navigation(id!(navigation)).show_stack_view(cx);
+                StackViewAction::ShowMoments => {
+                    ui.get_stack_navigation(id!(navigation))
+                        .show_stack_view_by_id(LiveId::from_str("moments_stack_view").unwrap(), cx);  
+                },
+                StackViewAction::ShowAddContact => {
+                    ui.get_stack_navigation(id!(navigation))
+                        .show_stack_view_by_id(LiveId::from_str("add_contact_stack_view").unwrap(), cx);
                 },
                 _ => {}
             }
