@@ -1,10 +1,12 @@
 use makepad_widgets::widget::WidgetCache;
+use crate::shared::clickable_frame::*;
 use makepad_widgets::*;
 
 live_design! {
     import makepad_widgets::frame::*;
     import makepad_widgets::label::Label;
 
+    import crate::shared::clickable_frame::ClickableFrame;
     import crate::shared::styles::*;
     import crate::shared::helpers::*;
     import crate::shared::header::SimpleHeader;
@@ -62,91 +64,105 @@ live_design! {
         }
     }
 
+    ClickableOptions = <ClickableFrame> {
+        frame: <Frame> {
+            walk: {width: Fill, height: Fit, margin: {top: 10., bottom: 10.}}
+            layout: {padding: {bottom: 10.}, spacing: 0., flow: Down}
+
+            show_bg: true
+            draw_bg: {
+                color: #f00
+            }
+        }
+    }
+
     Discover = {{Discover}} {
         frame: <Frame> {
-            walk: {width: Fill, height: Fill}
+            walk: {width: Fill, height: Fit}
             layout: {flow: Down, spacing: 0.0}
 
-            <Options> {
-                moments_link = <OptionsItem> {
-                    content = {
-                        icon = {
-                            image: (IMG_MOMENTS)
-                        }
+            moments_link = <ClickableOptions> {
+                frame: {
+                    <OptionsItem> {
+                        content = {
+                            icon = {
+                                image: (IMG_MOMENTS)
+                            }
 
-                        label = {
-                            label: "Moments"
+                            label = {
+                                label: "Moments"
+                            }
                         }
                     }
                 }
             }
-    
+
             <Options> {
                 <OptionsItem> {
                     content = {
                         icon = {
                             image: (IMG_SCAN)
                         }
-    
+
                         label = {
                             label: "Scan"
                         }
                     }
-    
+
                     divider = <Divider> {
                         walk: {margin: {left: 42.0}}
                     }
                 }
-    
+
                 <OptionsItem> {
                     content = {
                         icon = {
                             image: (IMG_SHAKE)
                         }
-    
+
                         label = {
                             label: "Shake"
                         }
-    
+
                     }
                 }
             }
-    
+
             <Options> {
                 <OptionsItem> {
                     content = {
                         icon = {
                             image: (IMG_SEARCH)
                         }
-    
+
                         label = {
                             label: "Search"
                         }
                     }
                 }
             }
-    
+
             <Options> {
                 <OptionsItem> {
                     content = {
                         icon = {
                             image: (IMG_PEOPLE_NEARBY)
                         }
-    
+
                         label = {
                             label: "People Nearby"
                         }
                     }
                 }
             }
-    
+
             <Options> {
                 <OptionsItem> {
                     content = {
                         icon = {
                             image: (IMG_MINI_PROGRAMS)
                         }
-    
+
                         label = {
                             label: "Mini Programs"
                         }
@@ -226,19 +242,10 @@ impl Widget for Discover {
 
 impl Discover {
     fn handle_event_with(&mut self, cx: &mut Cx, event: &Event, dispatch_action: &mut dyn FnMut(&mut Cx, DiscoveryAction)) {
-        match event.hits(cx, self.get_frame(id!(moments_link)).area()) {
-            Hit::FingerUp(fe) => if fe.is_over {
-                dispatch_action(cx, DiscoveryAction::OpenMoments);
-            },
-            Hit::FingerHoverIn(_) => {
-                cx.set_cursor(MouseCursor::Hand);
-                //self.animate_state(cx, id!(hover.on));
-            },
-            Hit::FingerHoverOut(_) => {
-                cx.set_cursor(MouseCursor::Arrow);
-                //self.animate_state(cx, id!(hover.off));
-            },
-            _ => ()
+        let actions = self.frame.handle_widget_event(cx, event);
+
+        if self.get_clickable_frame(id!(moments_link)).clicked(&actions) {
+            dispatch_action(cx, DiscoveryAction::OpenMoments);
         }
     }
 }

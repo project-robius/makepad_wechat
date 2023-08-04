@@ -11,6 +11,8 @@ live_design! {
     import crate::discover::discover_screen::DiscoverScreen
     import crate::profile::profile_screen::ProfileScreen
 
+    import crate::shared::clickable_frame::ClickableFrame
+
     ICON_CHAT = dep("crate://self/resources/chat.svg")
     ICON_CONTACTS = dep("crate://self/resources/contacts.svg")
     ICON_DISCOVER = dep("crate://self/resources/discover.svg")
@@ -176,6 +178,7 @@ impl LiveHook for App {
         crate::shared::search_bar::live_design(cx);
         crate::shared::dropdown_menu::live_design(cx);
         crate::shared::stack_navigation::live_design(cx);
+        crate::shared::clickable_frame::live_design(cx);
 
         // home - chats
         crate::home::home_screen::live_design(cx);
@@ -226,7 +229,7 @@ impl AppMain for App {
         for action in actions {
             match action.action() {
                 DiscoveryAction::OpenMoments => {
-                    println!("Open moments");
+                    println!("Display moments screen!!");
                     // Display moments screen
                 },
                 _ => {}
