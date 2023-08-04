@@ -65,14 +65,12 @@ live_design! {
     }
 
     ClickableOptions = <ClickableFrame> {
-        frame: <Frame> {
-            walk: {width: Fill, height: Fit, margin: {top: 10., bottom: 10.}}
-            layout: {padding: {bottom: 10.}, spacing: 0., flow: Down}
+        walk: {width: Fill, height: Fit, margin: {top: 10., bottom: 10.}}
+        layout: {padding: {bottom: 10.}, spacing: 0., flow: Down}
 
-            show_bg: true
-            draw_bg: {
-                color: #f00
-            }
+        show_bg: true
+        draw_bg: {
+            color: #f00
         }
     }
 
@@ -82,16 +80,14 @@ live_design! {
             layout: {flow: Down, spacing: 0.0}
 
             moments_link = <ClickableOptions> {
-                frame: {
-                    <OptionsItem> {
-                        content = {
-                            icon = {
-                                image: (IMG_MOMENTS)
-                            }
+                <OptionsItem> {
+                    content = {
+                        icon = {
+                            image: (IMG_MOMENTS)
+                        }
 
-                            label = {
-                                label: "Moments"
-                            }
+                        label = {
+                            label: "Moments"
                         }
                     }
                 }

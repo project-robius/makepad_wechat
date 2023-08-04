@@ -5,19 +5,17 @@ live_design! {
     import makepad_widgets::frame::*;
 
     ClickableFrame = {{ClickableFrame}} {
-        frame: <Frame> {
-            walk: {width: Fit, height: Fit}
-            show_bg: true
-            draw_bg: {
-                color: #fff
-            }
+        walk: {width: Fit, height: Fit}
+        show_bg: true
+        draw_bg: {
+            color: #fff
         }
     }
 }
 
 #[derive(Live)]
 pub struct ClickableFrame {
-    #[live]
+    #[deref]
     frame: Frame,
 }
 
