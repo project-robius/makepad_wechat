@@ -1,9 +1,9 @@
-use makepad_widgets::*;
-use crate::shared::stack_navigation::*;
-use crate::shared::stack_view_action::StackViewAction;
 use crate::contacts::contacts_screen::*;
 use crate::discover::discover_screen::*;
 use crate::discover::moments_screen::*;
+use crate::shared::stack_navigation::*;
+use crate::shared::stack_view_action::StackViewAction;
+use makepad_widgets::*;
 
 live_design! {
     import makepad_widgets::desktop_window::DesktopWindow
@@ -273,12 +273,15 @@ impl AppMain for App {
             match action.action() {
                 StackViewAction::ShowMoments => {
                     ui.get_stack_navigation(id!(navigation))
-                        .show_stack_view_by_id(LiveId::from_str("moments_stack_view").unwrap(), cx);  
-                },
+                        .show_stack_view_by_id(LiveId::from_str("moments_stack_view").unwrap(), cx);
+                }
                 StackViewAction::ShowAddContact => {
                     ui.get_stack_navigation(id!(navigation))
-                        .show_stack_view_by_id(LiveId::from_str("add_contact_stack_view").unwrap(), cx);
-                },
+                        .show_stack_view_by_id(
+                            LiveId::from_str("add_contact_stack_view").unwrap(),
+                            cx,
+                        );
+                }
                 _ => {}
             }
         }

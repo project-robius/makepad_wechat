@@ -1,7 +1,7 @@
-use makepad_widgets::widget::WidgetCache;
-use makepad_widgets::*;
 use crate::shared::stack_navigation::StackNavigation;
 use crate::shared::stack_view_action::StackViewAction;
+use makepad_widgets::widget::WidgetCache;
+use makepad_widgets::*;
 
 live_design! {
     import makepad_draw::shader::std::*;
@@ -173,7 +173,10 @@ impl Widget for Contacts {
 
         if self.get_button(id!(right_button)).clicked(&actions) {
             let uid = self.widget_uid();
-            dispatch_action(cx, WidgetActionItem::new(StackViewAction::ShowAddContact.into(), uid));
+            dispatch_action(
+                cx,
+                WidgetActionItem::new(StackViewAction::ShowAddContact.into(), uid),
+            );
             self.redraw(cx);
         }
     }

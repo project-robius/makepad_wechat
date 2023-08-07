@@ -4,5 +4,5 @@ use makepad_widgets::*;
 pub enum StackViewAction {
     None,
     ShowAddContact,
-    ShowMoments
+    ShowMoments,
 }

@@ -39,9 +39,9 @@ impl Widget for ClickableFrame {
         dispatch_action: &mut dyn FnMut(&mut Cx, WidgetActionItem),
     ) {
         let uid = self.widget_uid();
-        self.handle_event_with(cx, event, &mut | cx, action | {
+        self.handle_event_with(cx, event, &mut |cx, action| {
             dispatch_action(cx, WidgetActionItem::new(action.into(), uid));
-        });       
+        });
     }
 
     fn redraw(&mut self, cx: &mut Cx) {
@@ -63,20 +63,27 @@ impl Widget for ClickableFrame {
 }
 
 impl ClickableFrame {
-    fn handle_event_with(&mut self, cx: &mut Cx, event: &Event, dispatch_action: &mut dyn FnMut(&mut Cx, ClickableFrameAction)) {
+    fn handle_event_with(
+        &mut self,
+        cx: &mut Cx,
+        event: &Event,
+        dispatch_action: &mut dyn FnMut(&mut Cx, ClickableFrameAction),
+    ) {
         match event.hits(cx, self.frame.area()) {
-            Hit::FingerUp(fe) => if fe.is_over {
-                dispatch_action(cx, ClickableFrameAction::Click);
-            },
+            Hit::FingerUp(fe) => {
+                if fe.is_over {
+                    dispatch_action(cx, ClickableFrameAction::Click);
+                }
+            }
             Hit::FingerHoverIn(_) => {
                 cx.set_cursor(MouseCursor::Hand);
                 //self.animate_state(cx, id!(hover.on));
-            },
+            }
             Hit::FingerHoverOut(_) => {
                 cx.set_cursor(MouseCursor::Arrow);
                 //self.animate_state(cx, id!(hover.off));
-            },
-            _ => ()
+            }
+            _ => (),
         }
     }
 }
@@ -85,10 +92,10 @@ impl ClickableFrame {
 pub struct ClickableFrameRef(WidgetRef);
 
 impl ClickableFrameRef {
-    pub fn clicked(&self, actions:&WidgetActions) -> bool {
+    pub fn clicked(&self, actions: &WidgetActions) -> bool {
         if let Some(item) = actions.find_single_action(self.widget_uid()) {
             if let ClickableFrameAction::Click = item.action() {
-                return true
+                return true;
             }
         }
         false

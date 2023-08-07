@@ -1,6 +1,6 @@
-use makepad_widgets::widget::WidgetCache;
 use crate::shared::clickable_frame::*;
 use crate::shared::stack_view_action::StackViewAction;
+use makepad_widgets::widget::WidgetCache;
 use makepad_widgets::*;
 
 live_design! {
@@ -207,9 +207,9 @@ impl Widget for Discover {
         dispatch_action: &mut dyn FnMut(&mut Cx, WidgetActionItem),
     ) {
         let uid = self.widget_uid();
-        self.handle_event_with(cx, event, &mut | cx, action: StackViewAction | {
+        self.handle_event_with(cx, event, &mut |cx, action: StackViewAction| {
             dispatch_action(cx, WidgetActionItem::new(action.into(), uid));
-        });       
+        });
     }
 
     fn redraw(&mut self, cx: &mut Cx) {
@@ -227,10 +227,18 @@ impl Widget for Discover {
 }
 
 impl Discover {
-    fn handle_event_with(&mut self, cx: &mut Cx, event: &Event, dispatch_action: &mut dyn FnMut(&mut Cx, StackViewAction)) {
+    fn handle_event_with(
+        &mut self,
+        cx: &mut Cx,
+        event: &Event,
+        dispatch_action: &mut dyn FnMut(&mut Cx, StackViewAction),
+    ) {
         let actions = self.frame.handle_widget_event(cx, event);
 
-        if self.get_clickable_frame(id!(moments_link)).clicked(&actions) {
+        if self
+            .get_clickable_frame(id!(moments_link))
+            .clicked(&actions)
+        {
             dispatch_action(cx, StackViewAction::ShowMoments);
         }
     }

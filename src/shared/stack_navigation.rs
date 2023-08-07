@@ -12,7 +12,7 @@ live_design! {
                     label: "My Stack View"
                 }
             }
-  
+
             button_container = {
                 left_button = {
                     walk: {width: Fit}
@@ -24,7 +24,7 @@ live_design! {
             }
         }
     }
-  
+
     StackNavigationView = {{StackNavigationView}} {
         walk: {width: Fill, height: Fill}
         frame: <Frame> {
@@ -145,9 +145,10 @@ impl StackNavigationView {
             dispatch_action(cx, action);
         }
 
-        if self.state.is_in_state(cx, id!(slide.hide)) &&
-            !self.state.is_track_animating(cx, id!(slide)) {
-                self.apply_over(cx, live!{frame: {visible: false}});
+        if self.state.is_in_state(cx, id!(slide.hide))
+            && !self.state.is_track_animating(cx, id!(slide))
+        {
+            self.apply_over(cx, live! {frame: {visible: false}});
         }
     }
 }
@@ -158,7 +159,7 @@ pub struct StackNavigationViewRef(pub WidgetRef);
 impl StackNavigationViewRef {
     pub fn show(&mut self, cx: &mut Cx) {
         if let Some(mut inner) = self.borrow_mut() {
-            inner.apply_over(cx, live!{frame: {visible: true}});
+            inner.apply_over(cx, live! {frame: {visible: true}});
             inner.animate_state(cx, id!(slide.show));
         }
     }
@@ -173,14 +174,11 @@ impl StackNavigationViewRef {
     }
 }
 
+#[derive(Default)]
 enum ActiveStackView {
+    #[default]
     None,
     Active(LiveId),
-}
-impl Default for ActiveStackView {
-    fn default() -> Self {
-        ActiveStackView::None
-    }
 }
 
 #[derive(Live)]
