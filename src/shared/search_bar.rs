@@ -11,7 +11,7 @@ live_design! {
         walk: {width: Fill, height: Fit}
         show_bg: true
         draw_bg: {
-            color: #ddd;
+            color: #EDEDED;
         }
 
         input = <TextInput> {

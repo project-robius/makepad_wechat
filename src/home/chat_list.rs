@@ -53,7 +53,7 @@ live_design! {
             label: "yesterday"
         }
 
-        // TODO: implement divider when moving this into a widget.
+        // TODO: implement a divider
         // currently nested frames don't get drawn in the ListView
         // <Divider> {}
     }
@@ -95,44 +95,62 @@ impl LiveHook for ChatList {
             ChatEntry {
                 username: "Rik Arends".to_string(),
                 latest_message: MessagePreview::Text("Hi!".to_string()),
-                direction: MessageDirection::Incoming,
-                is_read: false,
-                timestamp: "yesterday".to_string(),
+                timestamp: "14:09".to_string(),
             },
             ChatEntry {
                 username: "John Doe".to_string(),
                 latest_message: MessagePreview::Image,
-                direction: MessageDirection::Incoming,
-                is_read: false,
-                timestamp: "18/09".to_string(),
+                timestamp: "11:20".to_string(),
             },
             ChatEntry {
                 username: "Jorge Bejar".to_string(),
                 latest_message: MessagePreview::Audio,
-                direction: MessageDirection::Incoming,
-                is_read: false,
-                timestamp: "thursday".to_string(),
+                timestamp: "friday".to_string(),
             },
             ChatEntry {
                 username: "Julian Montes de Oca".to_string(),
                 latest_message: MessagePreview::Video,
-                direction: MessageDirection::Outgoing,
-                is_read: false,
-                timestamp: "14:05".to_string(),
+                timestamp: "friday".to_string(),
             },
             ChatEntry {
                 username: "Edward Tan".to_string(),
                 latest_message: MessagePreview::Text("thanks ed, see you there.".to_string()),
-                direction: MessageDirection::Incoming,
-                is_read: false,
-                timestamp: "yesterday".to_string(),
+                timestamp: "thursday".to_string(),
             },
             ChatEntry {
                 username: "WeChat Team".to_string(),
                 latest_message: MessagePreview::Text("Welcome to WeChat!".to_string()),
-                direction: MessageDirection::Incoming,
-                is_read: false,
-                timestamp: "18:45".to_string(),
+                timestamp: "18/07".to_string(),
+            },
+            ChatEntry {
+                username: "Andrew Lin".to_string(),
+                latest_message: MessagePreview::Text("Awesome, I'll make sure they know about it".to_string()),
+                timestamp: "18/07".to_string(),
+            },
+            ChatEntry {
+                username: "Christian Huxley".to_string(),
+                latest_message: MessagePreview::Image,
+                timestamp: "15/07".to_string(),
+            },
+            ChatEntry {
+                username: "Ana Leddie".to_string(),
+                latest_message: MessagePreview::Image,
+                timestamp: "14/07".to_string(),
+            },
+            ChatEntry {
+                username: "Adam Adler".to_string(),
+                latest_message: MessagePreview::Video,
+                timestamp: "10/07".to_string(),
+            },
+            ChatEntry {
+                username: "Gabriel Hayes".to_string(),
+                latest_message: MessagePreview::Text("wow I haven't seen that".to_string()),
+                timestamp: "10/07".to_string(),
+            },
+            ChatEntry {
+                username: "Eric Ford".to_string(),
+                latest_message: MessagePreview::Text("Nice to see you here!".to_string()),
+                timestamp: "10/07".to_string(),
             },
         ];
     }
@@ -206,9 +224,7 @@ impl ChatList {
 pub struct ChatEntry {
     username: String,
     latest_message: MessagePreview,
-    direction: MessageDirection,
     timestamp: String,
-    is_read: bool,
 }
 
 pub enum MessagePreview {
@@ -227,9 +243,4 @@ impl MessagePreview {
             MessagePreview::Text(text) => text,
         }
     }
-}
-
-pub enum MessageDirection {
-    Outgoing,
-    Incoming,
 }

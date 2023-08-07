@@ -78,8 +78,8 @@ live_design! {
                             walk: {margin: 0.0}
                             layout: {padding: 0.0}
 
-                            tab1_frame = <HomeScreen> {visible: false}
-                            tab2_frame = <ContactsScreen> {visible: true}
+                            tab1_frame = <HomeScreen> {visible: true}
+                            tab2_frame = <ContactsScreen> {visible: false}
                             tab3_frame = <DiscoverScreen> {visible: false}
                             tab4_frame = <ProfileScreen> {visible: false}
                         }
@@ -96,6 +96,7 @@ live_design! {
 
                             mobile_modes = <Frame> {
                                 tab1 = <AppTab> {
+                            state: {selected = {default: on}}
                                     label: "Chat"
                                     draw_icon: {
                                         svg_file: (ICON_CHAT),
@@ -112,8 +113,7 @@ live_design! {
                                     layout: {flow: Down, spacing: 5.0, align: {x: 0.5, y: 0.5}}
                                 }
                                 tab2 = <AppTab> {
-                                    state: {selected = {default: on}}
-                                    label: "Contacts",
+                                            label: "Contacts",
                                     draw_icon: {
                                         svg_file: (ICON_CONTACTS),
                                         fn get_color(self) -> vec4 {
@@ -216,9 +216,10 @@ impl LiveHook for App {
 
         // shared
         crate::shared::styles::live_design(cx);
-        crate::shared::helpers::live_design(cx);
+        crate::shared::helpers::live_design(cx); 
         crate::shared::header::live_design(cx);
         crate::shared::search_bar::live_design(cx);
+        crate::shared::popup_menu::live_design(cx);
         crate::shared::dropdown_menu::live_design(cx);
         crate::shared::stack_navigation::live_design(cx);
         crate::shared::clickable_frame::live_design(cx);
