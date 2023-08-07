@@ -181,7 +181,7 @@ impl ChatList {
                     _ => id!(chat),
                 };
 
-                let item = self.list_view.get_item(cx, item_id, template).unwrap();
+                let item = self.list_view.get_item(cx, item_id, template[0]).unwrap();
 
                 if item_id >= 1 && item_id < chat_entries_count + 1 {
                     let item_index = item_id as usize - 1; // offset by 1 to account for the search bar
