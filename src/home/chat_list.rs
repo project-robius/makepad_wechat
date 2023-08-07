@@ -231,12 +231,14 @@ impl ChatListBody {
         event: &Event,
         dispatch_action: &mut dyn FnMut(&mut Cx, ChatListBodyAction),
     ) {
-        self.list_view.handle_widget_event_with(cx, event, &mut | cx, action | {
-            match action.action() {
+        self.list_view.handle_widget_event_with(
+            cx,
+            event,
+            &mut |cx, action| match action.action() {
                 ClickableFrameAction::Click => dispatch_action(cx, ChatListBodyAction::Click),
                 _ => (),
-            }
-        });
+            },
+        );
     }
 }
 
@@ -347,10 +349,4 @@ impl MessagePreview {
             MessagePreview::Text(text) => text,
         }
     }
-}
-
-#[derive(Debug)]
-pub enum MessageDirection {
-    Outgoing,
-    Incoming,
 }

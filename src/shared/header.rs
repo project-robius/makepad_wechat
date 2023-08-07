@@ -15,7 +15,7 @@ live_design! {
         layout: {padding: {bottom: 7., top: 50.}, align: {x: 0.5, y: 0.0}, spacing: 0.0, flow: Overlay}
         show_bg: true
         draw_bg: {
-            color: #EDEDED 
+            color: #EDEDED
         }
 
         content = <Frame> {
@@ -115,7 +115,7 @@ live_design! {
                 left_button = <Button> {
                     walk: {width: Fit, height: Fit}
                     layout: {padding: 0.}
-                    icon_walk: {width: 20, height: Fit} 
+                    icon_walk: {width: 20, height: Fit}
                     draw_bg: {
                         fn pixel(self) -> vec4 {
                             let sdf = Sdf2d::viewport(self.pos * self.rect_size);
@@ -128,7 +128,7 @@ live_design! {
                         brightness: 0.8;
                     }
                 }
-                
+
                 menu = <DropDown> {
                     walk: {height: Fit, width: Fit}
                     draw_icon: {
@@ -139,12 +139,12 @@ live_design! {
                     labels: ["Add Contact", "New Chat", "Scan", "Money"]
                     values: [AddContact, NewChat, Scan, Money]
                     icons: [
-                        dep("crate://self/resources/icons/add_contact.svg"), 
-                        dep("crate://self/resources/icons/chat.svg"), 
-                        dep("crate://self/resources/icons/scan.svg"), 
+                        dep("crate://self/resources/icons/add_contact.svg"),
+                        dep("crate://self/resources/icons/chat.svg"),
+                        dep("crate://self/resources/icons/scan.svg"),
                         dep("crate://self/resources/icons/money.svg")
                     ]
-                } 
+                }
             }
         }
     }

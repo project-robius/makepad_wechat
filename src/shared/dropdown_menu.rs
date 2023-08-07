@@ -215,14 +215,14 @@ impl DropDown {
         self.draw_bg.redraw(cx);
         let global = cx.global::<PopupMenuGlobal>().clone();
         let mut map = global.map.borrow_mut();
-        let lb = map.get_mut(&self.popup_menu.unwrap()).unwrap(); 
+        let lb = map.get_mut(&self.popup_menu.unwrap()).unwrap();
         let node_id = LiveId(self.selected_item as u64).into();
         lb.init_select_item(node_id);
         cx.sweep_lock(self.draw_bg.area());
     }
 
     pub fn set_closed(&mut self, cx: &mut Cx) {
-        self.is_open = false; 
+        self.is_open = false;
         self.draw_bg.redraw(cx);
         cx.sweep_unlock(self.draw_bg.area());
     }
@@ -240,8 +240,11 @@ impl DropDown {
             let mut map = global.map.borrow_mut();
             let menu = map.get_mut(&self.popup_menu.unwrap()).unwrap();
             let mut close = false;
-            menu.handle_event_with(cx, event, self.draw_bg.area(), &mut |cx, action| {
-                match action {
+            menu.handle_event_with(
+                cx,
+                event,
+                self.draw_bg.area(),
+                &mut |cx, action| match action {
                     PopupMenuAction::WasSelected(node_id) => {
                         self.selected_item = node_id.0 .0 as usize;
                         dispatch_action(
@@ -258,8 +261,8 @@ impl DropDown {
                         close = true;
                     }
                     _ => (),
-                }
-            });
+                },
+            );
             if close {
                 self.set_closed(cx);
             }
@@ -317,7 +320,7 @@ impl DropDown {
             Hit::FingerDown(_fe) => {
                 cx.set_key_focus(self.draw_bg.area());
                 self.toggle_open(cx);
-                self.animate_state(cx, id!(hover.pressed));                    
+                self.animate_state(cx, id!(hover.pressed));
             }
             Hit::FingerHoverIn(_) => {
                 cx.set_cursor(MouseCursor::Hand);
@@ -357,7 +360,7 @@ impl DropDown {
             let mut item_pos = None;
 
             popup_menu.begin(cx);
- 
+
             for (i, item) in self.labels.iter().enumerate() {
                 let node_id = LiveId(i as u64).into();
                 if i == self.selected_item {
