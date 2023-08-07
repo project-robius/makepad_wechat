@@ -1,3 +1,8 @@
+use crate::contacts::contacts_screen::*;
+use crate::discover::discover_screen::*;
+use crate::discover::moments_screen::*;
+use crate::shared::stack_navigation::*;
+use crate::shared::stack_view_action::StackViewAction;
 use makepad_widgets::*;
 
 live_design! {
@@ -7,7 +12,13 @@ live_design! {
 
     import crate::home::home_screen::HomeScreen
     import crate::contacts::contacts_screen::ContactsScreen
+    import crate::contacts::add_contact_screen::AddContactScreen
+    import crate::discover::discover_screen::DiscoverScreen
+    import crate::discover::moments_screen::MomentsScreen
     import crate::profile::profile_screen::ProfileScreen
+
+    import crate::shared::clickable_frame::ClickableFrame
+    import crate::shared::stack_navigation::*;
 
     ICON_CHAT = dep("crate://self/resources/chat.svg")
     ICON_CONTACTS = dep("crate://self/resources/contacts.svg")
@@ -54,96 +65,132 @@ live_design! {
             pass: {clear_color: #2A}
             block_signal_event: true;
 
-            <Frame> {
-                design_mode: false,
-                walk: {width: Fill, height: Fill}
-                layout: {padding: 0, align: {x: 0.0, y: 0.0}, spacing: 0., flow: Down}
+            navigation = <StackNavigation> {
+                frame: {
+                    design_mode: false,
+                    walk: {width: Fill, height: Fill}
 
-                application_pages = <Frame> {
-                    walk: {margin: 0.0}
-                    layout: {padding: 0.0}
+                    root_view = {
+                        walk: {width: Fill, height: Fill}
+                        layout: {padding: 0, align: {x: 0.0, y: 0.0}, spacing: 0., flow: Down}
 
-                    tab1_frame = <HomeScreen> {visible: false}
-                    tab2_frame = <ContactsScreen> {visible: true}
-                    tab3_frame = <Screen3> {visible: false}
-                    tab4_frame = <ProfileScreen> {visible: false}
-                }
+                        application_pages = <Frame> {
+                            walk: {margin: 0.0}
+                            layout: {padding: 0.0}
 
-                mobile_menu = <Box> {
-                    walk: {width: Fill, height: 80}
-                    layout: {flow: Right, spacing: 6.0, padding: 10}
-                    draw_bg: {
-                        instance radius: 0.0,
-                        instance border_width: 1.0,
-                        instance border_color: #aaa,
-                        color: #fff
+                            tab1_frame = <HomeScreen> {visible: false}
+                            tab2_frame = <ContactsScreen> {visible: true}
+                            tab3_frame = <DiscoverScreen> {visible: false}
+                            tab4_frame = <ProfileScreen> {visible: false}
+                        }
+
+                        mobile_menu = <Box> {
+                            walk: {width: Fill, height: 80}
+                            layout: {flow: Right, spacing: 6.0, padding: 10}
+                            draw_bg: {
+                                instance radius: 0.0,
+                                instance border_width: 1.0,
+                                instance border_color: #aaa,
+                                color: #fff
+                            }
+
+                            mobile_modes = <Frame> {
+                                tab1 = <AppTab> {
+                                    label: "Chat"
+                                    draw_icon: {
+                                        svg_file: (ICON_CHAT),
+                                        fn get_color(self) -> vec4 {
+                                            return mix(
+                                                #000,
+                                                #0b0,
+                                                self.selected
+                                            )
+                                        }
+                                    }
+                                    walk: {width: Fill}
+                                    icon_walk: {width: 20, height: 20}
+                                    layout: {flow: Down, spacing: 5.0, align: {x: 0.5, y: 0.5}}
+                                }
+                                tab2 = <AppTab> {
+                                    state: {selected = {default: on}}
+                                    label: "Contacts",
+                                    draw_icon: {
+                                        svg_file: (ICON_CONTACTS),
+                                        fn get_color(self) -> vec4 {
+                                            return mix(
+                                                #000,
+                                                #0b0,
+                                                self.selected
+                                            )
+                                        }
+                                    }
+                                    walk: {width: Fill}
+                                    icon_walk: {width: 20, height: 20}
+                                    layout: {flow: Down, spacing: 5.0, align: {x: 0.5, y: 0.5}}
+                                }
+                                tab3 = <AppTab> {
+                                    label: "Discover",
+                                    draw_icon: {
+                                        svg_file: (ICON_DISCOVER),
+                                        fn get_color(self) -> vec4 {
+                                            return mix(
+                                                #000,
+                                                #0b0,
+                                                self.selected
+                                            )
+                                        }
+                                    }
+                                    walk: {width: Fill}
+                                    icon_walk: {width: 20, height: 20}
+                                    layout: {flow: Down, spacing: 5.0, align: {x: 0.5, y: 0.5}}
+                                }
+                                tab4 = <AppTab> {
+                                    label: "Me",
+                                    draw_icon: {
+                                        svg_file: (ICON_ME),
+                                        fn get_color(self) -> vec4 {
+                                            return mix(
+                                                #000,
+                                                #0b0,
+                                                self.selected
+                                            )
+                                        }
+                                    }
+                                    walk: {width: Fill}
+                                    icon_walk: {width: 20, height: 20}
+                                    layout: {flow: Down, spacing: 5.0, align: {x: 0.5, y: 0.5}}
+                                }
+                            }
+                        }
                     }
 
-                    mobile_modes = <Frame> {
-                        tab1 = <AppTab> {
-                            label: "Chat"
-                            draw_icon: {
-                                svg_file: (ICON_CHAT),
-                                fn get_color(self) -> vec4 {
-                                    return mix(
-                                        #000,
-                                        #0b0,
-                                        self.selected
-                                    )
+                    moments_stack_view = <StackNavigationView> {
+                        frame: {
+                            header = {
+                                content = {
+                                    title_container = {
+                                        title = {
+                                            label: "Moments"
+                                        }
+                                    }
                                 }
                             }
-                            walk: {width: Fill}
-                            icon_walk: {width: 20, height: 20}
-                            layout: {flow: Down, spacing: 5.0, align: {x: 0.5, y: 0.5}}
+                            <MomentsScreen> {}
                         }
-                        tab2 = <AppTab> {
-                            state: {selected = {default: on}}
-                            label: "Contacts",
-                            draw_icon: {
-                                svg_file: (ICON_CONTACTS),
-                                fn get_color(self) -> vec4 {
-                                    return mix(
-                                        #000,
-                                        #0b0,
-                                        self.selected
-                                    )
+                    }
+
+                    add_contact_stack_view = <StackNavigationView> {
+                        frame: {
+                            header = {
+                                content = {
+                                    title_container = {
+                                        title = {
+                                            label: "Add Contact"
+                                        }
+                                    }
                                 }
                             }
-                            walk: {width: Fill}
-                            icon_walk: {width: 20, height: 20}
-                            layout: {flow: Down, spacing: 5.0, align: {x: 0.5, y: 0.5}}
-                        }
-                        tab3 = <AppTab> {
-                            label: "Discover",
-                            draw_icon: {
-                                svg_file: (ICON_DISCOVER),
-                                fn get_color(self) -> vec4 {
-                                    return mix(
-                                        #000,
-                                        #0b0,
-                                        self.selected
-                                    )
-                                }
-                            }
-                            walk: {width: Fill}
-                            icon_walk: {width: 20, height: 20}
-                            layout: {flow: Down, spacing: 5.0, align: {x: 0.5, y: 0.5}}
-                        }
-                        tab4 = <AppTab> {
-                            label: "Me",
-                            draw_icon: {
-                                svg_file: (ICON_ME),
-                                fn get_color(self) -> vec4 {
-                                    return mix(
-                                        #000,
-                                        #0b0,
-                                        self.selected
-                                    )
-                                }
-                            }
-                            walk: {width: Fill}
-                            icon_walk: {width: 20, height: 20}
-                            layout: {flow: Down, spacing: 5.0, align: {x: 0.5, y: 0.5}}
+                            <AddContactScreen> {}
                         }
                     }
                 }
@@ -174,6 +221,7 @@ impl LiveHook for App {
         crate::shared::search_bar::live_design(cx);
         crate::shared::dropdown_menu::live_design(cx);
         crate::shared::stack_navigation::live_design(cx);
+        crate::shared::clickable_frame::live_design(cx);
 
         // home - chats
         crate::home::home_screen::live_design(cx);
@@ -184,6 +232,10 @@ impl LiveHook for App {
         crate::contacts::contacts_group::live_design(cx);
         crate::contacts::contacts_list::live_design(cx);
         crate::contacts::add_contact_screen::live_design(cx);
+
+        // discover
+        crate::discover::discover_screen::live_design(cx);
+        crate::discover::moments_screen::live_design(cx);
 
         // profile
         crate::profile::profile_screen::live_design(cx);
@@ -217,5 +269,22 @@ impl AppMain for App {
                 application_pages.tab4_frame,
             ),
         );
+
+        for action in actions {
+            match action.action() {
+                StackViewAction::ShowMoments => {
+                    ui.get_stack_navigation(id!(navigation))
+                        .show_stack_view_by_id(LiveId::from_str("moments_stack_view").unwrap(), cx);
+                }
+                StackViewAction::ShowAddContact => {
+                    ui.get_stack_navigation(id!(navigation))
+                        .show_stack_view_by_id(
+                            LiveId::from_str("add_contact_stack_view").unwrap(),
+                            cx,
+                        );
+                }
+                _ => {}
+            }
+        }
     }
 }
