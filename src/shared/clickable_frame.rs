@@ -63,7 +63,7 @@ impl Widget for ClickableFrame {
 }
 
 impl ClickableFrame {
-    fn handle_event_with(
+    pub fn handle_event_with(
         &mut self,
         cx: &mut Cx,
         event: &Event,
@@ -88,13 +88,27 @@ impl ClickableFrame {
     }
 }
 
-#[derive(Clone, PartialEq, WidgetRef)]
+#[derive(Debug, Clone, PartialEq, WidgetRef)]
 pub struct ClickableFrameRef(WidgetRef);
 
 impl ClickableFrameRef {
     pub fn clicked(&self, actions: &WidgetActions) -> bool {
         if let Some(item) = actions.find_single_action(self.widget_uid()) {
             if let ClickableFrameAction::Click = item.action() {
+                return true;
+            }
+        }
+        false
+    }
+}
+
+#[derive(Debug, Clone, WidgetSet)]
+pub struct ClickableFrameSet(WidgetSet);
+
+impl ClickableFrameSet {
+    pub fn clicked(&self, actions: &WidgetActions) -> bool {
+        for clickable_frame in self.iter() {
+            if clickable_frame.clicked(actions) {
                 return true;
             }
         }
