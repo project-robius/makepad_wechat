@@ -240,11 +240,7 @@ impl DropDown {
             let mut close = false;
             menu.handle_event_with(cx, event, self.draw_bg.area(), &mut |cx, action| {
                 match action {
-                    PopupMenuAction::WasSweeped(_node_id) => {
-                        //dispatch_action(cx, PopupMenuAction::WasSweeped(node_id));
-                    }
                     PopupMenuAction::WasSelected(node_id) => {
-                        //dispatch_action(cx, PopupMenuAction::WasSelected(node_id));
                         self.selected_item = node_id.0 .0 as usize;
                         dispatch_action(
                             cx,

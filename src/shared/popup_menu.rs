@@ -183,8 +183,8 @@ struct DrawName {
 
 #[derive(Live)]
 pub struct PopupMenu {
-    #[live]
-    view: View,
+    #[live] draw_list: DrawList2d,
+
     #[live]
     menu_item: Option<LivePtr>,
 
@@ -229,7 +229,7 @@ impl LiveHook for PopupMenu {
                 node.apply(cx, from, index, nodes);
             }
         }
-        self.view.redraw(cx);
+        self.draw_list.redraw(cx);
     }
 }
 
@@ -265,7 +265,7 @@ impl PopupMenu {
     }
 
     pub fn begin(&mut self, cx: &mut Cx2d) {
-        self.view.begin_overlay_reuse(cx);
+        self.draw_list.begin_overlay_reuse(cx);
 
         cx.begin_pass_sized_turtle(Layout::flow_down());
 
@@ -279,7 +279,7 @@ impl PopupMenu {
         let shift = DVec2 { x: - area.size.x + (shift_area.get_rect(cx).size.x * 0.7), y: 30. };
 
         cx.end_pass_sized_turtle_with_shift(shift_area, shift);
-        self.view.end(cx);
+        self.draw_list.end(cx);
 
         self.menu_items.retain_visible();
         if let Some(init_select_item) = self.init_select_item.take() {
@@ -288,7 +288,7 @@ impl PopupMenu {
     }
 
     pub fn redraw(&mut self, cx: &mut Cx) {
-        self.view.redraw(cx);
+        self.draw_list.redraw(cx);
     }
 
     pub fn draw_item(&mut self, cx: &mut Cx2d, item_id: MenuItemId, label: &str) {
@@ -386,14 +386,16 @@ pub struct MenuItem {
     selected: f32,
 }
 
+#[derive(Default, Clone)]
 pub enum MenuItemAction {
     WasSweeped,
     WasSelected,
     MightBeSelected,
+    #[default]
     None,
 }
 
-#[derive(Clone, WidgetAction)]
+#[derive(Clone, WidgetAction, Debug)]
 pub enum PopupMenuAction {
     WasSweeped(MenuItemId),
     WasSelected(MenuItemId),

@@ -1,6 +1,7 @@
 use crate::contacts::contacts_screen::*;
 use crate::discover::discover_screen::*;
 use crate::discover::moments_screen::*;
+use crate::shared::dropdown_menu::DropDownAction;
 use crate::shared::stack_navigation::*;
 use crate::shared::stack_view_action::StackViewAction;
 use makepad_widgets::*;
@@ -283,8 +284,22 @@ impl AppMain for App {
                             LiveId::from_str("add_contact_stack_view").unwrap(),
                             cx,
                         );
-                }
+                },
                 _ => {}
+            }
+
+            match action.action() {
+                DropDownAction::Select(_id, value) => {
+                    if LiveValue::Bool(true) == value.enum_eq(id!(AddContact)) {
+                        ui.get_stack_navigation(id!(navigation))
+                            .show_stack_view_by_id(
+                                LiveId::from_str("add_contact_stack_view").unwrap(),
+                                cx,
+                            );
+                    }
+                }
+                _ => {
+                }
             }
         }
     }

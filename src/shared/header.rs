@@ -136,8 +136,8 @@ live_design! {
                         color: #000;
                         brightness: 0.8;
                     }
-                    labels: ["New Chat", "Add Contacts", "Scan", "Money"]
-                    values: [NewChat, AddContacts, Scan, Money]
+                    labels: ["Add Contact", "New Chat", "Scan", "Money"]
+                    values: [AddContact, NewChat, Scan, Money]
                 } 
             }
         }
