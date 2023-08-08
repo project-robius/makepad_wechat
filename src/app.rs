@@ -217,7 +217,7 @@ impl LiveHook for App {
 
         // shared
         crate::shared::styles::live_design(cx);
-        crate::shared::helpers::live_design(cx); 
+        crate::shared::helpers::live_design(cx);
         crate::shared::header::live_design(cx);
         crate::shared::search_bar::live_design(cx);
         crate::shared::popup_menu::live_design(cx);
@@ -278,7 +278,7 @@ impl AppMain for App {
                 StackViewAction::ShowMoments => {
                     ui.get_stack_navigation(id!(navigation))
                         .show_stack_view_by_id(LiveId::from_str("moments_stack_view").unwrap(), cx);
-                },
+                }
                 _ => {}
             }
 
@@ -292,8 +292,7 @@ impl AppMain for App {
                             );
                     }
                 }
-                _ => {
-                }
+                _ => {}
             }
         }
     }
