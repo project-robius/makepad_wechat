@@ -20,7 +20,7 @@ live_design! {
 
     IMG_DEFAULT_AVATAR = dep("crate://self/resources/img/default_avatar.png")
 
-    ChatPreview = {{ChatPreview}} {
+    ChatPreview = <ClickableFrame> {
             layout: {flow: Right, spacing: 10., padding: 10.}
             walk: {width: Fill, height: Fit}
 
@@ -102,68 +102,6 @@ live_design! {
             }
         }
 
-    }
-}
-
-#[derive(Debug, Clone, WidgetAction)]
-pub enum ChatPreviewAction {
-    Click,
-    None,
-}
-
-#[derive(Live)]
-pub struct ChatPreview {
-    #[deref]
-    clickable_frame: Frame,
-}
-
-impl LiveHook for ChatPreview {
-    fn before_live_design(cx: &mut Cx) {
-        register_widget!(cx, ChatPreview);
-    }
-}
-
-impl Widget for ChatPreview {
-    fn handle_widget_event_with(
-        &mut self,
-        cx: &mut Cx,
-        event: &Event,
-        dispatch_action: &mut dyn FnMut(&mut Cx, WidgetActionItem),
-    ) {
-        let widget_uid = self.widget_uid();
-        self.handle_event_with(cx, event, &mut |cx, action| {
-            dispatch_action(cx, WidgetActionItem::new(action.into(), widget_uid));
-        });
-    }
-
-    fn get_walk(&self) -> Walk {
-        self.clickable_frame.get_walk()
-    }
-
-    fn redraw(&mut self, cx: &mut Cx) {
-        self.clickable_frame.redraw(cx)
-    }
-
-    fn draw_walk_widget(&mut self, cx: &mut Cx2d, walk: Walk) -> WidgetDraw {
-        self.clickable_frame.draw_walk(cx, walk);
-        WidgetDraw::done()
-    }
-}
-
-impl ChatPreview {
-    fn handle_event_with(
-        &mut self,
-        cx: &mut Cx,
-        event: &Event,
-        dispatch_action: &mut dyn FnMut(&mut Cx, ChatPreviewAction),
-    ) {
-        self.clickable_frame
-            .handle_widget_event_with(cx, event, &mut |cx, action| match action.action() {
-                FrameAction::FingerDown(_) => {
-                    dispatch_action(cx, ChatPreviewAction::Click);
-                }
-                _ => {}
-            });
     }
 }
 
@@ -293,12 +231,12 @@ impl ChatListBody {
         event: &Event,
         dispatch_action: &mut dyn FnMut(&mut Cx, ChatListBodyAction),
     ) {
-        let actions = self.list_view.handle_widget_event(cx, event);
-        for action in actions {
-            if let aciton = ChatListBodyAction::Click {
-                dispatch_action(cx, ChatListBodyAction::Click);
+        self.list_view.handle_widget_event_with(cx, event, &mut | cx, action | {
+            match action.action() {
+                ClickableFrameAction::Click => dispatch_action(cx, ChatListBodyAction::Click),
+                _ => (),
             }
-        }
+        });
     }
 }
 
