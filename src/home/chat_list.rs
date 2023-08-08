@@ -1,67 +1,74 @@
+use crate::shared::clickable_frame::*;
+use crate::shared::stack_navigation::StackNavigation;
+use makepad_widgets::widget::WidgetCache;
 use makepad_widgets::*;
 
 live_design! {
     import makepad_widgets::frame::*;
     import makepad_widgets::label::*;
+    import makepad_widgets::button::Button;
     import makepad_widgets::list_view::ListView;
 
     import crate::shared::search_bar::SearchBar;
     import crate::shared::styles::*;
     import crate::shared::helpers::*;
+    import crate::shared::stack_navigation::StackNavigation;
+    import crate::profile::my_profile_screen::MyProfileScreen;
+    import crate::home::chat_screen::ChatScreen;
+    import crate::shared::clickable_frame::ClickableFrame;
 
     IMG_DEFAULT_AVATAR = dep("crate://self/resources/default_avatar.png")
 
-    ChatPreview = <Frame> {
-        layout: {flow: Right, spacing: 10., padding: 10.}
+    ChatPreview = {{ChatPreview}} {
+            layout: {flow: Right, spacing: 10., padding: 10.}
+            walk: {width: Fill, height: Fit}
 
-        avatar = <Image> {
-            image: (IMG_DEFAULT_AVATAR),
-            walk: {width: 36., height: 36.}
-            layout: {padding: 0}
-        }
-
-        preview = <Frame> {
-            layout: {flow: Down, spacing: 7.}
-
-            username = <Label> {
-                walk: {width: Fill, height: Fit}
-                draw_label: {
-                    color: #000,
-                    text_style: <REGULAR_TEXT>{}
-                }
-                label: "username"
+            avatar = <Image> {
+                image: (IMG_DEFAULT_AVATAR),
+                walk: {width: 36., height: 36.}
+                layout: {padding: 0}
             }
 
-            content = <Label> {
+            preview = <Frame> {
+                layout: {flow: Down, spacing: 7.}
+
+                username = <Label> {
+                    walk: {width: Fill, height: Fit}
+                    draw_label: {
+                        color: #000,
+                        text_style: <REGULAR_TEXT>{}
+                    }
+                    label: "username"
+                }
+
+                content = <Label> {
+                    walk: {width: Fit, height: Fit}
+                    draw_label: {
+                        text_style: <REGULAR_TEXT>{
+                            font_size: 10.5
+                        },
+                    }
+                    label: "Hi there! I'm using WeChat"
+                }
+            }
+
+            timestamp = <Label> {
                 walk: {width: Fit, height: Fit}
                 draw_label: {
                     text_style: <REGULAR_TEXT>{
-                        font_size: 10.5
+                        font_size: 8.
                     },
                 }
-                label: "Hi there! I'm using WeChat"
+                label: "yesterday"
             }
-        }
-
-        timestamp = <Label> {
-            walk: {width: Fit, height: Fit}
-            draw_label: {
-                text_style: <REGULAR_TEXT>{
-                    font_size: 8.
-                },
-            }
-            label: "yesterday"
-        }
-
-        // TODO: implement divider when moving this into a widget.
-        // currently nested frames don't get drawn in the ListView
-        // <Divider> {}
+            // TODO: implement divider when moving this into a widget.
+            // currently nested frames don't get drawn in the ListView
+            // <Divider> {}
     }
 
-    ChatList = {{ChatList}} {
+    ChatListBody = {{ChatListBody}} {
         walk: {width: Fill, height: Fill}
         layout: {flow: Down}
-
         list_view: <ListView> {
             walk: {width: Fill, height: Fill}
             layout: {flow: Down, spacing: 0.0}
@@ -70,10 +77,103 @@ live_design! {
             search_bar = <SearchBar> {}
         }
     }
+
+    ChatList = {{ChatList}} {
+        navigation: <StackNavigation> {
+            frame: {
+                root_view = {
+                    chat_list_body = <ChatListBody> {}
+                }
+                stack_view = {
+                    frame: {
+                        header = {
+                            content = {
+                                title_container = {
+                                    title = {
+                                        label: "FUNCIONA"
+                                    }
+                                }
+                            }
+                        }
+                        <ChatScreen> {}
+                    }
+                }
+            }
+        }
+
+    }
+}
+
+#[derive(Debug, Clone, WidgetAction)]
+pub enum ChatPreviewAction {
+    Click,
+    None,
 }
 
 #[derive(Live)]
-pub struct ChatList {
+pub struct ChatPreview {
+    #[deref]
+    clickable_frame: Frame,
+}
+
+impl LiveHook for ChatPreview {
+    fn before_live_design(cx: &mut Cx) {
+        register_widget!(cx, ChatPreview);
+    }
+}
+
+impl Widget for ChatPreview {
+    fn handle_widget_event_with(
+        &mut self,
+        cx: &mut Cx,
+        event: &Event,
+        dispatch_action: &mut dyn FnMut(&mut Cx, WidgetActionItem),
+    ) {
+        let widget_uid = self.widget_uid();
+        self.handle_event_with(cx, event, &mut |cx, action| {
+            dispatch_action(cx, WidgetActionItem::new(action.into(), widget_uid));
+        });
+    }
+
+    fn get_walk(&self) -> Walk {
+        self.clickable_frame.get_walk()
+    }
+
+    fn redraw(&mut self, cx: &mut Cx) {
+        self.clickable_frame.redraw(cx)
+    }
+
+    fn draw_walk_widget(&mut self, cx: &mut Cx2d, walk: Walk) -> WidgetDraw {
+        self.clickable_frame.draw_walk(cx, walk);
+        WidgetDraw::done()
+    }
+}
+
+impl ChatPreview {
+    fn handle_event_with(
+        &mut self,
+        cx: &mut Cx,
+        event: &Event,
+        dispatch_action: &mut dyn FnMut(&mut Cx, ChatPreviewAction),
+    ) {
+        self.clickable_frame
+            .handle_widget_event_with(cx, event, &mut |cx, action| match action.action() {
+                FrameAction::FingerDown(_) => {
+                    dispatch_action(cx, ChatPreviewAction::Click);
+                }
+                _ => {}
+            });
+    }
+}
+
+#[derive(Debug, Clone, WidgetAction)]
+pub enum ChatListBodyAction {
+    Click,
+    None,
+}
+
+#[derive(Live)]
+pub struct ChatListBody {
     #[live]
     walk: Walk,
     #[live]
@@ -85,9 +185,9 @@ pub struct ChatList {
     chat_entries: Vec<ChatEntry>,
 }
 
-impl LiveHook for ChatList {
+impl LiveHook for ChatListBody {
     fn before_live_design(cx: &mut Cx) {
-        register_widget!(cx, ChatList);
+        register_widget!(cx, ChatListBody);
     }
 
     fn after_new_from_doc(&mut self, _cx: &mut Cx) {
@@ -138,18 +238,17 @@ impl LiveHook for ChatList {
     }
 }
 
-impl Widget for ChatList {
+impl Widget for ChatListBody {
     fn handle_widget_event_with(
         &mut self,
         cx: &mut Cx,
         event: &Event,
         dispatch_action: &mut dyn FnMut(&mut Cx, WidgetActionItem),
     ) {
-        let _actions = self.list_view.handle_widget_event(cx, event);
-
-        for action in _actions {
-            dispatch_action(cx, action);
-        }
+        let widget_uid = self.widget_uid();
+        self.handle_event_with(cx, event, &mut |cx, action| {
+            dispatch_action(cx, WidgetActionItem::new(action.into(), widget_uid));
+        });
     }
 
     fn get_walk(&self) -> Walk {
@@ -166,7 +265,23 @@ impl Widget for ChatList {
     }
 }
 
-impl ChatList {
+impl ChatListBody {
+    fn handle_event_with(
+        &mut self,
+        cx: &mut Cx,
+        event: &Event,
+        dispatch_action: &mut dyn FnMut(&mut Cx, ChatListBodyAction),
+    ) {
+        let actions = self.list_view.handle_widget_event(cx, event);
+        for action in actions {
+            if let aciton = ChatListBodyAction::Click {
+                dispatch_action(cx, ChatListBodyAction::Click);
+            }
+        }
+    }
+}
+
+impl ChatListBody {
     pub fn draw_walk(&mut self, cx: &mut Cx2d, walk: Walk) {
         // todo: sort by newest incoming?
         let chat_entries_count = self.chat_entries.len() as u64;
@@ -203,6 +318,53 @@ impl ChatList {
     }
 }
 
+#[derive(Live)]
+pub struct ChatList {
+    #[live]
+    navigation: StackNavigation,
+}
+
+impl LiveHook for ChatList {
+    fn before_live_design(cx: &mut Cx) {
+        register_widget!(cx, ChatList);
+    }
+}
+
+impl Widget for ChatList {
+    fn handle_widget_event_with(
+        &mut self,
+        cx: &mut Cx,
+        event: &Event,
+        _dispatch_action: &mut dyn FnMut(&mut Cx, WidgetActionItem),
+    ) {
+        let actions = self.navigation.handle_widget_event(cx, event);
+
+        if actions.not_empty() {
+            let actions = self.navigation.handle_widget_event(cx, event);
+            for action in actions {
+                if let ChatListBodyAction::Click = action.action() {
+                    self.navigation.show_stack_view(cx);
+                    self.redraw(cx);
+                }
+            }
+        }
+    }
+
+    fn redraw(&mut self, cx: &mut Cx) {
+        self.navigation.redraw(cx);
+    }
+
+    fn find_widgets(&mut self, path: &[LiveId], cached: WidgetCache, results: &mut WidgetSet) {
+        self.navigation.find_widgets(path, cached, results);
+    }
+
+    fn draw_walk_widget(&mut self, cx: &mut Cx2d, walk: Walk) -> WidgetDraw {
+        let _ = self.navigation.draw_walk_widget(cx, walk);
+        WidgetDraw::done()
+    }
+}
+
+#[derive(Debug)]
 pub struct ChatEntry {
     username: String,
     latest_message: MessagePreview,
@@ -211,6 +373,7 @@ pub struct ChatEntry {
     is_read: bool,
 }
 
+#[derive(Debug)]
 pub enum MessagePreview {
     Audio,
     Image,
@@ -229,6 +392,7 @@ impl MessagePreview {
     }
 }
 
+#[derive(Debug)]
 pub enum MessageDirection {
     Outgoing,
     Incoming,
