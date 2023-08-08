@@ -1,3 +1,4 @@
+use crate::shared::clickable_frame::*;
 use crate::shared::stack_navigation::StackNavigation;
 use makepad_widgets::widget::WidgetCache;
 use makepad_widgets::*;
@@ -14,6 +15,7 @@ live_design! {
     import crate::shared::stack_navigation::StackNavigation;
     import crate::shared::styles::*;
     import crate::profile::my_profile_screen::MyProfileScreen;
+    import crate::shared::clickable_frame::ClickableFrame
 
     IMG_DEFAULT_AVATAR = dep("crate://self/resources/img/default_avatar.png")
     IMG_FAVORITES = dep("crate://self/resources/img/favorites.png")
@@ -134,27 +136,21 @@ live_design! {
                         }
                     }
 
-                    <Frame> {
+                    my_profile_frame = <ClickableFrame> {
                         walk: {width: Fit, height: Fit}
-                        layout: {align: {y: 0.5}}
-
+                        layout: {align: {y: 0.5}, spacing: 15}
                         qr_icon = <Image> {
                             source: (IMG_QR),
                             walk: {width: 20., height: 20.}
                         }
 
-                        my_profile_button = <Button> {
+                         <Label> {
                             walk: {width: Fit, height: Fit}
                             label: ">"
                             draw_label: {
                                 text_style: <REGULAR_TEXT>{font_size: 16},
                                 fn get_color(self) -> vec4 {
                                     return #b4
-                                }
-                            }
-                            draw_bg: {
-                                fn pixel(self) -> vec4 {
-                                    return #fff
                                 }
                             }
                         }
@@ -349,7 +345,7 @@ impl Widget for Profile {
             let profile_body_ref = self.navigation.get_widget(id!(root_view.profile_body));
 
             if profile_body_ref
-                .get_button(id!(my_profile_button))
+                .get_clickable_frame(id!(my_profile_frame))
                 .clicked(&actions)
             {
                 self.navigation.show_stack_view(cx);
