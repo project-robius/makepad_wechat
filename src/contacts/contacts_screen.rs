@@ -26,7 +26,7 @@ live_design! {
         content = {
             title_container = {
                 title = {
-                    label: "Contacts"
+                    label: "通讯录"
                 }
             }
         }

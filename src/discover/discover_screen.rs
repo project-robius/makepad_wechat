@@ -177,7 +177,7 @@ live_design! {
             content = {
                 title_container = {
                     title = {
-                        label: "Discover"
+                        label: "发现"
                     }
                 }
             }
