@@ -228,8 +228,6 @@ impl Widget for StackNavigation {
         for action in actions.into_iter() {
             dispatch_action(cx, action);
         }
-
-        self.redraw(cx);
     }
 
     fn redraw(&mut self, cx: &mut Cx) {
