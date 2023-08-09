@@ -277,13 +277,6 @@ impl AppMain for App {
                 StackViewAction::ShowMoments => {
                     ui.get_stack_navigation(id!(navigation))
                         .show_stack_view_by_id(LiveId::from_str("moments_stack_view").unwrap(), cx);
-                }
-                StackViewAction::ShowAddContact => {
-                    ui.get_stack_navigation(id!(navigation))
-                        .show_stack_view_by_id(
-                            LiveId::from_str("add_contact_stack_view").unwrap(),
-                            cx,
-                        );
                 },
                 _ => {}
             }
