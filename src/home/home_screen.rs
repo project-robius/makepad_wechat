@@ -3,8 +3,7 @@ use makepad_widgets::*;
 live_design! {
     import makepad_widgets::frame::*;
 
-    import crate::shared::header::SimpleHeader;
-    import crate::shared::dropdown_menu::DropDownMenu;
+    import crate::shared::header::HeaderDropDownMenu;
     import crate::home::chat_list::ChatList;
 
     HomeScreen = <Frame> {
@@ -14,16 +13,7 @@ live_design! {
         draw_bg: {
             color: #fff
         }
-        // WIP: need to rework header layout, later on the dropdown menu will be in the header by default.
-        <SimpleHeader> {
-            button_container = <DropDownMenu> {
-                walk: {height: Fit, width: Fit}
-                dropdown = {
-                    labels: ["New Chat", "Add Contacts", "Scan", "Money"]
-                    values: [NewChat, AddContacts, Scan, Money]
-                }
-            }
-        }
+        <HeaderDropDownMenu> {}
         <ChatList> {}
     }
 }

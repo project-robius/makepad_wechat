@@ -12,7 +12,7 @@ live_design! {
     import makepad_widgets::text_input::TextInput;
 
     import crate::shared::styles::*;
-    import crate::shared::header::HeaderWithRightActionButton;
+    import crate::shared::header::HeaderDropDownMenu;
     import crate::shared::search_bar::SearchBar;
     import crate::shared::stack_navigation::StackNavigation;
     import crate::contacts::add_contact_screen::AddContactScreen;
@@ -22,19 +22,11 @@ live_design! {
     IMG_GROUP_CHATS = dep("crate://self/resources/group_chats.png")
     IMG_TAGS = dep("crate://self/resources/tags.png")
 
-    ContactsHeader = <HeaderWithRightActionButton> {
+    ContactsHeader = <HeaderDropDownMenu> {
         content = {
             title_container = {
                 title = {
                     label: "Contacts"
-                }
-            }
-
-            button_container = {
-                right_button = {
-                    draw_icon: {
-                        svg_file: dep("crate://self/resources/add_contact.svg")
-                    }
                 }
             }
         }
@@ -169,16 +161,7 @@ impl Widget for Contacts {
         event: &Event,
         dispatch_action: &mut dyn FnMut(&mut Cx, WidgetActionItem),
     ) {
-        let actions = self.frame.handle_widget_event(cx, event);
-
-        if self.get_button(id!(right_button)).clicked(&actions) {
-            let uid = self.widget_uid();
-            dispatch_action(
-                cx,
-                WidgetActionItem::new(StackViewAction::ShowAddContact.into(), uid),
-            );
-            self.redraw(cx);
-        }
+        self.frame.handle_widget_event_with(cx, event, dispatch_action);
     }
 
     fn redraw(&mut self, cx: &mut Cx) {

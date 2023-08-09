@@ -10,7 +10,7 @@ live_design! {
     import crate::shared::clickable_frame::ClickableFrame;
     import crate::shared::styles::*;
     import crate::shared::helpers::*;
-    import crate::shared::header::SimpleHeader;
+    import crate::shared::header::HeaderDropDownMenu;
 
     IMG_MOMENTS = dep("crate://self/resources/moments.png")
     IMG_SCAN = dep("crate://self/resources/scan.png")
@@ -173,7 +173,7 @@ live_design! {
             color: #ddd
         }
 
-        <SimpleHeader> {
+        <HeaderDropDownMenu> {
             content = {
                 title_container = {
                     title = {
