@@ -9,7 +9,7 @@ live_design! {
     import crate::shared::styles::*;
     import crate::shared::helpers::*;
 
-    IMG_DEFAULT_AVATAR = dep("crate://self/resources/default_avatar.png")
+    IMG_DEFAULT_AVATAR = dep("crate://self/resources/img/default_avatar.png")
 
     ChatPreview = <Frame> {
         layout: {flow: Right, spacing: 10., padding: 10.}

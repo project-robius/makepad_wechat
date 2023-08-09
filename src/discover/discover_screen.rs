@@ -12,12 +12,12 @@ live_design! {
     import crate::shared::helpers::*;
     import crate::shared::header::HeaderDropDownMenu;
 
-    IMG_MOMENTS = dep("crate://self/resources/moments.png")
-    IMG_SCAN = dep("crate://self/resources/scan.png")
-    IMG_SHAKE = dep("crate://self/resources/shake.png")
-    IMG_SEARCH = dep("crate://self/resources/search.png")
-    IMG_PEOPLE_NEARBY = dep("crate://self/resources/people_nearby.png")
-    IMG_MINI_PROGRAMS = dep("crate://self/resources/mini_programs.png")
+    IMG_MOMENTS = dep("crate://self/resources/img/moments.png")
+    IMG_SCAN = dep("crate://self/resources/img/scan.png")
+    IMG_SHAKE = dep("crate://self/resources/img/shake.png")
+    IMG_SEARCH = dep("crate://self/resources/img/search.png")
+    IMG_PEOPLE_NEARBY = dep("crate://self/resources/img/people_nearby.png")
+    IMG_MINI_PROGRAMS = dep("crate://self/resources/img/mini_programs.png")
 
     ActionIcon = <Label> {
         walk: {width: Fit, height: Fit}

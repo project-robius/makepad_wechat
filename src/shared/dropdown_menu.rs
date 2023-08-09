@@ -156,6 +156,8 @@ pub struct DropDown {
     labels: Vec<String>,
     #[live]
     values: Vec<LiveValue>,
+    #[live]
+    icons: Vec<LiveDependency>,
 
     #[live]
     popup_shift: DVec2,
@@ -361,7 +363,7 @@ impl DropDown {
                 if i == self.selected_item {
                     item_pos = Some(cx.turtle().pos());
                 }
-                popup_menu.draw_item(cx, node_id, &item);
+                popup_menu.draw_item(cx, node_id, &item, self.icons[i].clone());
             }
 
             popup_menu.end(

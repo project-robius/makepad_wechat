@@ -5,9 +5,9 @@ live_design! {
     import makepad_widgets::frame::*;
     import makepad_widgets::label::Label;
 
-    IMG_DEFAULT_AVATAR = dep("crate://self/resources/default_avatar.png")
-    IMG_FILE_TRANSFER_AVATAR = dep("crate://self/resources/file_transfer_avatar.png")
-    IMG_WECHAT_AVATAR = dep("crate://self/resources/wechat_avatar.png")
+    IMG_DEFAULT_AVATAR = dep("crate://self/resources/img/default_avatar.png")
+    IMG_FILE_TRANSFER_AVATAR = dep("crate://self/resources/img/file_transfer_avatar.png")
+    IMG_WECHAT_AVATAR = dep("crate://self/resources/img/wechat_avatar.png")
 
     REGULAR_TEXT = {
         font_size: (12),

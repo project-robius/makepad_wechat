@@ -123,7 +123,7 @@ live_design! {
                         }
                     }
                     draw_icon: {
-                        svg_file: dep("crate://self/resources/search.svg")
+                        svg_file: dep("crate://self/resources/icons/search.svg")
                         color: #000;
                         brightness: 0.8;
                     }
@@ -132,12 +132,18 @@ live_design! {
                 menu = <DropDown> {
                     walk: {height: Fit, width: Fit}
                     draw_icon: {
-                        svg_file: dep("crate://self/resources/menu.svg")
+                        svg_file: dep("crate://self/resources/icons/menu.svg")
                         color: #000;
                         brightness: 0.8;
                     }
                     labels: ["Add Contact", "New Chat", "Scan", "Money"]
                     values: [AddContact, NewChat, Scan, Money]
+                    icons: [
+                        dep("crate://self/resources/icons/add_contact.svg"), 
+                        dep("crate://self/resources/icons/chat.svg"), 
+                        dep("crate://self/resources/icons/scan.svg"), 
+                        dep("crate://self/resources/icons/money.svg")
+                    ]
                 } 
             }
         }

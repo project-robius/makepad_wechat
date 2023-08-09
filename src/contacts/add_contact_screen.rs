@@ -8,14 +8,14 @@ live_design! {
     import crate::shared::helpers::*;
     import crate::shared::styles::*;
 
-    IMG_QR = dep("crate://self/resources/qr_green.png")
-    IMG_INVITE_FRIENDS = dep("crate://self/resources/invite_friends.png")
-    IMG_FRIEND_RADAR = dep("crate://self/resources/friend_radar.png")
-    IMG_SCAN_QR = dep("crate://self/resources/scan_qr.png")
-    IMG_GROUP_CHATS = dep("crate://self/resources/group_chats.png")
-    IMG_MOBILE_CONTACTS = dep("crate://self/resources/mobile_contacts.png")
-    IMG_OFFICIAL_ACCOUNTS = dep("crate://self/resources/official_accounts.png")
-    IMG_WECOM_CONTACTS = dep("crate://self/resources/wecom_contacts.png")
+    IMG_QR = dep("crate://self/resources/img/qr_green.png")
+    IMG_INVITE_FRIENDS = dep("crate://self/resources/img/invite_friends.png")
+    IMG_FRIEND_RADAR = dep("crate://self/resources/img/friend_radar.png")
+    IMG_SCAN_QR = dep("crate://self/resources/img/scan_qr.png")
+    IMG_GROUP_CHATS = dep("crate://self/resources/img/group_chats.png")
+    IMG_MOBILE_CONTACTS = dep("crate://self/resources/img/mobile_contacts.png")
+    IMG_OFFICIAL_ACCOUNTS = dep("crate://self/resources/img/official_accounts.png")
+    IMG_WECOM_CONTACTS = dep("crate://self/resources/img/wecom_contacts.png")
 
     ActionIcon = <Label> {
         walk: {width: Fit, height: Fit}

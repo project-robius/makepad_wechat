@@ -18,7 +18,7 @@ live_design! {
                     walk: {width: Fit}
                     icon_walk: {width: 10}
                     draw_icon: {
-                        svg_file: dep("crate://self/resources/back.svg")
+                        svg_file: dep("crate://self/resources/icons/back.svg")
                     }
                 }
             }
