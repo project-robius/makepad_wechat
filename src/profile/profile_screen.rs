@@ -105,7 +105,7 @@ live_design! {
                         color: #000,
                         text_style: <TEXT_SUB>{font_size: 20.},
                     }
-                    label: "facu"
+                    label: "玛卡巴卡"
                 }
 
                 <Frame> {

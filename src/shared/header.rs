@@ -34,7 +34,7 @@ live_design! {
                         color: #000,
                         text_style: <TITLE_TEXT>{},
                     },
-                    label: "WeChat"
+                    label: "微信"
                 }
             }
         }
