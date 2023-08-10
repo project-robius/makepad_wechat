@@ -16,9 +16,9 @@ live_design! {
 
     import crate::contacts::contacts_group::ContactsGroup
 
-    IMG_NEW_FRIENDS = dep("crate://self/resources/new_friends.png")
-    IMG_GROUP_CHATS = dep("crate://self/resources/group_chats.png")
-    IMG_TAGS = dep("crate://self/resources/tags.png")
+    IMG_NEW_FRIENDS = dep("crate://self/resources/img/new_friends.png")
+    IMG_GROUP_CHATS = dep("crate://self/resources/img/group_chats.png")
+    IMG_TAGS = dep("crate://self/resources/img/tags.png")
 
     OptionsItem = <Frame> {
         walk: {width: Fill, height: Fit}

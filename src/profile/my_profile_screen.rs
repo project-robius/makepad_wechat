@@ -10,8 +10,8 @@ live_design! {
     import crate::shared::search_bar::SearchBar;
     import crate::shared::styles::*;
 
-    IMG_DEFAULT_AVATAR = dep("crate://self/resources/default_avatar.png")
-    IMG_QR = dep("crate://self/resources/qr_icon.png")
+    IMG_DEFAULT_AVATAR = dep("crate://self/resources/img/default_avatar.png")
+    IMG_QR = dep("crate://self/resources/img/qr_icon.png")
 
     ActionIcon = <Label> {
         walk: {width: Fit, height: Fit}

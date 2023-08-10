@@ -14,12 +14,12 @@ live_design! {
     import crate::shared::styles::*;
     import crate::profile::my_profile_screen::MyProfileScreen;
 
-    IMG_DEFAULT_AVATAR = dep("crate://self/resources/default_avatar.png")
-    IMG_FAVORITES = dep("crate://self/resources/favorites.png")
-    IMG_MY_POSTS = dep("crate://self/resources/my-posts.png")
-    IMG_STICKER_GALLERY = dep("crate://self/resources/sticker-gallery.png")
-    IMG_SETTINGS = dep("crate://self/resources/settings.png")
-    IMG_QR = dep("crate://self/resources/qr_icon.png")
+    IMG_DEFAULT_AVATAR = dep("crate://self/resources/img/default_avatar.png")
+    IMG_FAVORITES = dep("crate://self/resources/img/favorites.png")
+    IMG_MY_POSTS = dep("crate://self/resources/img/my-posts.png")
+    IMG_STICKER_GALLERY = dep("crate://self/resources/img/sticker-gallery.png")
+    IMG_SETTINGS = dep("crate://self/resources/img/settings.png")
+    IMG_QR = dep("crate://self/resources/img/qr_icon.png")
 
     ActionIcon = <Label> {
         walk: {width: Fit, height: Fit}

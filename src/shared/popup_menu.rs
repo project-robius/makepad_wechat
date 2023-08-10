@@ -52,8 +52,6 @@ live_design! {
 
         icon_walk: {width: 15., height: Fit, margin: 0.}
         draw_icon: {
-            // same issue as with images, no way to change them dinamically yet
-            svg_file: dep("crate://self/resources/add_contact.svg")
             color: #f2f2f2;
             brightness: 0.8;
         }
@@ -291,14 +289,14 @@ impl PopupMenu {
         self.draw_list.redraw(cx);
     }
 
-    pub fn draw_item(&mut self, cx: &mut Cx2d, item_id: MenuItemId, label: &str) {
+    pub fn draw_item(&mut self, cx: &mut Cx2d, item_id: MenuItemId, label: &str, icon: LiveDependency) {
         self.count += 1;
 
         let menu_item = self.menu_item;
         let menu_item = self
             .menu_items
             .get_or_insert(cx, item_id, |cx| MenuItem::new_from_ptr(cx, menu_item));
-        menu_item.draw_item(cx, label);
+        menu_item.draw_item(cx, label, icon);
     }
 
     pub fn init_select_item(&mut self, which_id: MenuItemId) {
@@ -406,8 +404,9 @@ pub enum PopupMenuAction {
 pub struct MenuItemId(pub LiveId);
 
 impl MenuItem {
-    pub fn draw_item(&mut self, cx: &mut Cx2d, label: &str) {
+    pub fn draw_item(&mut self, cx: &mut Cx2d, label: &str, icon: LiveDependency) {
         self.draw_bg.begin(cx, self.walk, self.layout);
+        self.draw_icon.svg_file = icon;
         self.draw_icon.draw_walk(cx, self.icon_walk);
 
         self.draw_name

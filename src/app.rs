@@ -21,10 +21,10 @@ live_design! {
     import crate::shared::clickable_frame::ClickableFrame
     import crate::shared::stack_navigation::*;
 
-    ICON_CHAT = dep("crate://self/resources/chat.svg")
-    ICON_CONTACTS = dep("crate://self/resources/contacts.svg")
-    ICON_DISCOVER = dep("crate://self/resources/discover.svg")
-    ICON_ME = dep("crate://self/resources/me.svg")
+    ICON_CHAT = dep("crate://self/resources/icons/chat.svg")
+    ICON_CONTACTS = dep("crate://self/resources/icons/contacts.svg")
+    ICON_DISCOVER = dep("crate://self/resources/icons/discover.svg")
+    ICON_ME = dep("crate://self/resources/icons/me.svg")
 
     H3_TEXT_REGULAR = {
         font_size: 9.0,

@@ -18,9 +18,9 @@ live_design! {
     import crate::contacts::add_contact_screen::AddContactScreen;
     import crate::contacts::contacts_list::ContactsList;
 
-    IMG_NEW_FRIENDS = dep("crate://self/resources/new_friends.png")
-    IMG_GROUP_CHATS = dep("crate://self/resources/group_chats.png")
-    IMG_TAGS = dep("crate://self/resources/tags.png")
+    IMG_NEW_FRIENDS = dep("crate://self/resources/img/new_friends.png")
+    IMG_GROUP_CHATS = dep("crate://self/resources/img/group_chats.png")
+    IMG_TAGS = dep("crate://self/resources/img/tags.png")
 
     ContactsHeader = <HeaderDropDownMenu> {
         content = {
