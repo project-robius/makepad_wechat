@@ -260,7 +260,7 @@ impl StackNavigation {
     }
 }
 
-#[derive(Clone, PartialEq, WidgetRef)]
+#[derive(Clone, PartialEq, WidgetRef, Debug)]
 pub struct StackNavigationRef(pub WidgetRef);
 
 impl StackNavigationRef {
