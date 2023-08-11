@@ -1,3 +1,6 @@
+use std::collections::HashMap;
+
+use crate::api::{ChatEntry, Db, MessageDirection, MessageEntry, MessagePreview};
 use crate::shared::clickable_frame::*;
 use crate::shared::stack_navigation::StackNavigation;
 use makepad_widgets::widget::WidgetCache;
@@ -67,7 +70,11 @@ live_design! {
             // <Divider> {}
     }
 
-    ChatListBody = {{ChatListBody}} {
+    // TODO: implement a divider
+    // currently nested frames don't get drawn in the ListView
+    // <Divider> {}
+
+    ChatList = {{ChatList}} {
         walk: {width: Fill, height: Fill}
         layout: {flow: Down}
         list_view: <ListView> {
@@ -78,41 +85,18 @@ live_design! {
             search_bar = <SearchBar> {}
         }
     }
-
-    ChatList = {{ChatList}} {
-        navigation: <StackNavigation> {
-            frame: {
-                root_view = {
-                    chat_list_body = <ChatListBody> {}
-                }
-                stack_view = {
-                    frame: {
-                        header = {
-                            content = {
-                                title_container = {
-                                    title = {
-                                        label: "FUNCIONA"
-                                    }
-                                }
-                            }
-                        }
-                        <ChatScreen> {}
-                    }
-                }
-            }
-        }
-
-    }
 }
 
+pub type ChatId = u64;
+
 #[derive(Debug, Clone, WidgetAction)]
-pub enum ChatListBodyAction {
-    Click,
+pub enum ChatListAction {
+    Click(ChatId),
     None,
 }
 
 #[derive(Live)]
-pub struct ChatListBody {
+pub struct ChatList {
     #[live]
     walk: Walk,
     #[live]
@@ -122,82 +106,22 @@ pub struct ChatListBody {
     list_view: ListView,
     #[rust]
     chat_entries: Vec<ChatEntry>,
+    #[rust]
+    chat_list_view_map: HashMap<u64, u64>,
 }
 
-impl LiveHook for ChatListBody {
+impl LiveHook for ChatList {
     fn before_live_design(cx: &mut Cx) {
-        register_widget!(cx, ChatListBody);
+        register_widget!(cx, ChatList);
     }
 
     fn after_new_from_doc(&mut self, _cx: &mut Cx) {
-        self.chat_entries = vec![
-            ChatEntry {
-                username: "Rik Arends".to_string(),
-                latest_message: MessagePreview::Text("Hi!".to_string()),
-                timestamp: "14:09".to_string(),
-            },
-            ChatEntry {
-                username: "John Doe".to_string(),
-                latest_message: MessagePreview::Image,
-                timestamp: "11:20".to_string(),
-            },
-            ChatEntry {
-                username: "Jorge Bejar".to_string(),
-                latest_message: MessagePreview::Audio,
-                timestamp: "friday".to_string(),
-            },
-            ChatEntry {
-                username: "Julian Montes de Oca".to_string(),
-                latest_message: MessagePreview::Video,
-                timestamp: "friday".to_string(),
-            },
-            ChatEntry {
-                username: "Edward Tan".to_string(),
-                latest_message: MessagePreview::Text("thanks ed, see you there.".to_string()),
-                timestamp: "thursday".to_string(),
-            },
-            ChatEntry {
-                username: "WeChat Team".to_string(),
-                latest_message: MessagePreview::Text("Welcome to WeChat!".to_string()),
-                timestamp: "18/07".to_string(),
-            },
-            ChatEntry {
-                username: "Andrew Lin".to_string(),
-                latest_message: MessagePreview::Text(
-                    "Awesome, I'll make sure they know about it".to_string(),
-                ),
-                timestamp: "18/07".to_string(),
-            },
-            ChatEntry {
-                username: "Christian Huxley".to_string(),
-                latest_message: MessagePreview::Image,
-                timestamp: "15/07".to_string(),
-            },
-            ChatEntry {
-                username: "Ana Leddie".to_string(),
-                latest_message: MessagePreview::Image,
-                timestamp: "14/07".to_string(),
-            },
-            ChatEntry {
-                username: "Adam Adler".to_string(),
-                latest_message: MessagePreview::Video,
-                timestamp: "10/07".to_string(),
-            },
-            ChatEntry {
-                username: "Gabriel Hayes".to_string(),
-                latest_message: MessagePreview::Text("wow I haven't seen that".to_string()),
-                timestamp: "10/07".to_string(),
-            },
-            ChatEntry {
-                username: "Eric Ford".to_string(),
-                latest_message: MessagePreview::Text("Nice to see you here!".to_string()),
-                timestamp: "10/07".to_string(),
-            },
-        ];
+        let db = Db::new();
+        self.chat_entries = db.get_all_chats().clone();
     }
 }
 
-impl Widget for ChatListBody {
+impl Widget for ChatList {
     fn handle_widget_event_with(
         &mut self,
         cx: &mut Cx,
@@ -224,25 +148,31 @@ impl Widget for ChatListBody {
     }
 }
 
-impl ChatListBody {
+impl ChatList {
     fn handle_event_with(
         &mut self,
         cx: &mut Cx,
         event: &Event,
-        dispatch_action: &mut dyn FnMut(&mut Cx, ChatListBodyAction),
+        dispatch_action: &mut dyn FnMut(&mut Cx, ChatListAction),
     ) {
-        self.list_view.handle_widget_event_with(
-            cx,
-            event,
-            &mut |cx, action| match action.action() {
-                ClickableFrameAction::Click => dispatch_action(cx, ChatListBodyAction::Click),
+        let mut actions = Vec::new();
+        self.list_view
+            .handle_widget_event_with(cx, event, &mut |_, action| {
+                if let Some(chat_id) = self.chat_list_view_map.get(&action.widget_uid.0) {
+                    actions.push((chat_id, action));
+                }
+            });
+
+        for (chat_id, action) in actions {
+            match action.action() {
+                ClickableFrameAction::Click => dispatch_action(cx, ChatListAction::Click(*chat_id)),
                 _ => (),
-            },
-        );
+            }
+        }
     }
 }
 
-impl ChatListBody {
+impl ChatList {
     pub fn draw_walk(&mut self, cx: &mut Cx2d, walk: Walk) {
         // todo: sort by newest incoming?
         let chat_entries_count = self.chat_entries.len() as u64;
@@ -263,6 +193,9 @@ impl ChatListBody {
                     let item_index = item_id as usize - 1; // offset by 1 to account for the search bar
                     let item_content = &self.chat_entries[item_index];
 
+                    self.chat_list_view_map
+                        .insert(item.widget_uid().0, *(&self.chat_entries[item_index].id));
+
                     item.get_label(id!(preview.username))
                         .set_label(&item_content.username);
                     item.get_label(id!(preview.content))
@@ -276,77 +209,5 @@ impl ChatListBody {
         }
 
         cx.end_turtle();
-    }
-}
-
-#[derive(Live)]
-pub struct ChatList {
-    #[live]
-    navigation: StackNavigation,
-}
-
-impl LiveHook for ChatList {
-    fn before_live_design(cx: &mut Cx) {
-        register_widget!(cx, ChatList);
-    }
-}
-
-impl Widget for ChatList {
-    fn handle_widget_event_with(
-        &mut self,
-        cx: &mut Cx,
-        event: &Event,
-        _dispatch_action: &mut dyn FnMut(&mut Cx, WidgetActionItem),
-    ) {
-        let actions = self.navigation.handle_widget_event(cx, event);
-
-        if actions.not_empty() {
-            let actions = self.navigation.handle_widget_event(cx, event);
-            for action in actions {
-                if let ChatListBodyAction::Click = action.action() {
-                    self.navigation.show_stack_view(cx);
-                    self.redraw(cx);
-                }
-            }
-        }
-    }
-
-    fn redraw(&mut self, cx: &mut Cx) {
-        self.navigation.redraw(cx);
-    }
-
-    fn find_widgets(&mut self, path: &[LiveId], cached: WidgetCache, results: &mut WidgetSet) {
-        self.navigation.find_widgets(path, cached, results);
-    }
-
-    fn draw_walk_widget(&mut self, cx: &mut Cx2d, walk: Walk) -> WidgetDraw {
-        let _ = self.navigation.draw_walk_widget(cx, walk);
-        WidgetDraw::done()
-    }
-}
-
-#[derive(Debug)]
-pub struct ChatEntry {
-    username: String,
-    latest_message: MessagePreview,
-    timestamp: String,
-}
-
-#[derive(Debug)]
-pub enum MessagePreview {
-    Audio,
-    Image,
-    Video,
-    Text(String),
-}
-
-impl MessagePreview {
-    pub fn text(&self) -> &str {
-        match self {
-            MessagePreview::Audio => "[Audio]",
-            MessagePreview::Image => "[Image]",
-            MessagePreview::Video => "[Video]",
-            MessagePreview::Text(text) => text,
-        }
     }
 }

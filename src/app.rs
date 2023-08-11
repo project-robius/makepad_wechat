@@ -1,6 +1,9 @@
+use crate::api::Db;
 use crate::contacts::contacts_screen::*;
 use crate::discover::discover_screen::*;
 use crate::discover::moments_screen::*;
+use crate::home::chat_list::ChatListAction;
+use crate::home::chat_screen::*;
 use crate::shared::dropdown_menu::DropDownAction;
 use crate::shared::stack_navigation::*;
 use crate::shared::stack_view_action::StackViewAction;
@@ -211,6 +214,21 @@ live_design! {
                             <MyProfileScreen> {}
                         }
                     }
+
+                    chat_stack_view = <StackNavigationView> {
+                        frame: {
+                            header = {
+                                content = {
+                                    title_container = {
+                                        title = {
+                                            label: " "
+                                        }
+                                    }
+                                }
+                            }
+                            chat_screen = <ChatScreen> {}
+                        }
+                    }
                 }
             }
         }
@@ -322,6 +340,30 @@ impl AppMain for App {
                                 cx,
                             );
                     }
+                }
+                _ => {}
+            }
+
+            match action.action() {
+                ChatListAction::Click(id) => {
+                    let db = Db::new();
+
+                    let mut stack_navigation = ui.get_stack_navigation(id!(navigation));
+                    if let Some(chat_entry) = db.get_chat(id) {
+                        stack_navigation
+                            .get_label(id!(chat_stack_view.title))
+                            // TODO: get username from duymmy db
+                            // .set_label(&id);
+                            .set_label(&chat_entry.username);
+                    }
+
+                    let chat_ref = stack_navigation
+                        .get_frame(id!(chat_stack_view.chat_screen))
+                        .get_chat(id!(chat));
+                    chat_ref.set_chat_id(id);
+
+                    stack_navigation
+                        .show_stack_view_by_id(LiveId::from_str("chat_stack_view").unwrap(), cx);
                 }
                 _ => {}
             }
