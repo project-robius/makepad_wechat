@@ -14,10 +14,10 @@ live_design! {
     import crate::shared::helpers::*;
     import crate::shared::search_bar::SearchBar;
 
-    IMG_DEFAULT_AVATAR = dep("crate://self/resources/default_avatar.png")
-    IMG_SMILEY_FACE_BW = dep("crate://self/resources/smiley_face_bw.png")
-    IMG_PLUS = dep("crate://self/resources/plus.png")
-    IMG_KEYBOARD_ICON = dep("crate://self/resources/keyboard_icon.png")
+    IMG_DEFAULT_AVATAR = dep("crate://self/resources/img/default_avatar.png")
+    IMG_SMILEY_FACE_BW = dep("crate://self/resources/img/smiley_face_bw.png")
+    IMG_PLUS = dep("crate://self/resources/img/plus.png")
+    IMG_KEYBOARD_ICON = dep("crate://self/resources/img/keyboard_icon.png")
 
     MessageIncoming = <Frame> {
         walk: {width: Fill, height: Fit}
