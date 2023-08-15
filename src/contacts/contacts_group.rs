@@ -4,6 +4,7 @@ use makepad_widgets::*;
 live_design! {
     import makepad_widgets::frame::*;
     import makepad_widgets::label::Label;
+    import makepad_widgets::image::*;
 
     IMG_DEFAULT_AVATAR = dep("crate://self/resources/img/default_avatar.png")
     IMG_FILE_TRANSFER_AVATAR = dep("crate://self/resources/img/file_transfer_avatar.png")
@@ -31,7 +32,7 @@ live_design! {
             walk: {width: Fill, height: Fit}
             layout: {padding: {top: 4., bottom: 6.}, align: {x: 0.0, y: 0.5}, spacing: 10., flow: Right}
             avatar = <Image> {
-                image: (IMG_DEFAULT_AVATAR),
+                source: (IMG_DEFAULT_AVATAR),
                 walk: {width: 36., height: 36.}
                 layout: {padding: 0}
             }
@@ -72,7 +73,7 @@ live_design! {
         file_transfer_template: <ContactItem> {
             content = {
                 avatar = {
-                    image: (IMG_FILE_TRANSFER_AVATAR)
+                    source: (IMG_FILE_TRANSFER_AVATAR)
                 }
             }
         }
@@ -80,7 +81,7 @@ live_design! {
         wechat_template: <ContactItem> {
             content = {
                 avatar = {
-                    image: (IMG_WECHAT_AVATAR)
+                    source: (IMG_WECHAT_AVATAR)
                 }
             }
         }

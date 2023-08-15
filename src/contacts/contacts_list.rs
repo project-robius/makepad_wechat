@@ -9,6 +9,7 @@ live_design! {
     import makepad_widgets::button::Button;
     import makepad_widgets::text_input::TextInput;
     import makepad_widgets::list_view::ListView;
+    import makepad_widgets::image::*;
 
     import crate::shared::styles::*;
     import crate::shared::helpers::Divider;
@@ -29,7 +30,7 @@ live_design! {
             layout: {padding: 0, align: {x: 0.0, y: 0.5}, spacing: 10., flow: Right}
 
             icon = <Image> {
-                image: (IMG_NEW_FRIENDS),
+                source: (IMG_NEW_FRIENDS),
                 walk: {width: 36., height: 36.}
                 layout: {padding: 0}
             }
@@ -56,7 +57,7 @@ live_design! {
         <OptionsItem> {
             content = {
                 icon = {
-                    image: (IMG_NEW_FRIENDS)
+                    source: (IMG_NEW_FRIENDS)
                 }
 
                 label = {
@@ -68,7 +69,7 @@ live_design! {
         <OptionsItem> {
             content = {
                 icon = {
-                    image: (IMG_GROUP_CHATS)
+                    source: (IMG_GROUP_CHATS)
                 }
 
                 label = {
@@ -80,7 +81,7 @@ live_design! {
         <OptionsItem> {
             content = {
                 icon = {
-                    image: (IMG_TAGS)
+                    source: (IMG_TAGS)
                 }
 
                 label = {
