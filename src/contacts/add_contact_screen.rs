@@ -4,6 +4,8 @@ use makepad_widgets::*;
 live_design! {
     import makepad_widgets::frame::*;
     import makepad_widgets::label::Label;
+    import makepad_widgets::image::*;
+
     import crate::shared::search_bar::SearchBar;
     import crate::shared::helpers::*;
     import crate::shared::styles::*;
@@ -107,7 +109,7 @@ live_design! {
             }
 
             <Image> {
-                image: (IMG_QR),
+                source: (IMG_QR),
                 walk: {width: 20., height: 20.}
             }
         }
@@ -116,7 +118,7 @@ live_design! {
             <OptionsItem> {
                 content = {
                     icon = {
-                        image: (IMG_INVITE_FRIENDS)
+                        source: (IMG_INVITE_FRIENDS)
                     }
 
                     labels = {
@@ -129,7 +131,7 @@ live_design! {
             <OptionsItem> {
                 content = {
                     icon = {
-                        image: (IMG_FRIEND_RADAR)
+                        source: (IMG_FRIEND_RADAR)
                     }
 
                     labels = {
@@ -142,7 +144,7 @@ live_design! {
             <OptionsItem> {
                 content = {
                     icon = {
-                        image: (IMG_GROUP_CHATS)
+                        source: (IMG_GROUP_CHATS)
                     }
 
                     labels = {
@@ -155,7 +157,7 @@ live_design! {
             <OptionsItem> {
                 content = {
                     icon = {
-                        image: (IMG_SCAN_QR)
+                        source: (IMG_SCAN_QR)
                     }
 
                     labels = {
@@ -168,7 +170,7 @@ live_design! {
             <OptionsItem> {
                 content = {
                     icon = {
-                        image: (IMG_MOBILE_CONTACTS)
+                        source: (IMG_MOBILE_CONTACTS)
                     }
 
                     labels = {
@@ -181,7 +183,7 @@ live_design! {
             <OptionsItem> {
                 content = {
                     icon = {
-                        image: (IMG_OFFICIAL_ACCOUNTS)
+                        source: (IMG_OFFICIAL_ACCOUNTS)
                     }
 
                     labels = {
@@ -194,7 +196,7 @@ live_design! {
             <OptionsItem> {
                 content = {
                     icon = {
-                        image: (IMG_WECOM_CONTACTS)
+                        source: (IMG_WECOM_CONTACTS)
                     }
 
                     labels = {

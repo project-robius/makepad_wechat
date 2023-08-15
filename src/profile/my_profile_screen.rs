@@ -4,6 +4,7 @@ use makepad_widgets::*;
 live_design! {
     import makepad_widgets::frame::*;
     import makepad_widgets::label::Label;
+    import makepad_widgets::image::*;
 
     import crate::shared::helpers::FillerX;
     import crate::shared::helpers::Divider;
@@ -75,7 +76,7 @@ live_design! {
                         label: "Profile Photo"
                     }
                     item_data = <Image> {
-                        image: (IMG_DEFAULT_AVATAR),
+                        source: (IMG_DEFAULT_AVATAR),
                         walk: {width: 60., height: 60.}
                     }
                 }
@@ -127,7 +128,7 @@ live_design! {
                         label: "My QR Code"
                     }
                     item_data = <Image> {
-                        image: (IMG_QR),
+                        source: (IMG_QR),
                         walk: {width: 20., height: 20.}
                     }
                 }

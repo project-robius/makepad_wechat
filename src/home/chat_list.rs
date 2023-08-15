@@ -4,6 +4,7 @@ live_design! {
     import makepad_widgets::frame::*;
     import makepad_widgets::label::*;
     import makepad_widgets::list_view::ListView;
+    import makepad_widgets::image::*;
 
     import crate::shared::search_bar::SearchBar;
     import crate::shared::styles::*;
@@ -15,7 +16,7 @@ live_design! {
         layout: {flow: Right, spacing: 10., padding: 10.}
 
         avatar = <Image> {
-            image: (IMG_DEFAULT_AVATAR),
+            source: (IMG_DEFAULT_AVATAR),
             walk: {width: 36., height: 36.}
             layout: {padding: 0}
         }
@@ -124,7 +125,9 @@ impl LiveHook for ChatList {
             },
             ChatEntry {
                 username: "Andrew Lin".to_string(),
-                latest_message: MessagePreview::Text("Awesome, I'll make sure they know about it".to_string()),
+                latest_message: MessagePreview::Text(
+                    "Awesome, I'll make sure they know about it".to_string(),
+                ),
                 timestamp: "18/07".to_string(),
             },
             ChatEntry {

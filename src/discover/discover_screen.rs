@@ -11,6 +11,7 @@ live_design! {
     import crate::shared::styles::*;
     import crate::shared::helpers::*;
     import crate::shared::header::HeaderDropDownMenu;
+    import makepad_widgets::image::*;
 
     IMG_MOMENTS = dep("crate://self/resources/img/moments.png")
     IMG_SCAN = dep("crate://self/resources/img/scan.png")
@@ -79,7 +80,7 @@ live_design! {
                 <OptionsItem> {
                     content = {
                         icon = {
-                            image: (IMG_MOMENTS)
+                            source: (IMG_MOMENTS)
                         }
 
                         label = {
@@ -93,7 +94,7 @@ live_design! {
                 <OptionsItem> {
                     content = {
                         icon = {
-                            image: (IMG_SCAN)
+                            source: (IMG_SCAN)
                         }
 
                         label = {
@@ -109,7 +110,7 @@ live_design! {
                 <OptionsItem> {
                     content = {
                         icon = {
-                            image: (IMG_SHAKE)
+                            source: (IMG_SHAKE)
                         }
 
                         label = {
@@ -124,7 +125,7 @@ live_design! {
                 <OptionsItem> {
                     content = {
                         icon = {
-                            image: (IMG_SEARCH)
+                            source: (IMG_SEARCH)
                         }
 
                         label = {
@@ -138,7 +139,7 @@ live_design! {
                 <OptionsItem> {
                     content = {
                         icon = {
-                            image: (IMG_PEOPLE_NEARBY)
+                            source: (IMG_PEOPLE_NEARBY)
                         }
 
                         label = {
@@ -152,7 +153,7 @@ live_design! {
                 <OptionsItem> {
                     content = {
                         icon = {
-                            image: (IMG_MINI_PROGRAMS)
+                            source: (IMG_MINI_PROGRAMS)
                         }
 
                         label = {

@@ -10,6 +10,7 @@ live_design! {
     import makepad_widgets::label::Label;
     import makepad_widgets::button::Button;
     import makepad_widgets::text_input::TextInput;
+    import makepad_widgets::image::*;
 
     import crate::shared::styles::*;
     import crate::shared::header::HeaderDropDownMenu;
@@ -52,7 +53,7 @@ live_design! {
             layout: {padding: 0, align: {x: 0.0, y: 0.5}, spacing: 10., flow: Right}
 
             icon = <Image> {
-                image: (IMG_NEW_FRIENDS),
+                source: (IMG_NEW_FRIENDS),
                 walk: {width: 36., height: 36.}
                 layout: {padding: 0}
             }
@@ -79,7 +80,7 @@ live_design! {
         <OptionsItem> {
             content = {
                 icon = {
-                    image: (IMG_NEW_FRIENDS)
+                    source: (IMG_NEW_FRIENDS)
                 }
 
                 label = {
@@ -91,7 +92,7 @@ live_design! {
         <OptionsItem> {
             content = {
                 icon = {
-                    image: (IMG_GROUP_CHATS)
+                    source: (IMG_GROUP_CHATS)
                 }
 
                 label = {
@@ -103,7 +104,7 @@ live_design! {
         <OptionsItem> {
             content = {
                 icon = {
-                    image: (IMG_TAGS)
+                    source: (IMG_TAGS)
                 }
 
                 label = {
@@ -161,7 +162,8 @@ impl Widget for Contacts {
         event: &Event,
         dispatch_action: &mut dyn FnMut(&mut Cx, WidgetActionItem),
     ) {
-        self.frame.handle_widget_event_with(cx, event, dispatch_action);
+        self.frame
+            .handle_widget_event_with(cx, event, dispatch_action);
     }
 
     fn redraw(&mut self, cx: &mut Cx) {

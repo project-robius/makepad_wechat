@@ -7,6 +7,7 @@ live_design! {
     import makepad_widgets::label::Label;
     import makepad_widgets::button::Button;
     import makepad_draw::shader::std::*;
+    import makepad_widgets::image::*;
 
     import crate::shared::helpers::FillerX;
     import crate::shared::helpers::Divider;
@@ -91,7 +92,7 @@ live_design! {
                 walk: {width: Fit, height: Fit}
                 layout: {flow: Down, align: {y: 0}}
                 avatar = <Image> {
-                    image: (IMG_DEFAULT_AVATAR),
+                    source: (IMG_DEFAULT_AVATAR),
                     walk: {width: 80., height: 80.}
                 }
             }
@@ -138,7 +139,7 @@ live_design! {
                         layout: {align: {y: 0.5}}
 
                         qr_icon = <Image> {
-                            image: (IMG_QR),
+                            source: (IMG_QR),
                             walk: {width: 20., height: 20.}
                         }
 
@@ -238,7 +239,7 @@ live_design! {
             <OptionsItem> {
                 content = {
                     icon = {
-                        image: (IMG_FAVORITES)
+                        source: (IMG_FAVORITES)
                     }
 
                     label = {
@@ -250,7 +251,7 @@ live_design! {
             <OptionsItem> {
                 content = {
                     icon = {
-                        image: (IMG_MY_POSTS)
+                        source: (IMG_MY_POSTS)
                     }
 
                     label = {
@@ -262,7 +263,7 @@ live_design! {
             <OptionsItem> {
                 content = {
                     icon = {
-                        image: (IMG_STICKER_GALLERY)
+                        source: (IMG_STICKER_GALLERY)
                     }
 
                     label = {
@@ -279,7 +280,7 @@ live_design! {
             <OptionsItem> {
                 content = {
                     icon = {
-                        image: (IMG_SETTINGS)
+                        source: (IMG_SETTINGS)
                     }
 
                     label = {
