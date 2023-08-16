@@ -1,6 +1,9 @@
+use crate::api::Db;
 use crate::contacts::contacts_screen::*;
 use crate::discover::discover_screen::*;
 use crate::discover::moments_screen::*;
+use crate::home::chat_list::ChatListAction;
+use crate::home::chat_screen::*;
 use crate::shared::dropdown_menu::DropDownAction;
 use crate::shared::stack_navigation::*;
 use crate::shared::stack_view_action::StackViewAction;
@@ -12,11 +15,13 @@ live_design! {
     import makepad_widgets::radio_button::RadioButton
 
     import crate::home::home_screen::HomeScreen
+    import crate::home::chat_screen::ChatScreen
     import crate::contacts::contacts_screen::ContactsScreen
     import crate::contacts::add_contact_screen::AddContactScreen
     import crate::discover::discover_screen::DiscoverScreen
     import crate::discover::moments_screen::MomentsScreen
     import crate::profile::profile_screen::ProfileScreen
+    import crate::profile::my_profile_screen::MyProfileScreen
 
     import crate::shared::clickable_frame::ClickableFrame
     import crate::shared::stack_navigation::*;
@@ -194,6 +199,36 @@ live_design! {
                             <AddContactScreen> {}
                         }
                     }
+
+                    my_profile_stack_view = <StackNavigationView> {
+                        frame: {
+                            header = {
+                                content = {
+                                    title_container = {
+                                        title = {
+                                            label: "My Profile"
+                                        }
+                                    }
+                                }
+                            }
+                            <MyProfileScreen> {}
+                        }
+                    }
+
+                    chat_stack_view = <StackNavigationView> {
+                        frame: {
+                            header = {
+                                content = {
+                                    title_container = {
+                                        title = {
+                                            label: " "
+                                        }
+                                    }
+                                }
+                            }
+                            chat_screen = <ChatScreen> {}
+                        }
+                    }
                 }
             }
         }
@@ -217,7 +252,7 @@ impl LiveHook for App {
 
         // shared
         crate::shared::styles::live_design(cx);
-        crate::shared::helpers::live_design(cx); 
+        crate::shared::helpers::live_design(cx);
         crate::shared::header::live_design(cx);
         crate::shared::search_bar::live_design(cx);
         crate::shared::popup_menu::live_design(cx);
@@ -228,6 +263,7 @@ impl LiveHook for App {
         // home - chats
         crate::home::home_screen::live_design(cx);
         crate::home::chat_list::live_design(cx);
+        crate::home::chat_screen::live_design(cx);
 
         // contacts
         crate::contacts::contacts_screen::live_design(cx);
@@ -277,7 +313,14 @@ impl AppMain for App {
                 StackViewAction::ShowMoments => {
                     ui.get_stack_navigation(id!(navigation))
                         .show_stack_view_by_id(LiveId::from_str("moments_stack_view").unwrap(), cx);
-                },
+                }
+                StackViewAction::ShowMyProfile => {
+                    ui.get_stack_navigation(id!(navigation))
+                        .show_stack_view_by_id(
+                            LiveId::from_str("my_profile_stack_view").unwrap(),
+                            cx,
+                        );
+                }
                 _ => {}
             }
 
@@ -291,8 +334,29 @@ impl AppMain for App {
                             );
                     }
                 }
-                _ => {
+                _ => {}
+            }
+
+            match action.action() {
+                ChatListAction::Click(id) => {
+                    let db = Db::new();
+
+                    let mut stack_navigation = ui.get_stack_navigation(id!(navigation));
+                    if let Some(chat_entry) = db.get_chat(id) {
+                        stack_navigation
+                            .get_label(id!(chat_stack_view.title))
+                            .set_label(&chat_entry.username);
+                    }
+
+                    let chat_ref = stack_navigation
+                        .get_frame(id!(chat_stack_view.chat_screen))
+                        .get_chat(id!(chat));
+                    chat_ref.set_chat_id(id);
+
+                    stack_navigation
+                        .show_stack_view_by_id(LiveId::from_str("chat_stack_view").unwrap(), cx);
                 }
+                _ => {}
             }
         }
     }

@@ -1,68 +1,73 @@
+use std::collections::HashMap;
+
+use crate::api::{ChatEntry, Db, MessageDirection, MessageEntry, MessagePreview};
+use crate::shared::clickable_frame::*;
+use crate::shared::stack_navigation::StackNavigation;
+use makepad_widgets::widget::WidgetCache;
 use makepad_widgets::*;
 
 live_design! {
     import makepad_widgets::frame::*;
     import makepad_widgets::label::*;
+    import makepad_widgets::button::Button;
     import makepad_widgets::list_view::ListView;
     import makepad_widgets::image::*;
 
     import crate::shared::search_bar::SearchBar;
     import crate::shared::styles::*;
     import crate::shared::helpers::*;
+    import crate::shared::stack_navigation::StackNavigation;
+    import crate::shared::clickable_frame::ClickableFrame;
 
     IMG_DEFAULT_AVATAR = dep("crate://self/resources/img/default_avatar.png")
 
-    ChatPreview = <Frame> {
-        layout: {flow: Right, spacing: 10., padding: 10.}
+    ChatPreview = <ClickableFrame> {
+            layout: {flow: Right, spacing: 10., padding: 10.}
+            walk: {width: Fill, height: Fit}
 
-        avatar = <Image> {
-            source: (IMG_DEFAULT_AVATAR),
-            walk: {width: 36., height: 36.}
-            layout: {padding: 0}
-        }
-
-        preview = <Frame> {
-            layout: {flow: Down, spacing: 7.}
-
-            username = <Label> {
-                walk: {width: Fill, height: Fit}
-                draw_label: {
-                    color: #000,
-                    text_style: <REGULAR_TEXT>{}
-                }
-                label: "username"
+            avatar = <Image> {
+                source: (IMG_DEFAULT_AVATAR),
+                walk: {width: 36., height: 36.}
+                layout: {padding: 0}
             }
 
-            content = <Label> {
+            preview = <Frame> {
+                layout: {flow: Down, spacing: 7.}
+
+                username = <Label> {
+                    walk: {width: Fill, height: Fit}
+                    draw_label: {
+                        color: #000,
+                        text_style: <REGULAR_TEXT>{}
+                    }
+                    label: "username"
+                }
+
+                content = <Label> {
+                    walk: {width: Fit, height: Fit}
+                    draw_label: {
+                        text_style: <REGULAR_TEXT>{
+                            font_size: 10.5
+                        },
+                    }
+                    label: "Hi there! I'm using WeChat"
+                }
+            }
+
+            timestamp = <Label> {
                 walk: {width: Fit, height: Fit}
                 draw_label: {
                     text_style: <REGULAR_TEXT>{
-                        font_size: 10.5
+                        font_size: 8.
                     },
                 }
-                label: "Hi there! I'm using WeChat"
+                label: "yesterday"
             }
-        }
-
-        timestamp = <Label> {
-            walk: {width: Fit, height: Fit}
-            draw_label: {
-                text_style: <REGULAR_TEXT>{
-                    font_size: 8.
-                },
-            }
-            label: "yesterday"
-        }
-
-        // TODO: implement a divider
-        // currently nested frames don't get drawn in the ListView
-        // <Divider> {}
     }
 
     ChatList = {{ChatList}} {
         walk: {width: Fill, height: Fill}
         layout: {flow: Down}
-
         list_view: <ListView> {
             walk: {width: Fill, height: Fill}
             layout: {flow: Down, spacing: 0.0}
@@ -71,6 +76,14 @@ live_design! {
             search_bar = <SearchBar> {}
         }
     }
+}
+
+pub type ChatId = u64;
+
+#[derive(Debug, Clone, WidgetAction)]
+pub enum ChatListAction {
+    Click(ChatId),
+    None,
 }
 
 #[derive(Live)]
@@ -84,6 +97,8 @@ pub struct ChatList {
     list_view: ListView,
     #[rust]
     chat_entries: Vec<ChatEntry>,
+    #[rust]
+    chat_list_view_map: HashMap<u64, u64>,
 }
 
 impl LiveHook for ChatList {
@@ -92,70 +107,8 @@ impl LiveHook for ChatList {
     }
 
     fn after_new_from_doc(&mut self, _cx: &mut Cx) {
-        self.chat_entries = vec![
-            ChatEntry {
-                username: "Rik Arends".to_string(),
-                latest_message: MessagePreview::Text("Hi!".to_string()),
-                timestamp: "14:09".to_string(),
-            },
-            ChatEntry {
-                username: "John Doe".to_string(),
-                latest_message: MessagePreview::Image,
-                timestamp: "11:20".to_string(),
-            },
-            ChatEntry {
-                username: "Jorge Bejar".to_string(),
-                latest_message: MessagePreview::Audio,
-                timestamp: "friday".to_string(),
-            },
-            ChatEntry {
-                username: "Julian Montes de Oca".to_string(),
-                latest_message: MessagePreview::Video,
-                timestamp: "friday".to_string(),
-            },
-            ChatEntry {
-                username: "Edward Tan".to_string(),
-                latest_message: MessagePreview::Text("thanks ed, see you there.".to_string()),
-                timestamp: "thursday".to_string(),
-            },
-            ChatEntry {
-                username: "WeChat Team".to_string(),
-                latest_message: MessagePreview::Text("Welcome to WeChat!".to_string()),
-                timestamp: "18/07".to_string(),
-            },
-            ChatEntry {
-                username: "Andrew Lin".to_string(),
-                latest_message: MessagePreview::Text(
-                    "Awesome, I'll make sure they know about it".to_string(),
-                ),
-                timestamp: "18/07".to_string(),
-            },
-            ChatEntry {
-                username: "Christian Huxley".to_string(),
-                latest_message: MessagePreview::Image,
-                timestamp: "15/07".to_string(),
-            },
-            ChatEntry {
-                username: "Ana Leddie".to_string(),
-                latest_message: MessagePreview::Image,
-                timestamp: "14/07".to_string(),
-            },
-            ChatEntry {
-                username: "Adam Adler".to_string(),
-                latest_message: MessagePreview::Video,
-                timestamp: "10/07".to_string(),
-            },
-            ChatEntry {
-                username: "Gabriel Hayes".to_string(),
-                latest_message: MessagePreview::Text("wow I haven't seen that".to_string()),
-                timestamp: "10/07".to_string(),
-            },
-            ChatEntry {
-                username: "Eric Ford".to_string(),
-                latest_message: MessagePreview::Text("Nice to see you here!".to_string()),
-                timestamp: "10/07".to_string(),
-            },
-        ];
+        let db = Db::new();
+        self.chat_entries = db.get_all_chats().clone();
     }
 }
 
@@ -166,11 +119,10 @@ impl Widget for ChatList {
         event: &Event,
         dispatch_action: &mut dyn FnMut(&mut Cx, WidgetActionItem),
     ) {
-        let _actions = self.list_view.handle_widget_event(cx, event);
-
-        for action in _actions {
-            dispatch_action(cx, action);
-        }
+        let widget_uid = self.widget_uid();
+        self.handle_event_with(cx, event, &mut |cx, action| {
+            dispatch_action(cx, WidgetActionItem::new(action.into(), widget_uid));
+        });
     }
 
     fn get_walk(&self) -> Walk {
@@ -184,6 +136,30 @@ impl Widget for ChatList {
     fn draw_walk_widget(&mut self, cx: &mut Cx2d, walk: Walk) -> WidgetDraw {
         self.draw_walk(cx, walk);
         WidgetDraw::done()
+    }
+}
+
+impl ChatList {
+    fn handle_event_with(
+        &mut self,
+        cx: &mut Cx,
+        event: &Event,
+        dispatch_action: &mut dyn FnMut(&mut Cx, ChatListAction),
+    ) {
+        let mut actions = Vec::new();
+        self.list_view
+            .handle_widget_event_with(cx, event, &mut |_, action| {
+                if let Some(chat_id) = self.chat_list_view_map.get(&action.widget_uid.0) {
+                    actions.push((chat_id, action));
+                }
+            });
+
+        for (chat_id, action) in actions {
+            match action.action() {
+                ClickableFrameAction::Click => dispatch_action(cx, ChatListAction::Click(*chat_id)),
+                _ => (),
+            }
+        }
     }
 }
 
@@ -208,6 +184,9 @@ impl ChatList {
                     let item_index = item_id as usize - 1; // offset by 1 to account for the search bar
                     let item_content = &self.chat_entries[item_index];
 
+                    self.chat_list_view_map
+                        .insert(item.widget_uid().0, *(&self.chat_entries[item_index].id));
+
                     item.get_label(id!(preview.username))
                         .set_label(&item_content.username);
                     item.get_label(id!(preview.content))
@@ -221,29 +200,5 @@ impl ChatList {
         }
 
         cx.end_turtle();
-    }
-}
-
-pub struct ChatEntry {
-    username: String,
-    latest_message: MessagePreview,
-    timestamp: String,
-}
-
-pub enum MessagePreview {
-    Audio,
-    Image,
-    Video,
-    Text(String),
-}
-
-impl MessagePreview {
-    pub fn text(&self) -> &str {
-        match self {
-            MessagePreview::Audio => "[Audio]",
-            MessagePreview::Image => "[Image]",
-            MessagePreview::Video => "[Video]",
-            MessagePreview::Text(text) => text,
-        }
     }
 }

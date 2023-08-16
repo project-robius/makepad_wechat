@@ -124,7 +124,7 @@ live_design! {
                 )
             }
         }
-        
+
         draw_bg: {
             instance color: #4
             instance border_width: 0.0,
@@ -181,7 +181,8 @@ struct DrawName {
 
 #[derive(Live)]
 pub struct PopupMenu {
-    #[live] draw_list: DrawList2d,
+    #[live]
+    draw_list: DrawList2d,
 
     #[live]
     menu_item: Option<LivePtr>,
@@ -274,7 +275,10 @@ impl PopupMenu {
     pub fn end(&mut self, cx: &mut Cx2d, shift_area: Area, shift: DVec2) {
         self.draw_bg.end(cx);
         let area = self.draw_bg.area().get_rect(cx);
-        let shift = DVec2 { x: - area.size.x + (shift_area.get_rect(cx).size.x * 0.7), y: 30. };
+        let shift = DVec2 {
+            x: -area.size.x + (shift_area.get_rect(cx).size.x * 0.7),
+            y: 30.,
+        };
 
         cx.end_pass_sized_turtle_with_shift(shift_area, shift);
         self.draw_list.end(cx);
@@ -289,7 +293,13 @@ impl PopupMenu {
         self.draw_list.redraw(cx);
     }
 
-    pub fn draw_item(&mut self, cx: &mut Cx2d, item_id: MenuItemId, label: &str, icon: LiveDependency) {
+    pub fn draw_item(
+        &mut self,
+        cx: &mut Cx2d,
+        item_id: MenuItemId,
+        label: &str,
+        icon: LiveDependency,
+    ) {
         self.count += 1;
 
         let menu_item = self.menu_item;
@@ -359,10 +369,10 @@ pub struct MenuItem {
     #[live]
     layout: Layout,
     #[live]
-    walk: Walk, 
+    walk: Walk,
 
     #[live]
-    draw_bg: DrawBg, 
+    draw_bg: DrawBg,
     #[live]
     draw_name: DrawName,
 
@@ -410,7 +420,7 @@ impl MenuItem {
         self.draw_icon.draw_walk(cx, self.icon_walk);
 
         self.draw_name
-            .draw_walk(cx, Walk::fit(), Align { x: 0., y: 0.5}, label);
+            .draw_walk(cx, Walk::fit(), Align { x: 0., y: 0.5 }, label);
         self.draw_bg.end(cx);
     }
 

@@ -4,4 +4,5 @@ use makepad_widgets::*;
 pub enum StackViewAction {
     None,
     ShowMoments,
+    ShowMyProfile,
 }
