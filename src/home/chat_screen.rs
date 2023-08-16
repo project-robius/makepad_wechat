@@ -9,6 +9,7 @@ live_design! {
     import makepad_widgets::label::*;
     import makepad_widgets::list_view::ListView;
     import makepad_widgets::text_input::TextInput;
+    import makepad_widgets::image::*;
 
     import crate::shared::styles::*;
     import crate::shared::helpers::*;
@@ -27,7 +28,7 @@ live_design! {
             walk: {width: Fit, height: Fit}
 
             avatar = <Image> {
-                image: (IMG_DEFAULT_AVATAR),
+                source: (IMG_DEFAULT_AVATAR),
                 walk: {width: 36., height: 36.}
             }
             text = <Frame> {
@@ -126,7 +127,7 @@ live_design! {
             }
 
             avatar = <Image> {
-                image: (IMG_DEFAULT_AVATAR),
+                source: (IMG_DEFAULT_AVATAR),
                 walk: {width: 36., height: 36.}
             }
         }
@@ -162,7 +163,7 @@ live_design! {
             }
 
             <Image> {
-                image: (IMG_KEYBOARD_ICON),
+                source: (IMG_KEYBOARD_ICON),
                 walk: {width: 36., height: 36.}
             }
             message_input = <SearchBar> {
@@ -180,11 +181,11 @@ live_design! {
                 }
             }
             <Image> {
-                image: (IMG_SMILEY_FACE_BW),
+                source: (IMG_SMILEY_FACE_BW),
                 walk: {width: 36., height: 36.}
             }
             <Image> {
-                image: (IMG_PLUS),
+                source: (IMG_PLUS),
                 walk: {width: 36., height: 36.}
             }
         }

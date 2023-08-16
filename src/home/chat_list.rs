@@ -28,7 +28,7 @@ live_design! {
             walk: {width: Fill, height: Fit}
 
             avatar = <Image> {
-                image: (IMG_DEFAULT_AVATAR),
+                source: (IMG_DEFAULT_AVATAR),
                 walk: {width: 36., height: 36.}
                 layout: {padding: 0}
             }
