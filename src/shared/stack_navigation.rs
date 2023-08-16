@@ -228,8 +228,6 @@ impl Widget for StackNavigation {
         for action in actions.into_iter() {
             dispatch_action(cx, action);
         }
-
-        self.redraw(cx);
     }
 
     fn redraw(&mut self, cx: &mut Cx) {
@@ -251,12 +249,14 @@ impl StackNavigation {
         let mut stack_view_ref = self.get_stack_navigation_view(id!(stack_view));
         stack_view_ref.show(cx);
         self.active_stack_view = ActiveStackView::Active(id!(stack_view)[0]);
+        self.redraw(cx);
     }
 
     pub fn show_stack_view_by_id(&mut self, stack_view_id: LiveId, cx: &mut Cx) {
         let mut stack_view_ref = self.get_stack_navigation_view(&[stack_view_id]);
         stack_view_ref.show(cx);
         self.active_stack_view = ActiveStackView::Active(stack_view_id);
+        self.redraw(cx);
     }
 }
 

@@ -17,8 +17,6 @@ live_design! {
     import crate::shared::styles::*;
     import crate::shared::helpers::*;
     import crate::shared::stack_navigation::StackNavigation;
-    import crate::profile::my_profile_screen::MyProfileScreen;
-    import crate::home::chat_screen::ChatScreen;
     import crate::shared::clickable_frame::ClickableFrame;
 
     IMG_DEFAULT_AVATAR = dep("crate://self/resources/img/default_avatar.png")
