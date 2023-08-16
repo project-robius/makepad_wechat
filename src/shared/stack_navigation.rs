@@ -206,7 +206,7 @@ impl Widget for StackNavigation {
         event: &Event,
         dispatch_action: &mut dyn FnMut(&mut Cx, WidgetActionItem),
     ) {
-        let mut actions = vec![];
+        let actions;
 
         match self.active_stack_view {
             ActiveStackView::None => {
@@ -216,7 +216,7 @@ impl Widget for StackNavigation {
                     .handle_widget_event(cx, event);
             }
             ActiveStackView::Active(stack_view_id) => {
-                let mut stack_view_ref = self.get_stack_navigation_view(&[stack_view_id]);
+                let stack_view_ref = self.get_stack_navigation_view(&[stack_view_id]);
                 actions = stack_view_ref.handle_widget_event(cx, event);
 
                 if !stack_view_ref.is_showing(cx) {

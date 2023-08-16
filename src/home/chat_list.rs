@@ -2,8 +2,6 @@ use std::collections::HashMap;
 
 use crate::api::{ChatEntry, Db, MessageDirection, MessageEntry, MessagePreview};
 use crate::shared::clickable_frame::*;
-use crate::shared::stack_navigation::StackNavigation;
-use makepad_widgets::widget::WidgetCache;
 use makepad_widgets::*;
 
 live_design! {
