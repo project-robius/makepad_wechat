@@ -205,6 +205,8 @@ pub struct Chat {
     messages: Vec<MessageEntry>,
     #[live]
     list_view: ListView,
+    #[live]
+    first_render: bool,
 }
 
 impl LiveHook for Chat {
@@ -214,6 +216,7 @@ impl LiveHook for Chat {
 
     fn after_new_from_doc(&mut self, _cx: &mut Cx) {
         self.messages = vec![];
+        self.first_render = true;
     }
 }
 
@@ -258,6 +261,8 @@ impl Chat {
         };
         self.list_view.set_item_range(0, range_end, 1);
 
+        let mut visible_items_count = 0;
+
         while self.list_view.draw_widget(cx).hook_widget().is_some() {
             while let Some(item_id) = self.list_view.next_visible_item(cx) {
                 if item_id < messages_entries_count {
@@ -276,7 +281,14 @@ impl Chat {
 
                     item.draw_widget_all(cx);
                 }
+                visible_items_count += 1;
             }
+        }
+
+        if self.first_render {
+            let scroll_target = messages_entries_count - visible_items_count;
+            self.list_view.scroll_to_item(scroll_target);
+            self.first_render = false;
         }
 
         cx.end_turtle();
