@@ -63,14 +63,7 @@ live_design! {
                 }
                 label: "yesterday"
             }
-            // TODO: implement divider when moving this into a widget.
-            // currently nested frames don't get drawn in the ListView
-            // <Divider> {}
     }
-
-    // TODO: implement a divider
-    // currently nested frames don't get drawn in the ListView
-    // <Divider> {}
 
     ChatList = {{ChatList}} {
         walk: {width: Fill, height: Fill}

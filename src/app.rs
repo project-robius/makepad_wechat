@@ -345,8 +345,6 @@ impl AppMain for App {
                     if let Some(chat_entry) = db.get_chat(id) {
                         stack_navigation
                             .get_label(id!(chat_stack_view.title))
-                            // TODO: get username from duymmy db
-                            // .set_label(&id);
                             .set_label(&chat_entry.username);
                     }
 
