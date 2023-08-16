@@ -45,31 +45,33 @@ pub struct Db {
 
 impl Db {
     pub fn new() -> Self {
-        let mut messages = vec![];
-        for _ in 0..10 {
-            messages.append(&mut vec![
-                MessageEntry {
-                    direction: MessageDirection::Outgoing,
-                    chat_id: 2,
-                    text: "Sunny as always.".to_string(),
-                },
-                MessageEntry {
-                    direction: MessageDirection::Incoming,
-                    chat_id: 1,
-                    text: "Hey Facu!".to_string(),
-                },
-                MessageEntry {
-                    direction: MessageDirection::Outgoing,
-                    chat_id: 1,
-                    text: "Hello there!".to_string(),
-                },
-                MessageEntry {
-                    direction: MessageDirection::Incoming,
-                    chat_id: 2,
-                    text: "How's the weather?".to_string(),
-                },
-            ]);
-        }
+        let messages: Vec<MessageEntry> = (0..10)
+            .flat_map(|_| {
+                vec![
+                    MessageEntry {
+                        direction: MessageDirection::Outgoing,
+                        chat_id: 2,
+                        text: "Sunny as always.".to_string(),
+                    },
+                    MessageEntry {
+                        direction: MessageDirection::Incoming,
+                        chat_id: 1,
+                        text: "Hey Facu!".to_string(),
+                    },
+                    MessageEntry {
+                        direction: MessageDirection::Outgoing,
+                        chat_id: 1,
+                        text: "Hello there!".to_string(),
+                    },
+                    MessageEntry {
+                        direction: MessageDirection::Incoming,
+                        chat_id: 2,
+                        text: "How's the weather?".to_string(),
+                    },
+                ]
+            })
+            .collect();
+
         Db {
             messages,
             chats: vec![
