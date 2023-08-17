@@ -127,53 +127,14 @@ live_design! {
         <ContactsList> {}
     }
 
-    Contacts = {{Contacts}} {
-        frame: <Frame> {
-            walk: {width: Fill, height: Fill}
-            layout: {flow: Down, spacing: 0.0}
-            <ContactsBody> {}
-        }
+    Contacts = <Frame> {
+        walk: {width: Fill, height: Fill}
+        layout: {flow: Down, spacing: 0.0}
+        <ContactsBody> {}
     }
 
     ContactsScreen = <Frame> {
         walk: {width: Fill, height: Fill}
         <Contacts> {}
-    }
-}
-
-#[derive(Live)]
-pub struct Contacts {
-    #[live]
-    frame: Frame,
-}
-
-impl LiveHook for Contacts {
-    fn before_live_design(cx: &mut Cx) {
-        register_widget!(cx, Contacts);
-    }
-}
-
-impl Widget for Contacts {
-    fn handle_widget_event_with(
-        &mut self,
-        cx: &mut Cx,
-        event: &Event,
-        dispatch_action: &mut dyn FnMut(&mut Cx, WidgetActionItem),
-    ) {
-        self.frame
-            .handle_widget_event_with(cx, event, dispatch_action);
-    }
-
-    fn redraw(&mut self, cx: &mut Cx) {
-        self.frame.redraw(cx);
-    }
-
-    fn find_widgets(&mut self, path: &[LiveId], cached: WidgetCache, results: &mut WidgetSet) {
-        self.frame.find_widgets(path, cached, results);
-    }
-
-    fn draw_walk_widget(&mut self, cx: &mut Cx2d, walk: Walk) -> WidgetDraw {
-        let _ = self.frame.draw_walk_widget(cx, walk);
-        WidgetDraw::done()
     }
 }
