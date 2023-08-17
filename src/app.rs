@@ -1,7 +1,4 @@
 use crate::api::Db;
-use crate::contacts::contacts_screen::*;
-use crate::discover::discover_screen::*;
-use crate::discover::moments_screen::*;
 use crate::home::chat_list::ChatListAction;
 use crate::home::chat_screen::*;
 use crate::shared::dropdown_menu::DropDownAction;
