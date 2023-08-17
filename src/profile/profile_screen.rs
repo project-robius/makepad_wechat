@@ -13,7 +13,6 @@ live_design! {
     import crate::shared::helpers::FillerX;
     import crate::shared::helpers::Divider;
     import crate::shared::styles::*;
-    import crate::profile::my_profile_screen::MyProfileScreen;
     import crate::shared::clickable_frame::ClickableFrame
 
     IMG_DEFAULT_AVATAR = dep("crate://self/resources/img/default_avatar.png")
@@ -155,7 +154,7 @@ live_design! {
                                     }
                                 }
                             }
-                    }
+                        }
                     }
 
                     <Frame> {

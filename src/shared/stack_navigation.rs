@@ -172,6 +172,14 @@ impl StackNavigationViewRef {
             false
         }
     }
+
+    pub fn is_animating(&self, cx: &mut Cx) -> bool {
+        if let Some(inner) = self.borrow() {
+            inner.state.is_track_animating(cx, id!(slide))
+        } else {
+            false
+        }
+    }
 }
 
 #[derive(Default)]
@@ -217,10 +225,16 @@ impl Widget for StackNavigation {
             }
             ActiveStackView::Active(stack_view_id) => {
                 let stack_view_ref = self.get_stack_navigation_view(&[stack_view_id]);
-                actions = stack_view_ref.handle_widget_event(cx, event);
 
                 if !stack_view_ref.is_showing(cx) {
                     self.active_stack_view = ActiveStackView::None;
+
+                    actions = self
+                    .frame
+                    .get_widget(id!(root_view))
+                    .handle_widget_event(cx, event);
+                } else {
+                    actions = stack_view_ref.handle_widget_event(cx, event);
                 }
             }
         }
@@ -239,7 +253,25 @@ impl Widget for StackNavigation {
     }
 
     fn draw_walk_widget(&mut self, cx: &mut Cx2d, walk: Walk) -> WidgetDraw {
-        let _ = self.frame.draw_walk(cx, walk);
+        match self.active_stack_view {
+            ActiveStackView::None => {
+                self.frame.get_widget(id!(root_view)).draw_walk_widget(cx, walk);
+            },
+            ActiveStackView::Active(stack_view_id) => {
+                let stack_view_ref = self.get_stack_navigation_view(&[stack_view_id]);
+
+                if stack_view_ref.is_showing(cx) {
+                    if stack_view_ref.is_animating(cx) {
+                        self.frame.get_widget(id!(root_view)).draw_walk_widget(cx, walk);
+                    }
+                    stack_view_ref.draw_walk_widget(cx, walk);
+                } else {
+                    self.frame.get_widget(id!(root_view)).draw_walk_widget(cx, walk);
+                    self.active_stack_view = ActiveStackView::None;
+                }
+            }
+        }
+
         WidgetDraw::done()
     }
 }
