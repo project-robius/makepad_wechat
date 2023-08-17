@@ -69,163 +69,150 @@ live_design! {
             block_signal_event: true;
 
             navigation = <StackNavigation> {
-                frame: {
-                    design_mode: false,
+                root_view = {
                     walk: {width: Fill, height: Fill}
+                    layout: {padding: 0, align: {x: 0.0, y: 0.0}, spacing: 0., flow: Down}
 
-                    root_view = {
-                        walk: {width: Fill, height: Fill}
-                        layout: {padding: 0, align: {x: 0.0, y: 0.0}, spacing: 0., flow: Down}
+                    application_pages = <Frame> {
+                        walk: {margin: 0.0}
+                        layout: {padding: 0.0}
 
-                        application_pages = <Frame> {
-                            walk: {margin: 0.0}
-                            layout: {padding: 0.0}
+                        tab1_frame = <HomeScreen> {visible: true}
+                        tab2_frame = <ContactsScreen> {visible: false}
+                        tab3_frame = <DiscoverScreen> {visible: false}
+                        tab4_frame = <ProfileScreen> {visible: false}
+                    }
 
-                            tab1_frame = <HomeScreen> {visible: true}
-                            tab2_frame = <ContactsScreen> {visible: false}
-                            tab3_frame = <DiscoverScreen> {visible: false}
-                            tab4_frame = <ProfileScreen> {visible: false}
+                    mobile_menu = <Box> {
+                        walk: {width: Fill, height: 80}
+                        layout: {flow: Right, spacing: 6.0, padding: 10}
+                        draw_bg: {
+                            instance radius: 0.0,
+                            instance border_width: 1.0,
+                            instance border_color: #aaa,
+                            color: #fff
                         }
 
-                        mobile_menu = <Box> {
-                            walk: {width: Fill, height: 80}
-                            layout: {flow: Right, spacing: 6.0, padding: 10}
-                            draw_bg: {
-                                instance radius: 0.0,
-                                instance border_width: 1.0,
-                                instance border_color: #aaa,
-                                color: #fff
+                        mobile_modes = <Frame> {
+                            tab1 = <AppTab> {
+                                state: {selected = {default: on}}
+                                label: "Chat"
+                                draw_icon: {
+                                    svg_file: (ICON_CHAT),
+                                    fn get_color(self) -> vec4 {
+                                        return mix(
+                                            #000,
+                                            #0b0,
+                                            self.selected
+                                        )
+                                    }
+                                }
+                                walk: {width: Fill}
+                                icon_walk: {width: 20, height: 20}
+                                layout: {flow: Down, spacing: 5.0, align: {x: 0.5, y: 0.5}}
                             }
+                            tab2 = <AppTab> {
+                                label: "Contacts",
+                                draw_icon: {
+                                    svg_file: (ICON_CONTACTS),
+                                    fn get_color(self) -> vec4 {
+                                        return mix(
+                                            #000,
+                                            #0b0,
+                                            self.selected
+                                        )
+                                    }
+                                }
+                                walk: {width: Fill}
+                                icon_walk: {width: 20, height: 20}
+                                layout: {flow: Down, spacing: 5.0, align: {x: 0.5, y: 0.5}}
+                            }
+                            tab3 = <AppTab> {
+                                label: "Discover",
+                                draw_icon: {
+                                    svg_file: (ICON_DISCOVER),
+                                    fn get_color(self) -> vec4 {
+                                        return mix(
+                                            #000,
+                                            #0b0,
+                                            self.selected
+                                        )
+                                    }
+                                }
+                                walk: {width: Fill}
+                                icon_walk: {width: 20, height: 20}
+                                layout: {flow: Down, spacing: 5.0, align: {x: 0.5, y: 0.5}}
+                            }
+                            tab4 = <AppTab> {
+                                label: "Me",
+                                draw_icon: {
+                                    svg_file: (ICON_ME),
+                                    fn get_color(self) -> vec4 {
+                                        return mix(
+                                            #000,
+                                            #0b0,
+                                            self.selected
+                                        )
+                                    }
+                                }
+                                walk: {width: Fill}
+                                icon_walk: {width: 20, height: 20}
+                                layout: {flow: Down, spacing: 5.0, align: {x: 0.5, y: 0.5}}
+                            }
+                        }
+                    }
+                }
 
-                            mobile_modes = <Frame> {
-                                tab1 = <AppTab> {
-                            state: {selected = {default: on}}
-                                    label: "Chat"
-                                    draw_icon: {
-                                        svg_file: (ICON_CHAT),
-                                        fn get_color(self) -> vec4 {
-                                            return mix(
-                                                #000,
-                                                #0b0,
-                                                self.selected
-                                            )
-                                        }
-                                    }
-                                    walk: {width: Fill}
-                                    icon_walk: {width: 20, height: 20}
-                                    layout: {flow: Down, spacing: 5.0, align: {x: 0.5, y: 0.5}}
-                                }
-                                tab2 = <AppTab> {
-                                            label: "Contacts",
-                                    draw_icon: {
-                                        svg_file: (ICON_CONTACTS),
-                                        fn get_color(self) -> vec4 {
-                                            return mix(
-                                                #000,
-                                                #0b0,
-                                                self.selected
-                                            )
-                                        }
-                                    }
-                                    walk: {width: Fill}
-                                    icon_walk: {width: 20, height: 20}
-                                    layout: {flow: Down, spacing: 5.0, align: {x: 0.5, y: 0.5}}
-                                }
-                                tab3 = <AppTab> {
-                                    label: "Discover",
-                                    draw_icon: {
-                                        svg_file: (ICON_DISCOVER),
-                                        fn get_color(self) -> vec4 {
-                                            return mix(
-                                                #000,
-                                                #0b0,
-                                                self.selected
-                                            )
-                                        }
-                                    }
-                                    walk: {width: Fill}
-                                    icon_walk: {width: 20, height: 20}
-                                    layout: {flow: Down, spacing: 5.0, align: {x: 0.5, y: 0.5}}
-                                }
-                                tab4 = <AppTab> {
-                                    label: "Me",
-                                    draw_icon: {
-                                        svg_file: (ICON_ME),
-                                        fn get_color(self) -> vec4 {
-                                            return mix(
-                                                #000,
-                                                #0b0,
-                                                self.selected
-                                            )
-                                        }
-                                    }
-                                    walk: {width: Fill}
-                                    icon_walk: {width: 20, height: 20}
-                                    layout: {flow: Down, spacing: 5.0, align: {x: 0.5, y: 0.5}}
+                moments_stack_view = <StackNavigationView> {
+                    header = {
+                        content = {
+                            title_container = {
+                                title = {
+                                    label: "Moments"
                                 }
                             }
                         }
                     }
+                    <MomentsScreen> {}
+                }
 
-                    moments_stack_view = <StackNavigationView> {
-                        frame: {
-                            header = {
-                                content = {
-                                    title_container = {
-                                        title = {
-                                            label: "Moments"
-                                        }
-                                    }
+                add_contact_stack_view = <StackNavigationView> {
+                    header = {
+                        content = {
+                            title_container = {
+                                title = {
+                                    label: "Add Contact"
                                 }
                             }
-                            <MomentsScreen> {}
                         }
                     }
+                    <AddContactScreen> {}
+                }
 
-                    add_contact_stack_view = <StackNavigationView> {
-                        frame: {
-                            header = {
-                                content = {
-                                    title_container = {
-                                        title = {
-                                            label: "Add Contact"
-                                        }
-                                    }
+                my_profile_stack_view = <StackNavigationView> {
+                    header = {
+                        content = {
+                            title_container = {
+                                title = {
+                                    label: "My Profile"
                                 }
                             }
-                            <AddContactScreen> {}
                         }
                     }
+                    <MyProfileScreen> {}
+                }
 
-                    my_profile_stack_view = <StackNavigationView> {
-                        frame: {
-                            header = {
-                                content = {
-                                    title_container = {
-                                        title = {
-                                            label: "My Profile"
-                                        }
-                                    }
+                chat_stack_view = <StackNavigationView> {
+                    header = {
+                        content = {
+                            title_container = {
+                                title = {
+                                    label: " "
                                 }
                             }
-                            <MyProfileScreen> {}
                         }
                     }
-
-                    chat_stack_view = <StackNavigationView> {
-                        frame: {
-                            header = {
-                                content = {
-                                    title_container = {
-                                        title = {
-                                            label: " "
-                                        }
-                                    }
-                                }
-                            }
-                            chat_screen = <ChatScreen> {}
-                        }
-                    }
+                    chat_screen = <ChatScreen> {}
                 }
             }
         }
