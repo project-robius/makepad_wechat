@@ -94,7 +94,7 @@ live_design! {
             images = <Frame> {
                 walk: {width: Fill, height: 110.}
                 layout: {flow: Right, spacing: 7.}
-            
+
                 image_1 = <Image> {
                     source: (IMG_POST1),
                     walk: {width: 90., height: 110.}
@@ -178,6 +178,19 @@ impl LiveHook for MomentList {
 }
 
 impl Widget for MomentList {
+    fn handle_widget_event_with(
+        &mut self,
+        cx: &mut Cx,
+        event: &Event,
+        dispatch_action: &mut dyn FnMut(&mut Cx, WidgetActionItem),
+    ) {
+        let _actions = self.list_view.handle_widget_event(cx, event);
+
+        for action in _actions {
+            dispatch_action(cx, action);
+        }
+    }
+
     fn get_walk(&self) -> Walk {
         self.walk
     }
@@ -197,15 +210,15 @@ impl MomentList {
         let moment_entries_count = self.moment_entries.len() as u64;
 
         cx.begin_turtle(walk, self.layout);
-        self.list_view.set_item_range(0, moment_entries_count + 1, 1);
+        self.list_view
+            .set_item_range(0, moment_entries_count + 1, 1);
 
         while self.list_view.draw_widget(cx).hook_widget().is_some() {
             while let Some(item_id) = self.list_view.next_visible_item(cx) {
-
-                let template = match item_id { 
+                let template = match item_id {
                     0 => id!(hero),
                     x if x % 2 == 0 => id!(text_post),
-                    _ => id!(image_post)
+                    _ => id!(image_post),
                 };
 
                 // let template = if entry.images.len() > 0 {
@@ -217,13 +230,11 @@ impl MomentList {
                 let item = self.list_view.get_item(cx, item_id, template[0]).unwrap();
 
                 if item_id >= 1 && item_id < moment_entries_count + 1 {
-
                     let post = &self.moment_entries[item_id as usize - 1]; // offset by 1 to account for the hero
-                    
+
                     item.get_label(id!(content.username))
                         .set_label(&post.username);
-                    item.get_label(id!(content.text))
-                        .set_label(&post.text);
+                    item.get_label(id!(content.text)).set_label(&post.text);
                 }
 
                 item.draw_widget_all(cx);
@@ -237,5 +248,5 @@ impl MomentList {
 struct MomentEntry {
     images: Vec<String>,
     username: String,
-    text: String
+    text: String,
 }

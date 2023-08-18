@@ -7,6 +7,7 @@ live_design! {
 
     MomentsScreen = <Frame> {
         walk: { width: Fill, height: Fill }
+        layout: {flow: Down}
         show_bg: true
         draw_bg: {
             color: #fff
