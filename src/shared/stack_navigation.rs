@@ -26,18 +26,15 @@ live_design! {
     }
 
     StackNavigationView = {{StackNavigationView}} {
+        visible: false
         walk: {width: Fill, height: Fill}
-        frame: <Frame> {
-            visible: false
-            walk: {width: Fill, height: Fill}
-            layout: {flow: Down}
-            show_bg: true
-            draw_bg: {
-                color: #fff
-            }
-
-            header = <Header> {}
+        layout: {flow: Down}
+        show_bg: true
+        draw_bg: {
+            color: #fff
         }
+
+        header = <Header> {}
 
         // TBD Adjust this based on actual screen size
         offset: 1000.0
@@ -60,24 +57,18 @@ live_design! {
     }
 
     StackNavigation = {{StackNavigation}} {
-        frame: <Frame> {
-            layout: {flow: Overlay}
+        walk: {width: Fill, height: Fill}
+        layout: {flow: Overlay}
 
-            root_view = <Frame> {}
-            stack_view = <StackNavigationView> {}
-        }
+        root_view = <Frame> {}
     }
 }
 
 #[derive(Live)]
 pub struct StackNavigationView {
-    #[live]
-    walk: Walk,
-    #[live]
-    layout: Layout,
-
-    #[live]
+    #[deref]
     frame: Frame,
+
     #[live]
     offset: f64,
 
@@ -93,7 +84,7 @@ impl LiveHook for StackNavigationView {
 
 impl Widget for StackNavigationView {
     fn get_walk(&self) -> Walk {
-        self.walk
+        self.frame.get_walk()
     }
 
     fn redraw(&mut self, cx: &mut Cx) {
@@ -148,7 +139,7 @@ impl StackNavigationView {
         if self.state.is_in_state(cx, id!(slide.hide))
             && !self.state.is_track_animating(cx, id!(slide))
         {
-            self.apply_over(cx, live! {frame: {visible: false}});
+            self.apply_over(cx, live! {visible: false});
         }
     }
 }
@@ -159,7 +150,7 @@ pub struct StackNavigationViewRef(pub WidgetRef);
 impl StackNavigationViewRef {
     pub fn show(&mut self, cx: &mut Cx) {
         if let Some(mut inner) = self.borrow_mut() {
-            inner.apply_over(cx, live! {frame: {visible: true}});
+            inner.apply_over(cx, live! {visible: true});
             inner.animate_state(cx, id!(slide.show));
         }
     }
@@ -168,6 +159,14 @@ impl StackNavigationViewRef {
         if let Some(inner) = self.borrow() {
             inner.state.is_in_state(cx, id!(slide.show))
                 || inner.state.is_track_animating(cx, id!(slide))
+        } else {
+            false
+        }
+    }
+
+    pub fn is_animating(&self, cx: &mut Cx) -> bool {
+        if let Some(inner) = self.borrow() {
+            inner.state.is_track_animating(cx, id!(slide))
         } else {
             false
         }
@@ -183,7 +182,7 @@ enum ActiveStackView {
 
 #[derive(Live)]
 pub struct StackNavigation {
-    #[live]
+    #[deref]
     frame: Frame,
     #[rust]
     active_stack_view: ActiveStackView,
@@ -206,22 +205,11 @@ impl Widget for StackNavigation {
         event: &Event,
         dispatch_action: &mut dyn FnMut(&mut Cx, WidgetActionItem),
     ) {
-        let actions;
+        let mut actions = vec![];
 
-        match self.active_stack_view {
-            ActiveStackView::None => {
-                actions = self
-                    .frame
-                    .get_widget(id!(root_view))
-                    .handle_widget_event(cx, event);
-            }
-            ActiveStackView::Active(stack_view_id) => {
-                let stack_view_ref = self.get_stack_navigation_view(&[stack_view_id]);
-                actions = stack_view_ref.handle_widget_event(cx, event);
-
-                if !stack_view_ref.is_showing(cx) {
-                    self.active_stack_view = ActiveStackView::None;
-                }
+        for widget_ref in self.get_active_views(cx).iter() {
+            for a in widget_ref.handle_widget_event(cx, event) {
+                actions.push(a);
             }
         }
 
@@ -231,32 +219,53 @@ impl Widget for StackNavigation {
     }
 
     fn redraw(&mut self, cx: &mut Cx) {
-        self.frame.redraw(cx);
+        for widget_ref in self.get_active_views(cx).iter() {
+            widget_ref.redraw(cx);
+        }
     }
 
     fn find_widgets(&mut self, path: &[LiveId], cached: WidgetCache, results: &mut WidgetSet) {
+        // We're only using Frame widget ability to find widgets
         self.frame.find_widgets(path, cached, results);
     }
 
     fn draw_walk_widget(&mut self, cx: &mut Cx2d, walk: Walk) -> WidgetDraw {
-        let _ = self.frame.draw_walk(cx, walk);
+        for widget_ref in self.get_active_views(cx.cx).iter() {
+            let _ = widget_ref.draw_walk_widget(cx, walk);
+        }
         WidgetDraw::done()
     }
 }
 
 impl StackNavigation {
-    pub fn show_stack_view(&mut self, cx: &mut Cx) {
-        let mut stack_view_ref = self.get_stack_navigation_view(id!(stack_view));
-        stack_view_ref.show(cx);
-        self.active_stack_view = ActiveStackView::Active(id!(stack_view)[0]);
-        self.redraw(cx);
-    }
-
     pub fn show_stack_view_by_id(&mut self, stack_view_id: LiveId, cx: &mut Cx) {
         let mut stack_view_ref = self.get_stack_navigation_view(&[stack_view_id]);
         stack_view_ref.show(cx);
         self.active_stack_view = ActiveStackView::Active(stack_view_id);
         self.redraw(cx);
+    }
+
+    fn get_active_views(&mut self, cx: &mut Cx) -> Vec<WidgetRef> {
+        match self.active_stack_view {
+            ActiveStackView::None => {
+                vec![self.frame.get_widget(id!(root_view))]
+            },
+            ActiveStackView::Active(stack_view_id) => {
+                let stack_view_ref = self.get_stack_navigation_view(&[stack_view_id]);
+                let mut views = vec![];
+
+                if stack_view_ref.is_showing(cx) {
+                    if stack_view_ref.is_animating(cx) {
+                        views.push(self.frame.get_widget(id!(root_view)));
+                    }
+                    views.push(stack_view_ref.0.clone());
+                    views
+                } else {
+                    self.active_stack_view = ActiveStackView::None;
+                    vec![self.frame.get_widget(id!(root_view))]
+                }
+            }
+        }
     }
 }
 
@@ -264,12 +273,6 @@ impl StackNavigation {
 pub struct StackNavigationRef(pub WidgetRef);
 
 impl StackNavigationRef {
-    pub fn show_stack_view(&mut self, cx: &mut Cx) {
-        if let Some(mut inner) = self.borrow_mut() {
-            inner.show_stack_view(cx);
-        }
-    }
-
     pub fn show_stack_view_by_id(&mut self, stack_view_id: LiveId, cx: &mut Cx) {
         if let Some(mut inner) = self.borrow_mut() {
             inner.show_stack_view_by_id(stack_view_id, cx);
