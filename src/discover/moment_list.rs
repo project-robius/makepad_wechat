@@ -17,46 +17,61 @@ live_design! {
 
     Hero = <Frame> {
         walk: {width: Fill, height: Fit}
-        banner = <Image> {
+        banner = <ImageFrame> {
             walk: {width: Fill, height: 200.0}
-            source: (IMG_BANNER),
+            layout: {align: {y: 1, x: 1}}
+            image: (IMG_BANNER),
+            content = <Frame> {
+                walk: {width: Fit, height: Fit}
+                layout: {align: {y: 0.5}}
+                username = <Label> {
+                    walk: {width: Fit, height: Fit}
+                    draw_label: {
+                        color: #fff,
+                        text_style: <REGULAR_TEXT>{}
+                    }
+                    label: "減活乗治外進"
+                }
+                avatar = <Image> {
+                    source: (IMG_DEFAULT_AVATAR),
+                    walk: {width: 50., height: 50.}
+                    layout: {padding: 0}
+                }
+            }
         }
-        // TODO
-        // profile pic
-        // username
     }
 
     TextPost = <Frame> {
-            layout: {flow: Right, spacing: 10., padding: 10.}
-            walk: {width: Fill, height: Fit}
+        layout: {flow: Right, spacing: 10., padding: 10.}
+        walk: {width: Fill, height: Fit}
 
-            avatar = <Image> {
-                source: (IMG_DEFAULT_AVATAR),
-                walk: {width: 36., height: 36.}
-                layout: {padding: 0}
+        avatar = <Image> {
+            source: (IMG_DEFAULT_AVATAR),
+            walk: {width: 36., height: 36.}
+            layout: {padding: 0}
+        }
+
+        content = <Frame> {
+            layout: {flow: Down, spacing: 7.}
+
+            username = <Label> {
+                walk: {width: Fill, height: Fit}
+                draw_label: {
+                    color: #000,
+                    text_style: <REGULAR_TEXT>{}
+                }
+                label: "Josh"
             }
 
-            content = <Frame> {
-                layout: {flow: Down, spacing: 7.}
-
-                username = <Label> {
-                    walk: {width: Fill, height: Fit}
-                    draw_label: {
-                        color: #000,
-                        text_style: <REGULAR_TEXT>{}
-                    }
-                    label: "Josh"
+            text = <Label> {
+                walk: {width: Fill, height: Fit}
+                draw_label: {
+                    color: #000,
+                    text_style: <REGULAR_TEXT>{}
                 }
-
-                text = <Label> {
-                    walk: {width: Fill, height: Fit}
-                    draw_label: {
-                        color: #000,
-                        text_style: <REGULAR_TEXT>{}
-                    }
-                    label: "Lorem ipsum dolor sit amet, consectetur"
-                }
+                label: "Lorem ipsum dolor sit amet, consectetur"
             }
+        }
     }
 
     ImagePost = <Frame> {
@@ -220,12 +235,6 @@ impl MomentList {
                     x if x % 2 == 0 => id!(text_post),
                     _ => id!(image_post),
                 };
-
-                // let template = if entry.images.len() > 0 {
-                //     id!(image_post)
-                // } else {
-                //     id!(text_post)
-                // };
 
                 let item = self.list_view.get_item(cx, item_id, template[0]).unwrap();
 
