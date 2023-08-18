@@ -257,6 +257,7 @@ impl LiveHook for App {
 
         // discover
         crate::discover::discover_screen::live_design(cx);
+        crate::discover::moment_list::live_design(cx);
         crate::discover::moments_screen::live_design(cx);
 
         // profile
