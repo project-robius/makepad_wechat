@@ -205,8 +205,6 @@ pub struct Chat {
     messages: Vec<MessageEntry>,
     #[live]
     list_view: ListView,
-    #[live]
-    first_render: bool,
 }
 
 impl LiveHook for Chat {
@@ -216,7 +214,6 @@ impl LiveHook for Chat {
 
     fn after_new_from_doc(&mut self, _cx: &mut Cx) {
         self.messages = vec![];
-        self.first_render = true;
     }
 }
 
@@ -252,6 +249,9 @@ impl Chat {
     pub fn draw_walk(&mut self, cx: &mut Cx2d, walk: Walk) {
         let messages_entries_count = self.messages.len() as u64;
 
+        // TODO: when it's implemented, flag ListView to render/scroll upwards
+        // currently we'd rely on workarounds for scrolling to the latest item and limiting extra bottom space
+
         cx.begin_turtle(walk, self.layout);
 
         let range_end = if messages_entries_count > 0 {
@@ -260,8 +260,6 @@ impl Chat {
             0
         };
         self.list_view.set_item_range(0, range_end, 1);
-
-        let mut visible_items_count = 0;
 
         while self.list_view.draw_widget(cx).hook_widget().is_some() {
             while let Some(item_id) = self.list_view.next_visible_item(cx) {
@@ -281,14 +279,7 @@ impl Chat {
 
                     item.draw_widget_all(cx);
                 }
-                visible_items_count += 1;
             }
-        }
-
-        if self.first_render {
-            let scroll_target = messages_entries_count - visible_items_count;
-            self.list_view.scroll_to_item(scroll_target);
-            self.first_render = false;
         }
 
         cx.end_turtle();
