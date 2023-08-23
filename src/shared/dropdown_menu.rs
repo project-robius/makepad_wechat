@@ -311,23 +311,15 @@ impl DropDown {
             let global = cx.global::<PopupMenuGlobal>().clone();
             let mut map = global.map.borrow_mut();
             let popup_menu = map.get_mut(&self.popup_menu.unwrap()).unwrap();
-            let mut item_pos = None;
 
             popup_menu.begin(cx);
 
             for (i, item) in self.labels.iter().enumerate() {
                 let node_id = LiveId(i as u64).into();
-                if i == self.selected_item {
-                    item_pos = Some(cx.turtle().pos());
-                }
                 popup_menu.draw_item(cx, node_id, &item, self.icons[i].clone());
             }
 
-            popup_menu.end(
-                cx,
-                self.draw_bg.area(),
-                -item_pos.unwrap_or(dvec2(0.0, 0.0)),
-            );
+            popup_menu.end(cx, self.draw_bg.area());
         }
     }
 }

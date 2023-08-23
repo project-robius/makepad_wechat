@@ -1,6 +1,6 @@
 use std::collections::HashMap;
 
-use crate::api::{ChatEntry, Db, MessageDirection, MessageEntry, MessagePreview};
+use crate::api::{ChatEntry, Db};
 use crate::shared::clickable_frame::*;
 use makepad_widgets::*;
 

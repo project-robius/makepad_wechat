@@ -101,17 +101,3 @@ impl ClickableFrameRef {
         false
     }
 }
-
-#[derive(Debug, Clone, WidgetSet)]
-pub struct ClickableFrameSet(WidgetSet);
-
-impl ClickableFrameSet {
-    pub fn clicked(&self, actions: &WidgetActions) -> bool {
-        for clickable_frame in self.iter() {
-            if clickable_frame.clicked(actions) {
-                return true;
-            }
-        }
-        false
-    }
-}
