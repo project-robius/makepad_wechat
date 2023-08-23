@@ -297,17 +297,11 @@ impl AppMain for App {
             match action.action() {
                 StackViewAction::ShowMoments => {
                     ui.get_stack_navigation(id!(navigation))
-                        .show_stack_view_by_id(
-                            LiveId::from_str_with_lut("moments_stack_view").unwrap(),
-                            cx,
-                        );
+                        .show_stack_view_by_id(LiveId::from_str("moments_stack_view"), cx);
                 }
                 StackViewAction::ShowMyProfile => {
                     ui.get_stack_navigation(id!(navigation))
-                        .show_stack_view_by_id(
-                            LiveId::from_str_with_lut("my_profile_stack_view").unwrap(),
-                            cx,
-                        );
+                        .show_stack_view_by_id(LiveId::from_str("my_profile_stack_view"), cx);
                 }
                 _ => {}
             }
@@ -316,10 +310,7 @@ impl AppMain for App {
                 DropDownAction::Select(_id, value) => {
                     if LiveValue::Bool(true) == value.enum_eq(id!(AddContact)) {
                         ui.get_stack_navigation(id!(navigation))
-                            .show_stack_view_by_id(
-                                LiveId::from_str_with_lut("add_contact_stack_view").unwrap(),
-                                cx,
-                            );
+                            .show_stack_view_by_id(LiveId::from_str("add_contact_stack_view"), cx);
                     }
                 }
                 _ => {}
@@ -341,10 +332,7 @@ impl AppMain for App {
                         .get_chat(id!(chat));
                     chat_ref.set_chat_id(id);
 
-                    stack_navigation.show_stack_view_by_id(
-                        LiveId::from_str_with_lut("chat_stack_view").unwrap(),
-                        cx,
-                    );
+                    stack_navigation.show_stack_view_by_id(LiveId::from_str("chat_stack_view"), cx);
                 }
                 _ => {}
             }
