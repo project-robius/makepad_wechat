@@ -140,7 +140,7 @@ impl ContactsGroup {
         let _ = self.header.draw_walk_widget(cx, walk);
 
         for contact in self.data.iter() {
-            let contact_widget_id = LiveId::from_str(&contact.name).unwrap().into();
+            let contact_widget_id = LiveId::from_str_with_lut(&contact.name).unwrap().into();
             let current_contact = self.contacts.get_or_insert(cx, contact_widget_id, |cx| {
                 let template = match contact.kind {
                     ContactKind::People => self.people_contact_template,
