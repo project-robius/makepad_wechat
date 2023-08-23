@@ -34,7 +34,6 @@ live_design! {
             avatar = <Image> {
                 source: (IMG_DEFAULT_AVATAR),
                 walk: {width: 36., height: 36.}
-                layout: {padding: 0}
             }
 
             label = <Label> {

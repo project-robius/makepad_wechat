@@ -38,7 +38,6 @@ live_design! {
 
             icon = <Image> {
                 walk: {width: 24., height: 24., margin: {right: 10.}}
-                layout: {padding: 30.}
             }
 
             labels = <Frame> {

@@ -20,47 +20,46 @@ live_design! {
     IMG_DEFAULT_AVATAR = dep("crate://self/resources/img/default_avatar.png")
 
     ChatPreview = <ClickableFrame> {
-            layout: {flow: Right, spacing: 10., padding: 10.}
-            walk: {width: Fill, height: Fit}
+        layout: {flow: Right, spacing: 10., padding: 10.}
+        walk: {width: Fill, height: Fit}
 
-            avatar = <Image> {
-                source: (IMG_DEFAULT_AVATAR),
-                walk: {width: 36., height: 36.}
-                layout: {padding: 0}
+        avatar = <Image> {
+            source: (IMG_DEFAULT_AVATAR),
+            walk: {width: 36., height: 36.}
+        }
+
+        preview = <Frame> {
+            layout: {flow: Down, spacing: 7.}
+
+            username = <Label> {
+                walk: {width: Fill, height: Fit}
+                draw_label: {
+                    color: #000,
+                    text_style: <REGULAR_TEXT>{}
+                }
+                label: "username"
             }
 
-            preview = <Frame> {
-                layout: {flow: Down, spacing: 7.}
-
-                username = <Label> {
-                    walk: {width: Fill, height: Fit}
-                    draw_label: {
-                        color: #000,
-                        text_style: <REGULAR_TEXT>{}
-                    }
-                    label: "username"
-                }
-
-                content = <Label> {
-                    walk: {width: Fit, height: Fit}
-                    draw_label: {
-                        text_style: <REGULAR_TEXT>{
-                            font_size: 10.5
-                        },
-                    }
-                    label: "Hi there! I'm using WeChat"
-                }
-            }
-
-            timestamp = <Label> {
+            content = <Label> {
                 walk: {width: Fit, height: Fit}
                 draw_label: {
                     text_style: <REGULAR_TEXT>{
-                        font_size: 8.
+                        font_size: 10.5
                     },
                 }
-                label: "yesterday"
+                label: "Hi there! I'm using WeChat"
             }
+        }
+
+        timestamp = <Label> {
+            walk: {width: Fit, height: Fit}
+            draw_label: {
+                text_style: <REGULAR_TEXT>{
+                    font_size: 8.
+                },
+            }
+            label: "yesterday"
+        }
     }
 
     ChatList = {{ChatList}} {

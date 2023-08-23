@@ -45,7 +45,6 @@ live_design! {
 
             icon = <Image> {
                 walk: {width: 36., height: 36.}
-                layout: {padding: 0}
             }
 
             label = <Label> {

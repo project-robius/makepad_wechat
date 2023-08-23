@@ -60,7 +60,6 @@ live_design! {
                 off = {
                     from: {all: Forward {duration: 0.1}}
                     apply: {
-                        draw_bg: {pressed: 0.0, hover: 0.0}
                         draw_icon: {pressed: 0.0, hover: 0.0}
                     }
                 }
@@ -71,7 +70,6 @@ live_design! {
                         pressed: Forward {duration: 0.01}
                     }
                     apply: {
-                        draw_bg: {pressed: 0.0, hover: [{time: 0.0, value: 1.0}],}
                         draw_icon: {pressed: 0.0, hover: [{time: 0.0, value: 1.0}],}
                     }
                 }
@@ -79,52 +77,12 @@ live_design! {
                 pressed = {
                     from: {all: Forward {duration: 0.2}}
                     apply: {
-                        draw_bg: {pressed: [{time: 0.0, value: 1.0}], hover: 1.0,}
                         draw_icon: {pressed: [{time: 0.0, value: 1.0}], hover: 1.0,}
-                    }
-                }
-            }
-            focus = {
-                default: off
-                off = {
-                    from: {all: Snap}
-                    apply: {
-                        draw_bg: {focus: 0.0},
-                        draw_icon: {focus: 0.0}
-                    }
-                }
-                on = {
-                    from: {all: Snap}
-                    apply: {
-                        draw_bg: {focus: 1.0},
-                        draw_icon: {focus: 1.0}
                     }
                 }
             }
         }
     }
-}
-
-#[derive(Live, LiveHook)]
-#[repr(C)]
-struct DrawBg {
-    #[deref]
-    draw_super: DrawQuad,
-    #[live]
-    selected: f32,
-    #[live]
-    hover: f32,
-}
-
-#[derive(Live, LiveHook)]
-#[repr(C)]
-struct DrawName {
-    #[deref]
-    draw_super: DrawText,
-    #[live]
-    selected: f32,
-    #[live]
-    hover: f32,
 }
 
 #[derive(Live)]
@@ -278,13 +236,9 @@ impl DropDown {
         // TODO: close on clicking outside of the popup menu
         match event.hits_with_sweep_area(cx, self.draw_bg.area(), self.draw_bg.area()) {
             Hit::KeyFocusLost(_) => {
-                self.animate_state(cx, id!(focus.off));
                 self.set_closed(cx);
                 self.animate_state(cx, id!(hover.off));
                 self.draw_bg.redraw(cx);
-            }
-            Hit::KeyFocus(_) => {
-                self.animate_state(cx, id!(focus.on));
             }
             Hit::KeyDown(ke) => match ke.key_code {
                 KeyCode::ArrowUp => {
