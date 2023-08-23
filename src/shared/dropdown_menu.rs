@@ -202,23 +202,20 @@ impl DropDown {
                 cx,
                 event,
                 self.draw_bg.area(),
-                &mut |cx, action| match action {
-                    PopupMenuAction::WasSelected(node_id) => {
-                        self.selected_item = node_id.0 .0 as usize;
-                        dispatch_action(
-                            cx,
-                            DropDownAction::Select(
-                                self.selected_item,
-                                self.values
-                                    .get(self.selected_item)
-                                    .cloned()
-                                    .unwrap_or(LiveValue::None),
-                            ),
-                        );
-                        self.draw_bg.redraw(cx);
-                        close = true;
-                    }
-                    _ => (),
+                &mut |cx, action| if let PopupMenuAction::WasSelected(node_id) = action {
+                    self.selected_item = node_id.0 .0 as usize;
+                    dispatch_action(
+                        cx,
+                        DropDownAction::Select(
+                            self.selected_item,
+                            self.values
+                                .get(self.selected_item)
+                                .cloned()
+                                .unwrap_or(LiveValue::None),
+                        ),
+                    );
+                    self.draw_bg.redraw(cx);
+                    close = true;
                 },
             );
             if close {
@@ -256,7 +253,7 @@ impl DropDown {
                     }
                 }
                 KeyCode::ArrowDown => {
-                    if self.values.len() > 0 && self.selected_item < self.values.len() - 1 {
+                    if !self.values.is_empty() && self.selected_item < self.values.len() - 1 {
                         self.selected_item += 1;
                         dispatch_action(
                             cx,
@@ -316,7 +313,7 @@ impl DropDown {
 
             for (i, item) in self.labels.iter().enumerate() {
                 let node_id = LiveId(i as u64).into();
-                popup_menu.draw_item(cx, node_id, &item, self.icons[i].clone());
+                popup_menu.draw_item(cx, node_id, item, self.icons[i].clone());
             }
 
             popup_menu.end(cx, self.draw_bg.area());

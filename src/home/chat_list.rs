@@ -152,9 +152,8 @@ impl ChatList {
             });
 
         for (chat_id, action) in actions {
-            match action.action() {
-                ClickableFrameAction::Click => dispatch_action(cx, ChatListAction::Click(*chat_id)),
-                _ => (),
+            if let ClickableFrameAction::Click = action.action() {
+                dispatch_action(cx, ChatListAction::Click(*chat_id))
             }
         }
     }
@@ -182,7 +181,7 @@ impl ChatList {
                     let item_content = &self.chat_entries[item_index];
 
                     self.chat_list_view_map
-                        .insert(item.widget_uid().0, *(&self.chat_entries[item_index].id));
+                        .insert(item.widget_uid().0, self.chat_entries[item_index].id);
 
                     item.get_label(id!(preview.username))
                         .set_label(&item_content.username);
