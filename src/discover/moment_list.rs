@@ -17,10 +17,9 @@ live_design! {
 
     Hero = <Frame> {
         walk: {width: Fill, height: Fit}
-        layout: {flow: Overlay}
+        layout: {flow: Overlay, align: {y: 1, x: 1}}
         banner = <Image> {
             walk: {width: Fill, height: 200.0}
-            //layout: {align: {y: 1, x: 1}}
             source: (IMG_BANNER),
         }
         content = <Frame> {
