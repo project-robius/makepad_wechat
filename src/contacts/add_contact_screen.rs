@@ -1,7 +1,7 @@
 use makepad_widgets::*;
 
 live_design! {
-    import makepad_widgets::frame::*;
+    import makepad_widgets::frame::Frame;
     import makepad_widgets::label::Label;
     import makepad_widgets::image::*;
 
