@@ -17,26 +17,26 @@ live_design! {
 
     Hero = <Frame> {
         walk: {width: Fill, height: Fit}
-        banner = <ImageFrame> {
+        layout: {flow: Overlay}
+        banner = <Image> {
             walk: {width: Fill, height: 200.0}
-            layout: {align: {y: 1, x: 1}}
-            image: (IMG_BANNER),
-            content = <Frame> {
+            //layout: {align: {y: 1, x: 1}}
+            source: (IMG_BANNER),
+        }
+        content = <Frame> {
+            walk: {width: Fit, height: Fit}
+            layout: {align: {y: 0.5}}
+            username = <Label> {
                 walk: {width: Fit, height: Fit}
-                layout: {align: {y: 0.5}}
-                username = <Label> {
-                    walk: {width: Fit, height: Fit}
-                    draw_label: {
-                        color: #fff,
-                        text_style: <REGULAR_TEXT>{}
-                    }
-                    label: "減活乗治外進"
+                draw_label: {
+                    color: #fff,
+                    text_style: <REGULAR_TEXT>{}
                 }
-                avatar = <Image> {
-                    source: (IMG_DEFAULT_AVATAR),
-                    walk: {width: 50., height: 50.}
-                    layout: {padding: 0}
-                }
+                label: "減活乗治外進"
+            }
+            avatar = <Image> {
+                source: (IMG_DEFAULT_AVATAR),
+                walk: {width: 50., height: 50.}
             }
         }
     }
@@ -48,7 +48,6 @@ live_design! {
         avatar = <Image> {
             source: (IMG_DEFAULT_AVATAR),
             walk: {width: 36., height: 36.}
-            layout: {padding: 0}
         }
 
         content = <Frame> {
@@ -81,7 +80,6 @@ live_design! {
         avatar = <Image> {
             source: (IMG_DEFAULT_AVATAR),
             walk: {width: 36., height: 36.}
-            layout: {padding: 0}
         }
 
         content = <Frame> {
@@ -113,13 +111,11 @@ live_design! {
                 image_1 = <Image> {
                     source: (IMG_POST1),
                     walk: {width: 90., height: 110.}
-                    layout: {padding: 0}
                 }
 
                 image_2 = <Image> {
                     source: (IMG_POST2),
                     walk: {width: 180., height: 110.}
-                    layout: {padding: 0}
                 }
             }
         }

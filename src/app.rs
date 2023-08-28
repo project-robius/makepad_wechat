@@ -306,35 +306,29 @@ impl AppMain for App {
                 _ => {}
             }
 
-            match action.action() {
-                DropDownAction::Select(_id, value) => {
-                    if LiveValue::Bool(true) == value.enum_eq(id!(AddContact)) {
-                        ui.get_stack_navigation(id!(navigation))
-                            .show_stack_view_by_id(LiveId::from_str("add_contact_stack_view"), cx);
-                    }
+            if let DropDownAction::Select(_id, value) = action.action() {
+                if LiveValue::Bool(true) == value.enum_eq(id!(AddContact)) {
+                    ui.get_stack_navigation(id!(navigation))
+                        .show_stack_view_by_id(LiveId::from_str("add_contact_stack_view"), cx);
                 }
-                _ => {}
             }
 
-            match action.action() {
-                ChatListAction::Click(id) => {
-                    let db = Db::new();
+            if let ChatListAction::Click(id) = action.action() {
+                let db = Db::new();
 
-                    let mut stack_navigation = ui.get_stack_navigation(id!(navigation));
-                    if let Some(chat_entry) = db.get_chat(id) {
-                        stack_navigation
-                            .get_label(id!(chat_stack_view.title))
-                            .set_label(&chat_entry.username);
-                    }
-
-                    let chat_ref = stack_navigation
-                        .get_frame(id!(chat_stack_view.chat_screen))
-                        .get_chat(id!(chat));
-                    chat_ref.set_chat_id(id);
-
-                    stack_navigation.show_stack_view_by_id(LiveId::from_str("chat_stack_view"), cx);
+                let mut stack_navigation = ui.get_stack_navigation(id!(navigation));
+                if let Some(chat_entry) = db.get_chat(id) {
+                    stack_navigation
+                        .get_label(id!(chat_stack_view.title))
+                        .set_label(&chat_entry.username);
                 }
-                _ => {}
+
+                let chat_ref = stack_navigation
+                    .get_frame(id!(chat_stack_view.chat_screen))
+                    .get_chat(id!(chat));
+                chat_ref.set_chat_id(id);
+
+                stack_navigation.show_stack_view_by_id(LiveId::from_str("chat_stack_view"), cx);
             }
         }
     }

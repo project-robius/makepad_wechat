@@ -60,7 +60,6 @@ live_design! {
                 off = {
                     from: {all: Forward {duration: 0.1}}
                     apply: {
-                        draw_bg: {pressed: 0.0, hover: 0.0}
                         draw_icon: {pressed: 0.0, hover: 0.0}
                     }
                 }
@@ -71,7 +70,6 @@ live_design! {
                         pressed: Forward {duration: 0.01}
                     }
                     apply: {
-                        draw_bg: {pressed: 0.0, hover: [{time: 0.0, value: 1.0}],}
                         draw_icon: {pressed: 0.0, hover: [{time: 0.0, value: 1.0}],}
                     }
                 }
@@ -79,52 +77,12 @@ live_design! {
                 pressed = {
                     from: {all: Forward {duration: 0.2}}
                     apply: {
-                        draw_bg: {pressed: [{time: 0.0, value: 1.0}], hover: 1.0,}
                         draw_icon: {pressed: [{time: 0.0, value: 1.0}], hover: 1.0,}
-                    }
-                }
-            }
-            focus = {
-                default: off
-                off = {
-                    from: {all: Snap}
-                    apply: {
-                        draw_bg: {focus: 0.0},
-                        draw_icon: {focus: 0.0}
-                    }
-                }
-                on = {
-                    from: {all: Snap}
-                    apply: {
-                        draw_bg: {focus: 1.0},
-                        draw_icon: {focus: 1.0}
                     }
                 }
             }
         }
     }
-}
-
-#[derive(Live, LiveHook)]
-#[repr(C)]
-struct DrawBg {
-    #[deref]
-    draw_super: DrawQuad,
-    #[live]
-    selected: f32,
-    #[live]
-    hover: f32,
-}
-
-#[derive(Live, LiveHook)]
-#[repr(C)]
-struct DrawName {
-    #[deref]
-    draw_super: DrawText,
-    #[live]
-    selected: f32,
-    #[live]
-    hover: f32,
 }
 
 #[derive(Live)]
@@ -244,23 +202,20 @@ impl DropDown {
                 cx,
                 event,
                 self.draw_bg.area(),
-                &mut |cx, action| match action {
-                    PopupMenuAction::WasSelected(node_id) => {
-                        self.selected_item = node_id.0 .0 as usize;
-                        dispatch_action(
-                            cx,
-                            DropDownAction::Select(
-                                self.selected_item,
-                                self.values
-                                    .get(self.selected_item)
-                                    .cloned()
-                                    .unwrap_or(LiveValue::None),
-                            ),
-                        );
-                        self.draw_bg.redraw(cx);
-                        close = true;
-                    }
-                    _ => (),
+                &mut |cx, action| if let PopupMenuAction::WasSelected(node_id) = action {
+                    self.selected_item = node_id.0 .0 as usize;
+                    dispatch_action(
+                        cx,
+                        DropDownAction::Select(
+                            self.selected_item,
+                            self.values
+                                .get(self.selected_item)
+                                .cloned()
+                                .unwrap_or(LiveValue::None),
+                        ),
+                    );
+                    self.draw_bg.redraw(cx);
+                    close = true;
                 },
             );
             if close {
@@ -278,13 +233,9 @@ impl DropDown {
         // TODO: close on clicking outside of the popup menu
         match event.hits_with_sweep_area(cx, self.draw_bg.area(), self.draw_bg.area()) {
             Hit::KeyFocusLost(_) => {
-                self.animate_state(cx, id!(focus.off));
                 self.set_closed(cx);
                 self.animate_state(cx, id!(hover.off));
                 self.draw_bg.redraw(cx);
-            }
-            Hit::KeyFocus(_) => {
-                self.animate_state(cx, id!(focus.on));
             }
             Hit::KeyDown(ke) => match ke.key_code {
                 KeyCode::ArrowUp => {
@@ -302,7 +253,7 @@ impl DropDown {
                     }
                 }
                 KeyCode::ArrowDown => {
-                    if self.values.len() > 0 && self.selected_item < self.values.len() - 1 {
+                    if !self.values.is_empty() && self.selected_item < self.values.len() - 1 {
                         self.selected_item += 1;
                         dispatch_action(
                             cx,
@@ -357,23 +308,15 @@ impl DropDown {
             let global = cx.global::<PopupMenuGlobal>().clone();
             let mut map = global.map.borrow_mut();
             let popup_menu = map.get_mut(&self.popup_menu.unwrap()).unwrap();
-            let mut item_pos = None;
 
             popup_menu.begin(cx);
 
             for (i, item) in self.labels.iter().enumerate() {
                 let node_id = LiveId(i as u64).into();
-                if i == self.selected_item {
-                    item_pos = Some(cx.turtle().pos());
-                }
-                popup_menu.draw_item(cx, node_id, &item, self.icons[i].clone());
+                popup_menu.draw_item(cx, node_id, item, self.icons[i].clone());
             }
 
-            popup_menu.end(
-                cx,
-                self.draw_bg.area(),
-                -item_pos.unwrap_or(dvec2(0.0, 0.0)),
-            );
+            popup_menu.end(cx, self.draw_bg.area());
         }
     }
 }

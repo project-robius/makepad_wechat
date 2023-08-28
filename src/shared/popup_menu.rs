@@ -272,7 +272,7 @@ impl PopupMenu {
         self.count = 0;
     }
 
-    pub fn end(&mut self, cx: &mut Cx2d, shift_area: Area, shift: DVec2) {
+    pub fn end(&mut self, cx: &mut Cx2d, shift_area: Area) {
         self.draw_bg.end(cx);
         let area = self.draw_bg.area().get_rect(cx);
         let shift = DVec2 {
@@ -287,10 +287,6 @@ impl PopupMenu {
         if let Some(init_select_item) = self.init_select_item.take() {
             self.select_item_state(cx, init_select_item);
         }
-    }
-
-    pub fn redraw(&mut self, cx: &mut Cx) {
-        self.draw_list.redraw(cx);
     }
 
     pub fn draw_item(
@@ -342,14 +338,6 @@ impl PopupMenu {
 
         for (node_id, action) in actions {
             match action {
-                MenuItemAction::MightBeSelected => {
-                    if self.first_tap {
-                        self.first_tap = false;
-                    } else {
-                        self.select_item_state(cx, node_id);
-                        dispatch_action(cx, PopupMenuAction::WasSelected(node_id));
-                    }
-                }
                 MenuItemAction::WasSweeped => {
                     self.select_item_state(cx, node_id);
                     dispatch_action(cx, PopupMenuAction::WasSweeped(node_id));
@@ -398,7 +386,6 @@ pub struct MenuItem {
 pub enum MenuItemAction {
     WasSweeped,
     WasSelected,
-    MightBeSelected,
     #[default]
     None,
 }

@@ -1,6 +1,6 @@
 use std::collections::HashMap;
 
-use crate::api::{ChatEntry, Db, MessageDirection, MessageEntry, MessagePreview};
+use crate::api::{ChatEntry, Db};
 use crate::shared::clickable_frame::*;
 use makepad_widgets::*;
 
@@ -20,47 +20,46 @@ live_design! {
     IMG_DEFAULT_AVATAR = dep("crate://self/resources/img/default_avatar.png")
 
     ChatPreview = <ClickableFrame> {
-            layout: {flow: Right, spacing: 10., padding: 10.}
-            walk: {width: Fill, height: Fit}
+        layout: {flow: Right, spacing: 10., padding: 10.}
+        walk: {width: Fill, height: Fit}
 
-            avatar = <Image> {
-                source: (IMG_DEFAULT_AVATAR),
-                walk: {width: 36., height: 36.}
-                layout: {padding: 0}
+        avatar = <Image> {
+            source: (IMG_DEFAULT_AVATAR),
+            walk: {width: 36., height: 36.}
+        }
+
+        preview = <Frame> {
+            layout: {flow: Down, spacing: 7.}
+
+            username = <Label> {
+                walk: {width: Fill, height: Fit}
+                draw_label: {
+                    color: #000,
+                    text_style: <REGULAR_TEXT>{}
+                }
+                label: "username"
             }
 
-            preview = <Frame> {
-                layout: {flow: Down, spacing: 7.}
-
-                username = <Label> {
-                    walk: {width: Fill, height: Fit}
-                    draw_label: {
-                        color: #000,
-                        text_style: <REGULAR_TEXT>{}
-                    }
-                    label: "username"
-                }
-
-                content = <Label> {
-                    walk: {width: Fit, height: Fit}
-                    draw_label: {
-                        text_style: <REGULAR_TEXT>{
-                            font_size: 10.5
-                        },
-                    }
-                    label: "Hi there! I'm using WeChat"
-                }
-            }
-
-            timestamp = <Label> {
+            content = <Label> {
                 walk: {width: Fit, height: Fit}
                 draw_label: {
                     text_style: <REGULAR_TEXT>{
-                        font_size: 8.
+                        font_size: 10.5
                     },
                 }
-                label: "yesterday"
+                label: "Hi there! I'm using WeChat"
             }
+        }
+
+        timestamp = <Label> {
+            walk: {width: Fit, height: Fit}
+            draw_label: {
+                text_style: <REGULAR_TEXT>{
+                    font_size: 8.
+                },
+            }
+            label: "yesterday"
+        }
     }
 
     ChatList = {{ChatList}} {
@@ -153,9 +152,8 @@ impl ChatList {
             });
 
         for (chat_id, action) in actions {
-            match action.action() {
-                ClickableFrameAction::Click => dispatch_action(cx, ChatListAction::Click(*chat_id)),
-                _ => (),
+            if let ClickableFrameAction::Click = action.action() {
+                dispatch_action(cx, ChatListAction::Click(*chat_id))
             }
         }
     }
@@ -183,7 +181,7 @@ impl ChatList {
                     let item_content = &self.chat_entries[item_index];
 
                     self.chat_list_view_map
-                        .insert(item.widget_uid().0, *(&self.chat_entries[item_index].id));
+                        .insert(item.widget_uid().0, self.chat_entries[item_index].id);
 
                     item.get_label(id!(preview.username))
                         .set_label(&item_content.username);
