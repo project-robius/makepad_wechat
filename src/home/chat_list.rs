@@ -63,6 +63,15 @@ live_design! {
     }
 
     ChatList = {{ChatList}} {
+        avatar_images_deps: [
+            dep("crate://self/resources/img/avatars/user1.png"),
+            dep("crate://self/resources/img/avatars/user2.png"),
+            dep("crate://self/resources/img/avatars/user3.png"),
+            dep("crate://self/resources/img/avatars/user4.png"),
+            dep("crate://self/resources/img/avatars/user5.png"),
+            dep("crate://self/resources/img/avatars/user6.png"),
+        ]
+
         walk: {width: Fill, height: Fill}
         layout: {flow: Down}
         list_view: <ListView> {
@@ -92,6 +101,10 @@ pub struct ChatList {
 
     #[live]
     list_view: ListView,
+
+    #[live]
+    avatar_images_deps: Vec<LiveDependency>,
+
     #[rust]
     chat_entries: Vec<ChatEntry>,
     #[rust]
@@ -189,6 +202,11 @@ impl ChatList {
                         .set_label(item_content.latest_message.text());
                     item.get_label(id!(timestamp))
                         .set_label(&item_content.timestamp);
+
+                    if let Some(avatar_path) = self.avatar_images_deps_path(item_content.avatar) {
+                        item.get_image(id!(avatar))
+                            .load_image_dep_by_path(cx, avatar_path);
+                    }
                 }
 
                 item.draw_widget_all(cx);
@@ -196,5 +214,23 @@ impl ChatList {
         }
 
         cx.end_turtle();
+    }
+
+    fn avatar_images_deps_path(&self, id: LiveId) -> Option<&str> {
+        if id == LiveId::from_str("rikarends") {
+            Some(self.avatar_images_deps[0].as_str())
+        } else if id == LiveId::from_str("jorgebejar") {
+            Some(self.avatar_images_deps[1].as_str())
+        } else if id == LiveId::from_str("julianmontesdeoca") {
+            Some(self.avatar_images_deps[2].as_str())
+        } else if id == LiveId::from_str("johndoe") {
+            Some(self.avatar_images_deps[3].as_str())
+        } else if id == LiveId::from_str("edwardtan") {
+            Some(self.avatar_images_deps[4].as_str())
+        } else if id == LiveId::from_str("wechatteam") {
+            Some(self.avatar_images_deps[5].as_str())
+        } else {
+            None
+        }
     }
 }
