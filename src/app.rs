@@ -9,6 +9,7 @@ use makepad_widgets::*;
 live_design! {
     import makepad_widgets::desktop_window::DesktopWindow
     import makepad_widgets::frame::*
+    import makepad_widgets::label::*
     import makepad_widgets::radio_button::RadioButton
 
     import crate::home::home_screen::HomeScreen
@@ -22,6 +23,7 @@ live_design! {
 
     import crate::shared::clickable_frame::ClickableFrame
     import crate::shared::stack_navigation::*;
+    import crate::shared::styles::*;
 
     ICON_CHAT = dep("crate://self/resources/icons/chat.svg")
     ICON_CONTACTS = dep("crate://self/resources/icons/contacts.svg")
@@ -214,6 +216,42 @@ live_design! {
                     }
                     chat_screen = <ChatScreen> {}
                 }
+            }
+
+            // TODO We render some hidden labels to force font early processing when
+            // the first screen is rendered. It helps to navigate between screen without
+            // performance penalties.
+            <Label> {
+                walk: {width: Fit, height: Fit, abs_pos: vec2(5000.0, 0.0)}
+                draw_label: {
+                    color: #000,
+                    text_style: <REGULAR_TEXT>{font_size: 16}
+                }
+                label: "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789.>消再中野誰強心無嶋可済日政中実玉全示餌 ",
+            }
+            <Label> {
+                walk: {width: Fit, height: Fit, abs_pos: vec2(5000.0, 0.0)}
+                draw_label: {
+                    color: #000,
+                    text_style: <REGULAR_TEXT>{font_size: 11}
+                }
+                label: "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789.>消再中野誰強心無嶋可済日政中実玉全示餌 ",
+            }
+            <Label> {
+                walk: {width: Fit, height: Fit, abs_pos: vec2(5000.0, 0.0)}
+                draw_label: {
+                    color: #000,
+                    text_style: <REGULAR_TEXT>{font_size: 10}
+                }
+                label: "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789.>消再中野誰強心無嶋可済日政中実玉全示餌 ",
+            }
+            <Label> {
+                walk: {width: Fit, height: Fit, abs_pos: vec2(5000.0, 0.0)}
+                draw_label: {
+                    color: #000,
+                    text_style: <REGULAR_TEXT>{}
+                }
+                label: "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789.>消再中野誰強心無嶋可済日政中実玉全示餌 ",
             }
         }
     }

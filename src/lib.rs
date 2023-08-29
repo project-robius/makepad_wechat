@@ -6,3 +6,5 @@ mod discover;
 mod home;
 mod profile;
 mod shared;
+
+pub use makepad_platform::makepad_error_log;
