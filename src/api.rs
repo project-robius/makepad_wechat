@@ -39,6 +39,7 @@ pub enum MessageDirection {
 pub struct MessageEntry {
     pub direction: MessageDirection,
     pub chat_id: u64,
+    pub avatar: LiveId,
     pub text: String,
 }
 
@@ -55,29 +56,57 @@ impl Default for Db {
 
 impl Db {
     pub fn new() -> Self {
-        let messages: Vec<MessageEntry> = (0..10)
-        .flat_map(|_| {
+        let messages: Vec<MessageEntry> = (0..200)
+        .flat_map(|i| {
             vec![
-            MessageEntry {
-                direction: MessageDirection::Outgoing,
-                chat_id: 2,
-                text: "犯福併中読併棋一御質慰".to_string(),
-            },
-            MessageEntry {
-                direction: MessageDirection::Incoming,
-                chat_id: 1,
-                text: "体議速人幅触無持編聞組込".to_string(),
-            },
-            MessageEntry {
-                direction: MessageDirection::Outgoing,
-                chat_id: 1,
-                text: "減活乗治外進".to_string(),
-            },
-            MessageEntry {
-                direction: MessageDirection::Incoming,
-                chat_id: 2,
-                text: "消再中野誰強心無嶋可済日政中実玉全示餌".to_string(),
-            },
+                MessageEntry {
+                    direction: MessageDirection::Incoming,
+                    avatar: LiveId::from_str("jorgebejar"),
+                    chat_id: (i * 2) % 50 + 1,
+                    text: "体議速人幅触無持編聞組込".to_string(),
+                },
+                MessageEntry {
+                    direction: MessageDirection::Outgoing,
+                    avatar: LiveId::from_str("rikarends"),
+                    chat_id: (i * 2) % 50 + 1,
+                    text: "減活乗治外進".to_string(),
+                },
+                MessageEntry {
+                    direction: MessageDirection::Incoming,
+                    avatar: LiveId::from_str("jorgebejar"),
+                    chat_id: (i * 2) % 50 + 1,
+                    text: "犯福併中読併棋一御質慰".to_string(),
+                },
+                MessageEntry {
+                    direction: MessageDirection::Outgoing,
+                    avatar: LiveId::from_str("rikarends"),
+                    chat_id: (i * 2) % 50 + 1,
+                    text: "消再中野誰強心無嶋可済日政中実玉全示餌".to_string(),
+                },
+                MessageEntry {
+                    direction: MessageDirection::Outgoing,
+                    avatar: LiveId::from_str("johndoe"),
+                    chat_id: (i * 2) % 50 + 2,
+                    text: "犯福併中読併棋一御質慰".to_string(),
+                },
+                MessageEntry {
+                    direction: MessageDirection::Incoming,
+                    avatar: LiveId::from_str("julianmontesdeoca"),
+                    chat_id: (i * 2) % 50 + 2,
+                    text: "消再中野誰強心無嶋可済日政中実玉全示餌".to_string(),
+                },
+                MessageEntry {
+                    direction: MessageDirection::Outgoing,
+                    avatar: LiveId::from_str("johndoe"),
+                    chat_id: (i * 2) % 50 + 2,
+                    text: "体議速人幅触無持編聞組込".to_string(),
+                },
+                MessageEntry {
+                    direction: MessageDirection::Incoming,
+                    avatar: LiveId::from_str("julianmontesdeoca"),
+                    chat_id: (i * 2) % 50 + 2,
+                    text: "減活乗治外進".to_string(),
+                },
             ]
         })
         .collect();

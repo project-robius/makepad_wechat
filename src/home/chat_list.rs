@@ -101,7 +101,6 @@ pub struct ChatList {
 
     #[live]
     list_view: ListView,
-
     #[live]
     avatar_images_deps: Vec<LiveDependency>,
 

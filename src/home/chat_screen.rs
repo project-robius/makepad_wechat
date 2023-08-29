@@ -137,6 +137,15 @@ live_design! {
         walk: {width: Fill, height: Fill}
         layout: {flow: Right, spacing: 10., padding: 0.}
 
+        avatar_images_deps: [
+            dep("crate://self/resources/img/avatars/user1.png"),
+            dep("crate://self/resources/img/avatars/user2.png"),
+            dep("crate://self/resources/img/avatars/user3.png"),
+            dep("crate://self/resources/img/avatars/user4.png"),
+            dep("crate://self/resources/img/avatars/user5.png"),
+            dep("crate://self/resources/img/avatars/user6.png"),
+        ]
+
         list_view: <ListView> {
             walk: {width: Fill, height: Fill}
             layout: {flow: Down, spacing: 0.}
@@ -199,8 +208,9 @@ pub struct Chat {
     #[live]
     layout: Layout,
 
-    #[rust]
-    chat_id: u64,
+    #[live]
+    avatar_images_deps: Vec<LiveDependency>,
+
     #[rust]
     messages: Vec<MessageEntry>,
     #[live]
@@ -277,12 +287,35 @@ impl Chat {
                     item.get_label(id!(text.label))
                         .set_label(&item_content.text);
 
+                    if let Some(avatar_path) = self.avatar_images_deps_path(item_content.avatar) {
+                        item.get_image(id!(avatar))
+                            .load_image_dep_by_path(cx, avatar_path);
+                    }
+
                     item.draw_widget_all(cx);
                 }
             }
         }
 
         cx.end_turtle();
+    }
+
+    fn avatar_images_deps_path(&self, id: LiveId) -> Option<&str> {
+        if id == LiveId::from_str("rikarends") {
+            Some(self.avatar_images_deps[0].as_str())
+        } else if id == LiveId::from_str("jorgebejar") {
+            Some(self.avatar_images_deps[1].as_str())
+        } else if id == LiveId::from_str("julianmontesdeoca") {
+            Some(self.avatar_images_deps[2].as_str())
+        } else if id == LiveId::from_str("johndoe") {
+            Some(self.avatar_images_deps[3].as_str())
+        } else if id == LiveId::from_str("edwardtan") {
+            Some(self.avatar_images_deps[4].as_str())
+        } else if id == LiveId::from_str("wechatteam") {
+            Some(self.avatar_images_deps[5].as_str())
+        } else {
+            None
+        }
     }
 }
 
@@ -294,7 +327,6 @@ impl ChatRef {
         if let Some(mut inner) = self.borrow_mut() {
             let db = Db::new();
             inner.messages = db.get_messages_by_chat_id(chat_id);
-            inner.chat_id = chat_id;
         }
     }
 }
