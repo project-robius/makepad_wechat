@@ -51,6 +51,7 @@ live_design! {
         }
 
         content = <Frame> {
+            walk: {width: Fill, height: Fit}
             layout: {flow: Down, spacing: 7.}
 
             username = <Label> {

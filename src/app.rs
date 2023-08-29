@@ -227,7 +227,7 @@ live_design! {
                     color: #000,
                     text_style: <REGULAR_TEXT>{font_size: 16}
                 }
-                label: "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789.>消再中野誰強心無嶋可済日政中実玉全示餌 ",
+                label: "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789.>消再中野誰強心無嶋可済日政中実玉全示餌体議速人幅触無持編聞組込減活乗治外進犯福併中読併棋一御質慰 ",
             }
             <Label> {
                 walk: {width: Fit, height: Fit, abs_pos: vec2(5000.0, 0.0)}
@@ -235,7 +235,7 @@ live_design! {
                     color: #000,
                     text_style: <REGULAR_TEXT>{font_size: 11}
                 }
-                label: "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789.>消再中野誰強心無嶋可済日政中実玉全示餌 ",
+                label: "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789.>消再中野誰強心無嶋可済日政中実玉全示餌体議速人幅触無持編聞組込減活乗治外進犯福併中読併棋一御質慰 ",
             }
             <Label> {
                 walk: {width: Fit, height: Fit, abs_pos: vec2(5000.0, 0.0)}
@@ -243,7 +243,7 @@ live_design! {
                     color: #000,
                     text_style: <REGULAR_TEXT>{font_size: 10}
                 }
-                label: "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789.>消再中野誰強心無嶋可済日政中実玉全示餌 ",
+                label: "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789.>消再中野誰強心無嶋可済日政中実玉全示餌体議速人幅触無持編聞組込減活乗治外進犯福併中読併棋一御質慰 ",
             }
             <Label> {
                 walk: {width: Fit, height: Fit, abs_pos: vec2(5000.0, 0.0)}
@@ -251,7 +251,7 @@ live_design! {
                     color: #000,
                     text_style: <REGULAR_TEXT>{}
                 }
-                label: "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789.>消再中野誰強心無嶋可済日政中実玉全示餌 ",
+                label: "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789.>消再中野誰強心無嶋可済日政中実玉全示餌体議速人幅触無持編聞組込減活乗治外進犯福併中読併棋一御質慰 ",
             }
         }
     }

@@ -37,19 +37,19 @@ live_design! {
         header = <Header> {}
 
         // TBD Adjust this based on actual screen size
-        offset: 1000.0
+        offset: 600.0
 
         state: {
             slide = {
                 default: hide,
                 hide = {
-                    from: {all: Forward {duration: 0.6}}
+                    from: {all: Forward {duration: 0.5}}
                     // Bug: Constants are not working as part of an live state value
-                    apply: {offset: 1000.0}
+                    apply: {offset: 600.0}
                 }
 
                 show = {
-                    from: {all: Forward {duration: 0.6}}
+                    from: {all: Forward {duration: 0.5}}
                     apply: {offset: 0.0}
                 }
             }
