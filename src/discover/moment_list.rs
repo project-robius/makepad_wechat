@@ -163,27 +163,22 @@ impl LiveHook for MomentList {
             MomentEntry {
                 username: "John Doe".to_string(),
                 text: "消再中野誰強心無嶋可済日政中実玉全示餌".to_string(),
-                images: vec![],
             },
             MomentEntry {
                 username: "Andrew Lin".to_string(),
                 text: "俳権竹減活乗治外進梨詰鉄掲動中覇予載".to_string(),
-                images: vec!["image_1.png".to_string(), "image_2.png".to_string()],
             },
             MomentEntry {
                 username: "Chris Huxley".to_string(),
                 text: "犯福併中読併棋一御質慰".to_string(),
-                images: vec![],
             },
             MomentEntry {
                 username: "Adam Adler".to_string(),
                 text: "体議速人幅触無持編聞組込".to_string(),
-                images: vec!["image_2.png".to_string(), "image_1.png".to_string()],
             },
             MomentEntry {
                 username: "Eric Ford".to_string(),
                 text: "体議速人幅触無持編聞組込 減活乗治外進".to_string(),
-                images: vec![],
             }
         ];
 
@@ -256,7 +251,6 @@ impl MomentList {
 
 #[derive(Clone)]
 struct MomentEntry {
-    images: Vec<String>,
     username: String,
     text: String,
 }

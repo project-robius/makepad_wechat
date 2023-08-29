@@ -29,6 +29,7 @@ live_design! {
         }
 
         preview = <Frame> {
+            walk: {width: Fill, height: Fit}
             layout: {flow: Down, spacing: 7.}
 
             username = <Label> {
