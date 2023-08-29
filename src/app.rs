@@ -9,7 +9,6 @@ use makepad_widgets::*;
 live_design! {
     import makepad_widgets::desktop_window::DesktopWindow
     import makepad_widgets::frame::*
-    import makepad_widgets::label::*
     import makepad_widgets::radio_button::RadioButton
 
     import crate::home::home_screen::HomeScreen
@@ -23,7 +22,6 @@ live_design! {
 
     import crate::shared::clickable_frame::ClickableFrame
     import crate::shared::stack_navigation::*;
-    import crate::shared::styles::*;
 
     ICON_CHAT = dep("crate://self/resources/icons/chat.svg")
     ICON_CONTACTS = dep("crate://self/resources/icons/contacts.svg")
