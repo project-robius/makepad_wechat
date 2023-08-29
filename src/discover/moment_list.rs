@@ -1,4 +1,5 @@
 use makepad_widgets::*;
+use std::iter;
 
 live_design! {
     import makepad_widgets::frame::*;
@@ -158,32 +159,36 @@ impl LiveHook for MomentList {
     }
 
     fn after_new_from_doc(&mut self, _cx: &mut Cx) {
-        self.moment_entries = Vec::new();
-        self.moment_entries.push(MomentEntry {
-            username: "John Doe".to_string(),
-            text: "消再中野誰強心無嶋可済日政中実玉全示餌".to_string(),
-            images: vec![],
-        });
-        self.moment_entries.push(MomentEntry {
-            username: "Andrew Lin".to_string(),
-            text: "俳権竹減活乗治外進梨詰鉄掲動中覇予載".to_string(),
-            images: vec!["image_1.png".to_string(), "image_2.png".to_string()],
-        });
-        self.moment_entries.push(MomentEntry {
-            username: "Chris Huxley".to_string(),
-            text: "犯福併中読併棋一御質慰".to_string(),
-            images: vec![],
-        });
-        self.moment_entries.push(MomentEntry {
-            username: "Adam Adler".to_string(),
-            text: "体議速人幅触無持編聞組込".to_string(),
-            images: vec!["image_1.png".to_string(), "image_2.png".to_string()],
-        });
-        self.moment_entries.push(MomentEntry {
-            username: "Eric Ford".to_string(),
-            text: "体議速人幅触無持編聞組込 減活乗治外進".to_string(),
-            images: vec![],
-        });
+        let entries: Vec<MomentEntry> = vec![
+            MomentEntry {
+                username: "John Doe".to_string(),
+                text: "消再中野誰強心無嶋可済日政中実玉全示餌".to_string(),
+                images: vec![],
+            },
+            MomentEntry {
+                username: "Andrew Lin".to_string(),
+                text: "俳権竹減活乗治外進梨詰鉄掲動中覇予載".to_string(),
+                images: vec!["image_1.png".to_string(), "image_2.png".to_string()],
+            },
+            MomentEntry {
+                username: "Chris Huxley".to_string(),
+                text: "犯福併中読併棋一御質慰".to_string(),
+                images: vec![],
+            },
+            MomentEntry {
+                username: "Adam Adler".to_string(),
+                text: "体議速人幅触無持編聞組込".to_string(),
+                images: vec!["image_2.png".to_string(), "image_1.png".to_string()],
+            },
+            MomentEntry {
+                username: "Eric Ford".to_string(),
+                text: "体議速人幅触無持編聞組込 減活乗治外進".to_string(),
+                images: vec![],
+            }
+        ];
+
+        let repeated = iter::repeat(entries.clone()).take(10).flatten().collect();
+        self.moment_entries = repeated;
     }
 }
 
@@ -249,6 +254,7 @@ impl MomentList {
     }
 }
 
+#[derive(Clone)]
 struct MomentEntry {
     images: Vec<String>,
     username: String,
