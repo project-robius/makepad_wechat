@@ -50,7 +50,7 @@ live_design! {
     }
 
     Options = <Frame> {
-        walk: {width: Fill, height: Fit, margin: {left: 6.0}}
+        walk: {width: Fill, height: Fit, margin: {left: 12.0}}
         layout: {padding: 0, spacing: 0., flow: Down}
 
         <OptionsItem> {
