@@ -43,13 +43,13 @@ live_design! {
             slide = {
                 default: hide,
                 hide = {
-                    from: {all: Forward {duration: 0.5}}
+                    from: {all: Forward {duration: 0.3}}
                     // Bug: Constants are not working as part of an live state value
                     apply: {offset: 600.0}
                 }
 
                 show = {
-                    from: {all: Forward {duration: 0.5}}
+                    from: {all: Forward {duration: 0.3}}
                     apply: {offset: 0.0}
                 }
             }
