@@ -8,7 +8,7 @@ use makepad_widgets::*;
 
 live_design! {
     import makepad_widgets::desktop_window::DesktopWindow
-    import makepad_widgets::frame::*
+    import makepad_widgets::view::*
     import makepad_widgets::radio_button::RadioButton
 
     import crate::home::home_screen::HomeScreen
@@ -20,7 +20,7 @@ live_design! {
     import crate::profile::profile_screen::ProfileScreen
     import crate::profile::my_profile_screen::MyProfileScreen
 
-    import crate::shared::clickable_frame::ClickableFrame
+    import crate::shared::clickable_view::ClickableView
     import crate::shared::stack_navigation::*;
 
     ICON_CHAT = dep("crate://self/resources/icons/chat.svg")
@@ -34,14 +34,15 @@ live_design! {
     }
 
     AppTab = <RadioButton> {
-        walk: {height: Fill, width: Fit}
-        layout: {align: {x: 0.0, y: 0.0}}
+        width: Fit,
+        height: Fill,
+        align: {x: 0.0, y: 0.0}
         draw_radio: {
             radio_type: Tab,
             color_active: #fff,
             color_inactive: #fff,
         }
-        draw_label: {
+        draw_text: {
             color_selected: #0b0,
             color_unselected: #000,
             color_unselected_hover: #111,
@@ -49,9 +50,10 @@ live_design! {
         }
     }
 
-    Screen3 = <Frame> {
+    Screen3 = <View> {
         show_bg: true,
-        walk: {width: Fill, height: Fill}
+        width: Fill,
+        height: Fill,
         draw_bg: {
             fn pixel(self) -> vec4 {
                 // Gradient color effect starting from a yellow tone
@@ -70,12 +72,13 @@ live_design! {
 
             navigation = <StackNavigation> {
                 root_view = {
-                    walk: {width: Fill, height: Fill}
-                    layout: {padding: 0, align: {x: 0.0, y: 0.0}, spacing: 0., flow: Down}
+                    width: Fill,
+                    height: Fill,
+                    padding: 0, align: {x: 0.0, y: 0.0}, spacing: 0., flow: Down
 
-                    application_pages = <Frame> {
-                        walk: {margin: 0.0}
-                        layout: {padding: 0.0}
+                    application_pages = <View> {
+                        margin: 0.0,
+                        padding: 0.0
 
                         tab1_frame = <HomeScreen> {visible: true}
                         tab2_frame = <ContactsScreen> {visible: false}
@@ -83,9 +86,10 @@ live_design! {
                         tab4_frame = <ProfileScreen> {visible: false}
                     }
 
-                    mobile_menu = <Box> {
-                        walk: {width: Fill, height: 80}
-                        layout: {flow: Right, spacing: 6.0, padding: 10}
+                    mobile_menu = <RoundedView> {
+                        width: Fill,
+                        height: 80,
+                        flow: Right, spacing: 6.0, padding: 10
                         draw_bg: {
                             instance radius: 0.0,
                             instance border_width: 1.0,
@@ -93,9 +97,9 @@ live_design! {
                             color: #fff
                         }
 
-                        mobile_modes = <Frame> {
+                        mobile_modes = <View> {
                             tab1 = <AppTab> {
-                                state: {selected = {default: on}}
+                                animator: {selected = {default: on}}
                                 label: "Chat"
                                 draw_icon: {
                                     svg_file: (ICON_CHAT),
@@ -107,9 +111,9 @@ live_design! {
                                         )
                                     }
                                 }
-                                walk: {width: Fill}
+                                width: Fill,
                                 icon_walk: {width: 20, height: 20}
-                                layout: {flow: Down, spacing: 5.0, align: {x: 0.5, y: 0.5}}
+                                flow: Down, spacing: 5.0, align: {x: 0.5, y: 0.5}
                             }
                             tab2 = <AppTab> {
                                 label: "Contacts",
@@ -123,9 +127,9 @@ live_design! {
                                         )
                                     }
                                 }
-                                walk: {width: Fill}
+                                width: Fill
                                 icon_walk: {width: 20, height: 20}
-                                layout: {flow: Down, spacing: 5.0, align: {x: 0.5, y: 0.5}}
+                                flow: Down, spacing: 5.0, align: {x: 0.5, y: 0.5}
                             }
                             tab3 = <AppTab> {
                                 label: "Discover",
@@ -139,9 +143,9 @@ live_design! {
                                         )
                                     }
                                 }
-                                walk: {width: Fill}
+                                width: Fill
                                 icon_walk: {width: 20, height: 20}
-                                layout: {flow: Down, spacing: 5.0, align: {x: 0.5, y: 0.5}}
+                                flow: Down, spacing: 5.0, align: {x: 0.5, y: 0.5}
                             }
                             tab4 = <AppTab> {
                                 label: "Me",
@@ -155,9 +159,9 @@ live_design! {
                                         )
                                     }
                                 }
-                                walk: {width: Fill}
+                                width: Fill
                                 icon_walk: {width: 20, height: 20}
-                                layout: {flow: Down, spacing: 5.0, align: {x: 0.5, y: 0.5}}
+                                flow: Down, spacing: 5.0, align: {x: 0.5, y: 0.5}
                             }
                         }
                     }
@@ -168,7 +172,7 @@ live_design! {
                         content = {
                             title_container = {
                                 title = {
-                                    label: "Moments"
+                                    text: "Moments"
                                 }
                             }
                         }
@@ -181,7 +185,7 @@ live_design! {
                         content = {
                             title_container = {
                                 title = {
-                                    label: "Add Contact"
+                                    text: "Add Contact"
                                 }
                             }
                         }
@@ -194,7 +198,7 @@ live_design! {
                         content = {
                             title_container = {
                                 title = {
-                                    label: "My Profile"
+                                    text: "My Profile"
                                 }
                             }
                         }
@@ -207,7 +211,7 @@ live_design! {
                         content = {
                             title_container = {
                                 title = {
-                                    label: " "
+                                    text: " "
                                 }
                             }
                         }
@@ -242,7 +246,7 @@ impl LiveHook for App {
         crate::shared::popup_menu::live_design(cx);
         crate::shared::dropdown_menu::live_design(cx);
         crate::shared::stack_navigation::live_design(cx);
-        crate::shared::clickable_frame::live_design(cx);
+        crate::shared::clickable_view::live_design(cx);
 
         // home - chats
         crate::home::home_screen::live_design(cx);
@@ -275,7 +279,7 @@ impl AppMain for App {
         let ui = self.ui.clone();
         let actions = ui.handle_widget_event(cx, event);
 
-        ui.get_radio_button_set(ids!(
+        ui.radio_button_set(ids!(
             mobile_modes.tab1,
             mobile_modes.tab2,
             mobile_modes.tab3,
@@ -296,11 +300,11 @@ impl AppMain for App {
         for action in actions {
             match action.action() {
                 StackViewAction::ShowMoments => {
-                    ui.get_stack_navigation(id!(navigation))
+                    ui.stack_navigation(id!(navigation))
                         .show_stack_view_by_id(LiveId::from_str("moments_stack_view"), cx);
                 }
                 StackViewAction::ShowMyProfile => {
-                    ui.get_stack_navigation(id!(navigation))
+                    ui.stack_navigation(id!(navigation))
                         .show_stack_view_by_id(LiveId::from_str("my_profile_stack_view"), cx);
                 }
                 _ => {}
@@ -308,7 +312,7 @@ impl AppMain for App {
 
             if let DropDownAction::Select(_id, value) = action.action() {
                 if LiveValue::Bool(true) == value.enum_eq(id!(AddContact)) {
-                    ui.get_stack_navigation(id!(navigation))
+                    ui.stack_navigation(id!(navigation))
                         .show_stack_view_by_id(LiveId::from_str("add_contact_stack_view"), cx);
                 }
             }
@@ -316,16 +320,16 @@ impl AppMain for App {
             if let ChatListAction::Click(id) = action.action() {
                 let db = Db::new();
 
-                let mut stack_navigation = ui.get_stack_navigation(id!(navigation));
+                let mut stack_navigation = ui.stack_navigation(id!(navigation));
                 if let Some(chat_entry) = db.get_chat(id) {
                     stack_navigation
-                        .get_label(id!(chat_stack_view.title))
-                        .set_label(&chat_entry.username);
+                        .label(id!(chat_stack_view.title))
+                        .set_text(&chat_entry.username);
                 }
 
                 let chat_ref = stack_navigation
-                    .get_frame(id!(chat_stack_view.chat_screen))
-                    .get_chat(id!(chat));
+                    .view(id!(chat_stack_view.chat_screen))
+                    .chat(id!(chat));
                 chat_ref.set_chat_id(id);
 
                 stack_navigation.show_stack_view_by_id(LiveId::from_str("chat_stack_view"), cx);

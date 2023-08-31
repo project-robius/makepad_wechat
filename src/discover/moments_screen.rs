@@ -1,12 +1,12 @@
 use makepad_widgets::*;
 
 live_design! {
-    import makepad_widgets::frame::*;
+    import makepad_widgets::view::*;
     import crate::discover::moment_list::MomentList;
 
-    MomentsScreen = <Frame> {
-        walk: { width: Fill, height: Fill }
-        layout: {flow: Down}
+    MomentsScreen = <View> {
+        width: Fill, height: Fill
+        flow: Down
         show_bg: true
         draw_bg: {
             color: #fff

@@ -4,7 +4,7 @@ use makepad_widgets::*;
 
 live_design! {
     import makepad_draw::shader::std::*;
-    import makepad_widgets::frame::*;
+    import makepad_widgets::view::*;
     import makepad_widgets::label::Label;
     import makepad_widgets::button::Button;
     import makepad_widgets::text_input::TextInput;
@@ -21,37 +21,43 @@ live_design! {
     IMG_GROUP_CHATS = dep("crate://self/resources/img/group_chats.png")
     IMG_TAGS = dep("crate://self/resources/img/tags.png")
 
-    OptionsItem = <Frame> {
-        walk: {width: Fill, height: Fit}
-        layout: {padding: {left: 10., top: 10., bottom: 2.}, spacing: 8., flow: Down}
+    OptionsItem = <View> {
+        width: Fill,
+        height: Fit,
+        padding: {left: 10., top: 10., bottom: 2.}, spacing: 8., flow: Down
 
-        content = <Frame> {
-            walk: {width: Fit, height: Fit}
-            layout: {padding: 0, align: {x: 0.0, y: 0.5}, spacing: 10., flow: Right}
+        content = <View> {
+            width: Fit,
+            height: Fit,
+            padding: 0, align: {x: 0.0, y: 0.5}, spacing: 10., flow: Right
 
             icon = <Image> {
                 source: (IMG_NEW_FRIENDS),
-                walk: {width: 36., height: 36.}
+                width: 36.,
+                height: 36.,
             }
 
             label = <Label> {
-                walk: {width: Fit, height: Fit}
-                draw_label: {
+                width: Fit,
+                height: Fit,
+                draw_text: {
                     color: #000,
                     text_style: <REGULAR_TEXT>{},
                 },
-                label: "New Friends"
+                text: "New Friends"
             }
         }
 
         divider = <Divider> {
-            walk: {margin: {left: 42.0}}
+            margin: {left: 42.0}
         }
     }
 
-    Options = <Frame> {
-        walk: {width: Fill, height: Fit, margin: {left: 12.0}}
-        layout: {padding: 0, spacing: 0., flow: Down}
+    Options = <View> {
+        width: Fill,
+        height: Fit,
+        margin: {left: 12.0},
+        padding: 0, spacing: 0., flow: Down
 
         <OptionsItem> {
             content = {
@@ -60,7 +66,7 @@ live_design! {
                 }
 
                 label = {
-                    label: "New Friends"
+                    text: "New Friends"
                 }
             }
         }
@@ -72,7 +78,7 @@ live_design! {
                 }
 
                 label = {
-                    label: "Group Chats"
+                    text: "Group Chats"
                 }
             }
         }
@@ -84,7 +90,7 @@ live_design! {
                 }
 
                 label = {
-                    label: "Tags"
+                    text: "Tags"
                 }
             }
 
@@ -93,28 +99,32 @@ live_design! {
     }
 
     ContactsList = {{ContactsList}} {
-        walk: {width: Fill, height: Fill}
-        layout: {flow: Down}
+        width: Fill,
+        height: Fill,
+        flow: Down
 
         list_view: <ListView> {
-            walk: {width: Fill, height: Fill}
-            layout: {flow: Down, spacing: 0.0}
+            width: Fill,
+            height: Fill,
+            flow: Down, spacing: 0.0
 
             search_bar = <SearchBar> {}
             options = <Options> {}
             contacts_group = <ContactsGroup> {}
 
-            bottom = <Frame> {
-                walk: {width: Fill, height: Fit}
-                layout: {padding: {top: 14., bottom: 50.}, align: {x: 0.5, y: 0.}}
+            bottom = <View> {
+                width: Fill,
+                height: Fit,
+                padding: {top: 14., bottom: 50.}, align: {x: 0.5, y: 0.}
 
                 <Label> {
-                    walk: {width: Fit, height: Fit}
-                    draw_label: {
+                    width: Fit,
+                    height: Fit,
+                    draw_text: {
                         color: #777,
                         text_style: <REGULAR_TEXT>{},
                     }
-                    label: "3 friends"
+                    text: "3 friends"
                 }
             }
         }
@@ -123,9 +133,9 @@ live_design! {
 
 #[derive(Live)]
 pub struct ContactsList {
-    #[live]
+    #[walk]
     walk: Walk,
-    #[live]
+    #[layout]
     layout: Layout,
 
     #[live]
@@ -183,7 +193,7 @@ impl Widget for ContactsList {
         }
     }
 
-    fn get_walk(&self) -> Walk {
+    fn walk(&self) -> Walk {
         self.walk
     }
 

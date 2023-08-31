@@ -13,15 +13,11 @@ live_design! {
     import crate::shared::popup_menu::*;
 
     DropDown = {{DropDown}} {
-        walk: {
-            width: Fit,
-            height: Fit,
-            margin: {left: 1.0, right: 1.0, top: 1.0, bottom: 1.0},
-        }
-        layout: {
-            align: {x: 0., y: 0.},
-            padding: {left: 5.0, top: 5.0, right: 4.0, bottom: 5.0}
-        }
+        width: Fit,
+        height: Fit,
+        margin: {left: 1.0, right: 1.0, top: 1.0, bottom: 1.0},
+        align: {x: 0., y: 0.},
+        padding: {left: 5.0, top: 5.0, right: 4.0, bottom: 5.0}
 
         draw_bg: {
             fn pixel(self) -> vec4 {
@@ -54,7 +50,7 @@ live_design! {
         popup_shift: vec2(-6.0,4.0)
 
         selected_item: -1
-        state: {
+        animator: {
             hover = {
                 default: off,
                 off = {
@@ -87,12 +83,12 @@ live_design! {
 
 #[derive(Live)]
 pub struct DropDown {
-    #[state]
-    state: LiveState,
+    #[animator]
+    animator: Animator,
 
-    #[live]
+    #[walk]
     walk: Walk,
-    #[live]
+    #[layout]
     layout: Layout,
 
     #[live]
@@ -191,7 +187,7 @@ impl DropDown {
         event: &Event,
         dispatch_action: &mut dyn FnMut(&mut Cx, DropDownAction),
     ) {
-        self.state_handle_event(cx, event);
+        self.animator_handle_event(cx, event);
 
         if self.is_open && self.popup_menu.is_some() {
             let global = cx.global::<PopupMenuGlobal>().clone();
@@ -226,7 +222,7 @@ impl DropDown {
             if let Event::MouseDown(e) = event {
                 if !menu.menu_contains_pos(cx, e.abs) {
                     self.set_closed(cx);
-                    self.animate_state(cx, id!(hover.off));
+                    self.animator_play(cx, id!(hover.off));
                 }
             }
         }
@@ -234,7 +230,7 @@ impl DropDown {
         match event.hits_with_sweep_area(cx, self.draw_bg.area(), self.draw_bg.area()) {
             Hit::KeyFocusLost(_) => {
                 self.set_closed(cx);
-                self.animate_state(cx, id!(hover.off));
+                self.animator_play(cx, id!(hover.off));
                 self.draw_bg.redraw(cx);
             }
             Hit::KeyDown(ke) => match ke.key_code {
@@ -271,22 +267,22 @@ impl DropDown {
             Hit::FingerDown(_fe) => {
                 cx.set_key_focus(self.draw_bg.area());
                 self.toggle_open(cx);
-                self.animate_state(cx, id!(hover.pressed));
+                self.animator_play(cx, id!(hover.pressed));
             }
             Hit::FingerHoverIn(_) => {
                 cx.set_cursor(MouseCursor::Hand);
-                self.animate_state(cx, id!(hover.on));
+                self.animator_play(cx, id!(hover.on));
             }
             Hit::FingerHoverOut(_) => {
-                self.animate_state(cx, id!(hover.off));
+                self.animator_play(cx, id!(hover.off));
             }
             Hit::FingerUp(fe) => {
                 if fe.is_over {
                     if fe.device.has_hovers() {
-                        self.animate_state(cx, id!(hover.on));
+                        self.animator_play(cx, id!(hover.on));
                     }
                 } else {
-                    self.animate_state(cx, id!(hover.off));
+                    self.animator_play(cx, id!(hover.off));
                 }
             }
             _ => (),
@@ -367,7 +363,7 @@ impl Widget for DropDown {
         });
     }
 
-    fn get_walk(&self) -> Walk {
+    fn walk(&self) -> Walk {
         self.walk
     }
 

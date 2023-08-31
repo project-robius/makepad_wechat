@@ -1,7 +1,7 @@
 use makepad_widgets::*;
 
 live_design! {
-    import makepad_widgets::frame::*;
+    import makepad_widgets::view::*;
     import makepad_widgets::label::Label;
     import makepad_widgets::image::*;
 
@@ -14,29 +14,29 @@ live_design! {
     IMG_QR = dep("crate://self/resources/img/qr_icon.png")
 
     ActionIcon = <Label> {
-        walk: {width: Fit, height: Fit}
-        label: ">"
-        draw_label: {
+        width: Fit, height: Fit
+        text: ">"
+        draw_text: {
             color: #b4,
             text_style: <REGULAR_TEXT>{font_size: 16},
         }
     }
 
-    OptionsItem = <Frame> {
-        walk: {width: Fill, height: Fit}
-        layout: {padding: {left: 10., top: 10., right: 10. bottom: 2.}, spacing: 8., flow: Down}
+    OptionsItem = <View> {
+        width: Fill, height: Fit
+        padding: {left: 10., top: 10., right: 10. bottom: 2.}, spacing: 8., flow: Down
         show_bg: true
         draw_bg: {
             color: #fff
         }
 
-        content = <Frame> {
-            walk: {width: Fill, height: 36.}
-            layout: {padding: 0, align: {x: 0.0, y: 0.5}, spacing: 10., flow: Right}
+        content = <View> {
+            width: Fill, height: 36.
+            padding: 0, align: {x: 0.0, y: 0.5}, spacing: 10., flow: Right
 
             label = <Label> {
-                walk: {width: Fit, height: Fit}
-                draw_label: {
+                width: Fit, height: Fit
+                draw_text: {
                     color: #000,
                     text_style: <REGULAR_TEXT>{},
                 },
@@ -44,8 +44,8 @@ live_design! {
 
             <FillerX> {}
 
-            item_data = <Frame> {
-                walk: {width: 0., height: 0.}
+            item_data = <View> {
+                width: 0., height: 0.
             }
 
             action_icon = <ActionIcon> {}
@@ -54,14 +54,14 @@ live_design! {
         divider = <Divider> {}
     }
 
-    Options = <Frame> {
-        walk: {width: Fill, height: Fit}
-        layout: {padding: 0, spacing: 0., flow: Down}
+    Options = <View> {
+        width: Fill, height: Fit
+        padding: 0, spacing: 0., flow: Down
     }
 
-    MyProfileScreen = <Frame> {
-        walk: {width: Fill, height: Fill}
-        layout: {flow: Down, spacing: 10.}
+    MyProfileScreen = <View> {
+        width: Fill, height: Fill
+        flow: Down, spacing: 10.
         show_bg: true,
         draw_bg: {
             color: #eee
@@ -70,13 +70,13 @@ live_design! {
         <Options> {
             <OptionsItem> {
                 content = {
-                    walk: {width: Fill, height: Fit}
+                    width: Fill, height: Fit
                     label = {
-                        label: "Profile Photo"
+                        text: "Profile Photo"
                     }
                     item_data = <Image> {
                         source: (IMG_DEFAULT_AVATAR),
-                        walk: {width: 60., height: 60.}
+                        width: 60., height: 60.
                     }
                 }
             }
@@ -84,15 +84,15 @@ live_design! {
             <OptionsItem> {
                 content = {
                     label = {
-                        label: "Name"
+                        text: "Name"
                     }
                     item_data = <Label> {
-                        walk: {width: Fit, height: Fit}
-                        draw_label: {
+                        width: Fit, height: Fit
+                        draw_text:{
                             color: #6
                             text_style: <REGULAR_TEXT>{},
                         }
-                        label: "facu"
+                        text: "facu"
                     }
                 }
             }
@@ -100,7 +100,7 @@ live_design! {
             <OptionsItem> {
                 content = {
                     label = {
-                        label: "Tickle"
+                        text: "Tickle"
                     }
                 }
             }
@@ -108,15 +108,15 @@ live_design! {
             <OptionsItem> {
                 content = {
                     label = {
-                        label: "WeChat ID"
+                        text: "WeChat ID"
                     }
                     item_data = <Label> {
-                        walk: {width: Fit, height: Fit}
-                        draw_label: {
+                        width: Fit, height: Fit
+                        draw_text: {
                             color: #6
                             text_style: <REGULAR_TEXT>{},
                         }
-                        label: "wxid_123n43kjl123hjg"
+                        text:"wxid_123n43kjl123hjg"
                     }
                 }
             }
@@ -124,11 +124,11 @@ live_design! {
             <OptionsItem> {
                 content = {
                     label = {
-                        label: "My QR Code"
+                        text: "My QR Code"
                     }
                     item_data = <Image> {
                         source: (IMG_QR),
-                        walk: {width: 20., height: 20.}
+                        width: 20., height: 20.
                     }
                 }
             }
@@ -136,21 +136,10 @@ live_design! {
             <OptionsItem> {
                 content = {
                     label = {
-                        label: "More Info"
+                        text: "More Info"
                     }
                 }
-                divider = <Frame> {}
-            }
-        }
-
-        <Options> {
-            <OptionsItem> {
-                content = {
-                    label = {
-                        label: "Ringtone for Incoming Calls"
-                    }
-                }
-                divider = <Frame> {}
+                divider = <View> {}
             }
         }
 
@@ -158,10 +147,21 @@ live_design! {
             <OptionsItem> {
                 content = {
                     label = {
-                        label: "WeBeans"
+                        text: "Ringtone for Incoming Calls"
                     }
                 }
-                divider = <Frame> {}
+                divider = <View> {}
+            }
+        }
+
+        <Options> {
+            <OptionsItem> {
+                content = {
+                    label = {
+                        text: "WeBeans"
+                    }
+                }
+                divider = <View> {}
             }
         }
     }

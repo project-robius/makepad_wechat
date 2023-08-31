@@ -1,11 +1,11 @@
 use std::collections::HashMap;
 
 use crate::api::{ChatEntry, Db};
-use crate::shared::clickable_frame::*;
+use crate::shared::clickable_view::*;
 use makepad_widgets::*;
 
 live_design! {
-    import makepad_widgets::frame::*;
+    import makepad_widgets::view::*;
     import makepad_widgets::label::*;
     import makepad_widgets::button::Button;
     import makepad_widgets::list_view::ListView;
@@ -15,51 +15,51 @@ live_design! {
     import crate::shared::styles::*;
     import crate::shared::helpers::*;
     import crate::shared::stack_navigation::StackNavigation;
-    import crate::shared::clickable_frame::ClickableFrame;
+    import crate::shared::clickable_view::ClickableView;
 
     IMG_DEFAULT_AVATAR = dep("crate://self/resources/img/default_avatar.png")
 
-    ChatPreview = <ClickableFrame> {
-        layout: {flow: Right, spacing: 10., padding: 10.}
-        walk: {width: Fill, height: Fit}
+    ChatPreview = <ClickableView> {
+        flow: Right, spacing: 10., padding: 10.
+        width: Fill, height: Fit
 
         avatar = <Image> {
             source: (IMG_DEFAULT_AVATAR),
-            walk: {width: 36., height: 36.}
+            width: 36., height: 36.
         }
 
-        preview = <Frame> {
-            walk: {width: Fill, height: Fit}
-            layout: {flow: Down, spacing: 7.}
+        preview = <View> {
+            width: Fill, height: Fit
+            flow: Down, spacing: 7.
 
             username = <Label> {
-                walk: {width: Fill, height: Fit}
-                draw_label: {
+                width: Fill, height: Fit
+                draw_text:{
                     color: #000,
                     text_style: <REGULAR_TEXT>{}
                 }
-                label: "username"
+                text:"username"
             }
 
             content = <Label> {
-                walk: {width: Fit, height: Fit}
-                draw_label: {
+                width: Fit, height: Fit
+                draw_text:{
                     text_style: <REGULAR_TEXT>{
                         font_size: 10.5
                     },
                 }
-                label: "Hi there! I'm using WeChat"
+                text:"Hi there! I'm using WeChat"
             }
         }
 
         timestamp = <Label> {
-            walk: {width: Fit, height: Fit}
-            draw_label: {
+            width: Fit, height: Fit
+            draw_text:{
                 text_style: <REGULAR_TEXT>{
                     font_size: 8.
                 },
             }
-            label: "yesterday"
+            text:"yesterday"
         }
     }
 
@@ -73,11 +73,11 @@ live_design! {
             dep("crate://self/resources/img/avatars/user6.png"),
         ]
 
-        walk: {width: Fill, height: Fill}
-        layout: {flow: Down}
+        width: Fill, height: Fill
+        flow: Down
         list_view: <ListView> {
-            walk: {width: Fill, height: Fill}
-            layout: {flow: Down, spacing: 0.0}
+            width: Fill, height: Fill
+            flow: Down, spacing: 0.0
 
             chat = <ChatPreview> {}
             search_bar = <SearchBar> {}
@@ -95,9 +95,9 @@ pub enum ChatListAction {
 
 #[derive(Live)]
 pub struct ChatList {
-    #[live]
+    #[walk]
     walk: Walk,
-    #[live]
+    #[layout]
     layout: Layout,
 
     #[live]
@@ -135,7 +135,7 @@ impl Widget for ChatList {
         });
     }
 
-    fn get_walk(&self) -> Walk {
+    fn walk(&self) -> Walk {
         self.walk
     }
 
@@ -165,7 +165,7 @@ impl ChatList {
             });
 
         for (chat_id, action) in actions {
-            if let ClickableFrameAction::Click = action.action() {
+            if let ClickableViewAction::Click = action.action() {
                 dispatch_action(cx, ChatListAction::Click(*chat_id))
             }
         }
@@ -196,15 +196,15 @@ impl ChatList {
                     self.chat_list_view_map
                         .insert(item.widget_uid().0, self.chat_entries[item_index].id);
 
-                    item.get_label(id!(preview.username))
-                        .set_label(&item_content.username);
-                    item.get_label(id!(preview.content))
-                        .set_label(item_content.latest_message.text());
-                    item.get_label(id!(timestamp))
-                        .set_label(&item_content.timestamp);
+                    item.label(id!(preview.username))
+                        .set_text(&item_content.username);
+                    item.label(id!(preview.content))
+                        .set_text(item_content.latest_message.text());
+                    item.label(id!(timestamp))
+                        .set_text(&item_content.timestamp);
 
                     if let Some(avatar_path) = self.avatar_images_deps_path(item_content.avatar) {
-                        item.get_image(id!(avatar))
+                        item.image(id!(avatar))
                             .load_image_dep_by_path(cx, avatar_path);
                     }
                 }

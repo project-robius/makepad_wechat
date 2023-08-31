@@ -2,7 +2,7 @@ use makepad_widgets::*;
 use std::iter;
 
 live_design! {
-    import makepad_widgets::frame::*;
+    import makepad_widgets::view::*;
     import makepad_widgets::label::*;
     import makepad_widgets::list_view::ListView;
     import makepad_widgets::image::*;
@@ -16,118 +16,118 @@ live_design! {
     IMG_POST1 = dep("crate://self/resources/img/post1.jpg")
     IMG_POST2 = dep("crate://self/resources/img/post2.jpg")
 
-    Hero = <Frame> {
-        walk: {width: Fill, height: Fit}
-        layout: {flow: Overlay, align: {y: 1, x: 1}}
+    Hero = <View> {
+        width: Fill, height: Fit
+        flow: Overlay, align: {y: 1, x: 1}
         banner = <Image> {
-            walk: {width: Fill, height: 200.0}
+            width: Fill, height: 200.0
             source: (IMG_BANNER),
         }
-        content = <Frame> {
-            walk: {width: Fit, height: Fit}
-            layout: {align: {y: 0.5}}
+        content = <View> {
+            width: Fit, height: Fit
+            align: {y: 0.5}
             username = <Label> {
-                walk: {width: Fit, height: Fit}
-                draw_label: {
+                width: Fit, height: Fit
+                draw_text:{
                     color: #fff,
                     text_style: <REGULAR_TEXT>{}
                 }
-                label: "減活乗治外進"
+                text:"減活乗治外進"
             }
             avatar = <Image> {
                 source: (IMG_DEFAULT_AVATAR),
-                walk: {width: 50., height: 50.}
+                width: 50., height: 50.
             }
         }
     }
 
-    TextPost = <Frame> {
-        layout: {flow: Right, spacing: 10., padding: 10.}
-        walk: {width: Fill, height: Fit}
+    TextPost = <View> {
+        flow: Right, spacing: 10., padding: 10.
+        width: Fill, height: Fit
 
         avatar = <Image> {
             source: (IMG_DEFAULT_AVATAR),
-            walk: {width: 36., height: 36.}
+            width: 36., height: 36.
         }
 
-        content = <Frame> {
-            walk: {width: Fill, height: Fit}
-            layout: {flow: Down, spacing: 7.}
+        content = <View> {
+            width: Fill, height: Fit
+            flow: Down, spacing: 7.
 
             username = <Label> {
-                walk: {width: Fill, height: Fit}
-                draw_label: {
+                width: Fill, height: Fit
+                draw_text:{
                     color: #000,
                     text_style: <REGULAR_TEXT>{}
                 }
-                label: "Josh"
+                text:"Josh"
             }
 
             text = <Label> {
-                walk: {width: Fill, height: Fit}
-                draw_label: {
+                width: Fill, height: Fit
+                draw_text:{
                     color: #000,
                     text_style: <REGULAR_TEXT>{}
                 }
-                label: "Lorem ipsum dolor sit amet, consectetur"
+                text:"Lorem ipsum dolor sit amet, consectetur"
             }
         }
     }
 
-    ImagePost = <Frame> {
-        layout: {flow: Right, spacing: 10., padding: 10.}
-        walk: {width: Fill, height: Fit}
+    ImagePost = <View> {
+        flow: Right, spacing: 10., padding: 10.
+        width: Fill, height: Fit
 
         avatar = <Image> {
             source: (IMG_DEFAULT_AVATAR),
-            walk: {width: 36., height: 36.}
+            width: 36., height: 36.
         }
 
-        content = <Frame> {
-            layout: {flow: Down, spacing: 7.}
-            walk: {width: Fill, height: Fit}
+        content = <View> {
+            flow: Down, spacing: 7.
+            width: Fill, height: Fit
 
             username = <Label> {
-                walk: {width: Fill, height: Fit}
-                draw_label: {
+                width: Fill, height: Fit
+                draw_text:{
                     color: #000,
                     text_style: <REGULAR_TEXT>{}
                 }
-                label: "Josh"
+                text:"Josh"
             }
 
             text = <Label> {
-                walk: {width: Fill, height: Fit}
-                draw_label: {
+                width: Fill, height: Fit
+                draw_text:{
                     color: #000,
                     text_style: <REGULAR_TEXT>{font_size: 11.}
                 }
-                label: "Lorem ipsum dolor sit amet, consectetur"
+                text:"Lorem ipsum dolor sit amet, consectetur"
             }
 
-            images = <Frame> {
-                walk: {width: Fill, height: 110.}
-                layout: {flow: Right, spacing: 7.}
+            images = <View> {
+                width: Fill, height: 110.
+                flow: Right, spacing: 7.
 
                 image_1 = <Image> {
                     source: (IMG_POST1),
-                    walk: {width: 90., height: 110.}
+                    width: 90., height: 110.
                 }
 
                 image_2 = <Image> {
                     source: (IMG_POST2),
-                    walk: {width: 180., height: 110.}
+                    width: 180., height: 110.
                 }
             }
         }
     }
 
     MomentList = {{MomentList}} {
-        walk: {width: Fill, height: Fill}
-        layout: {flow: Down}
+        width: Fill, height: Fill
+        flow: Down
         list_view: <ListView> {
-            walk: {width: Fill, height: Fill}
-            layout: {flow: Down, spacing: 0.0}
+            width: Fill, height: Fill
+            flow: Down, spacing: 0.0
 
             image_post = <ImagePost> {}
             text_post = <TextPost> {}
@@ -143,9 +143,9 @@ pub enum MomentListAction {
 
 #[derive(Live)]
 pub struct MomentList {
-    #[live]
+    #[walk]
     walk: Walk,
-    #[live]
+    #[layout]
     layout: Layout,
 
     #[live]
@@ -202,7 +202,7 @@ impl Widget for MomentList {
         }
     }
 
-    fn get_walk(&self) -> Walk {
+    fn walk(&self) -> Walk {
         self.walk
     }
 
@@ -237,9 +237,9 @@ impl MomentList {
                 if item_id >= 1 && item_id < moment_entries_count + 1 {
                     let post = &self.moment_entries[item_id as usize - 1]; // offset by 1 to account for the hero
 
-                    item.get_label(id!(content.username))
-                        .set_label(&post.username);
-                    item.get_label(id!(content.text)).set_label(&post.text);
+                    item.label(id!(content.username))
+                        .set_text(&post.username);
+                    item.label(id!(content.text)).set_text(&post.text);
                 }
 
                 item.draw_widget_all(cx);
