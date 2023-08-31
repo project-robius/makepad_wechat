@@ -22,7 +22,7 @@ live_design! {
 
     ActionIcon = <Label> {
         width: Fit, height: Fit
-        text:">"
+        text: ">"
         draw_text:{
             color: #b4
             text_style: <REGULAR_TEXT>{font_size: 16},
@@ -31,7 +31,7 @@ live_design! {
 
     OptionsItem = <View> {
         width: Fill, height: Fit
-
+        padding: {left: 10., top: 10., right: 20. bottom: 2.}, spacing: 8., flow: Down
 
         content = <View> {
             width: Fill, height: Fit
@@ -83,7 +83,7 @@ live_design! {
                         }
 
                         label = {
-                            text:"Moments"
+                            text: "Moments"
                         }
                     }
                 }
@@ -97,7 +97,7 @@ live_design! {
                         }
 
                         label = {
-                            text:"Scan"
+                            text: "Scan"
                         }
                     }
 
@@ -113,7 +113,7 @@ live_design! {
                         }
 
                         label = {
-                            text:"Shake"
+                            text: "Shake"
                         }
 
                     }
@@ -128,7 +128,7 @@ live_design! {
                         }
 
                         label = {
-                            text:"Search"
+                            text: "Search"
                         }
                     }
                 }
@@ -142,7 +142,7 @@ live_design! {
                         }
 
                         label = {
-                            text:"People Nearby"
+                            text: "People Nearby"
                         }
                     }
                 }
@@ -156,7 +156,7 @@ live_design! {
                         }
 
                         label = {
-                            text:"Mini Programs"
+                            text: "Mini Programs"
                         }
                     }
                 }
@@ -177,7 +177,7 @@ live_design! {
             content = {
                 title_container = {
                     title = {
-                        text:"发现"
+                        text: "发现"
                     }
                 }
             }
