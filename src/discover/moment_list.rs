@@ -232,7 +232,7 @@ impl MomentList {
                     _ => id!(image_post),
                 };
 
-                let item = self.list_view.get_item(cx, item_id, template[0]).unwrap();
+                let item = self.list_view.item(cx, item_id, template[0]).unwrap();
 
                 if item_id >= 1 && item_id < moment_entries_count + 1 {
                     let post = &self.moment_entries[item_id as usize - 1]; // offset by 1 to account for the hero

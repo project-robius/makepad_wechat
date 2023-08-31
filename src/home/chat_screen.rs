@@ -282,7 +282,7 @@ impl Chat {
                         MessageDirection::Incoming => id!(message_incoming),
                     };
 
-                    let item = self.list_view.get_item(cx, item_id, template[0]).unwrap();
+                    let item = self.list_view.item(cx, item_id, template[0]).unwrap();
 
                     item.label(id!(text.label))
                         .set_text(&item_content.text);

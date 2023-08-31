@@ -20,9 +20,6 @@ live_design! {
             clip_y: true,
             align: {y: 0.5}
             text: "Search"
-            label_walk: {
-                margin: 0.0
-            }
             draw_bg: {
                 color: #fff
             }
