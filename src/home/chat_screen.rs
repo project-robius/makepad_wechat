@@ -5,7 +5,7 @@ use crate::api::{Db, MessageDirection, MessageEntry};
 
 live_design! {
     import makepad_draw::shader::std::*;
-    import makepad_widgets::frame::*;
+    import makepad_widgets::view::*;
     import makepad_widgets::label::*;
     import makepad_widgets::list_view::ListView;
     import makepad_widgets::text_input::TextInput;
@@ -20,20 +20,20 @@ live_design! {
     IMG_PLUS = dep("crate://self/resources/img/plus.png")
     IMG_KEYBOARD_ICON = dep("crate://self/resources/img/keyboard_icon.png")
 
-    MessageIncoming = <Frame> {
-        walk: {width: Fill, height: Fit}
+    MessageIncoming = <View> {
+        width: Fill, height: Fit
 
-        content = <Frame> {
-            layout: {flow: Right, spacing: 10., padding: 10., align: {y: 0.5}}
-            walk: {width: Fit, height: Fit}
+        content = <View> {
+            flow: Right, spacing: 10., padding: 10., align: {y: 0.5}
+            width: Fit, height: Fit
 
             avatar = <Image> {
                 source: (IMG_DEFAULT_AVATAR),
-                walk: {width: 36., height: 36.}
+                width: 36., height: 36.
             }
-            text = <Frame> {
-                walk: {width: Fit, height: 36}
-                layout: {padding: {left: 15., right: 10.}, align: {y: 0.5}}
+            text = <View> {
+                width: Fit, height: 36
+                padding: {left: 15., right: 10.}, align: {y: 0.5}
 
                 show_bg: true,
                 draw_bg: {
@@ -63,8 +63,8 @@ live_design! {
                     }
                 }
                 label = <Label> {
-                    label: ""
-                    draw_label: {
+                    text:""
+                    draw_text:{
                         text_style: <REGULAR_TEXT>{font_size: 11.},
                         color: #000
                     }
@@ -75,20 +75,20 @@ live_design! {
         <FillerX> {}
     }
 
-    MessageOutgoing = <Frame> {
-        walk: {width: Fill, height: Fit}
+    MessageOutgoing = <View> {
+        width: Fill, height: Fit
 
         <FillerX> {}
 
-        content = <Frame> {
-            layout: {flow: Right, spacing: 10., padding: 10., align: {y: 0.5}}
-            walk: {width: Fit, height: Fit}
+        content = <View> {
+            flow: Right, spacing: 10., padding: 10., align: {y: 0.5}
+            width: Fit, height: Fit
 
 
 
-            text = <Frame> {
-                walk: {width: Fit, height: 36}
-                layout: {padding: {left: 10., right: 15.}, align: {y: 0.5}}
+            text = <View> {
+                width: Fit, height: 36
+                padding: {left: 10., right: 15.}, align: {y: 0.5}
 
                 show_bg: true,
                 draw_bg: {
@@ -118,8 +118,8 @@ live_design! {
                     }
                 }
                 label = <Label> {
-                    label: ""
-                    draw_label: {
+                    text:""
+                    draw_text:{
                         text_style: <REGULAR_TEXT>{font_size: 11.},
                         color: #000
                     }
@@ -128,14 +128,14 @@ live_design! {
 
             avatar = <Image> {
                 source: (IMG_DEFAULT_AVATAR),
-                walk: {width: 36., height: 36.}
+                width: 36., height: 36.
             }
         }
     }
 
     Chat = {{Chat}} {
-        walk: {width: Fill, height: Fill}
-        layout: {flow: Right, spacing: 10., padding: 0.}
+        width: Fill, height: Fill
+        flow: Right, spacing: 10., padding: 0.
 
         avatar_images_deps: [
             dep("crate://self/resources/img/avatars/user1.png"),
@@ -147,25 +147,25 @@ live_design! {
         ]
 
         list_view: <ListView> {
-            walk: {width: Fill, height: Fill}
-            layout: {flow: Down, spacing: 0.}
+            width: Fill, height: Fill
+            flow: Down, spacing: 0.
 
             message_incoming = <MessageIncoming> {}
             message_outgoing = <MessageOutgoing> {}
         }
     }
 
-    ChatScreen = <Frame> {
-        walk: {width: Fill, height: Fill}
-        layout: {flow: Down}
+    ChatScreen = <View> {
+        width: Fill, height: Fill
+        flow: Down
         show_bg: true,
         draw_bg: {
             color: #ddd
         }
         chat = <Chat> {}
-        <Frame> {
-            walk: {width: Fill, height: Fit}
-            layout: {flow: Right, align: {y: 0.5}, padding: 10.}
+        <View> {
+            width: Fill, height: Fit
+            flow: Right, align: {y: 0.5}, padding: 10.
             show_bg: true,
             draw_bg: {
                 color: #f8
@@ -173,14 +173,14 @@ live_design! {
 
             <Image> {
                 source: (IMG_KEYBOARD_ICON),
-                walk: {width: 36., height: 36.}
+                width: 36., height: 36.
             }
             message_input = <SearchBar> {
                 show_bg: false
                 input = {
-                    walk: {width: Fill, height: Fit, margin: 0}
+                    width: Fill, height: Fit, margin: 0
                     text: " "
-                    draw_label: {
+                    draw_text:{
                         text_style:<REGULAR_TEXT>{font_size: 11},
 
                         fn get_color(self) -> vec4 {
@@ -191,11 +191,11 @@ live_design! {
             }
             <Image> {
                 source: (IMG_SMILEY_FACE_BW),
-                walk: {width: 36., height: 36.}
+                width: 36., height: 36.
             }
             <Image> {
                 source: (IMG_PLUS),
-                walk: {width: 36., height: 36.}
+                width: 36., height: 36.
             }
         }
     }
@@ -203,9 +203,9 @@ live_design! {
 
 #[derive(Live)]
 pub struct Chat {
-    #[live]
+    #[walk]
     walk: Walk,
-    #[live]
+    #[layout]
     layout: Layout,
 
     #[live]
@@ -284,11 +284,11 @@ impl Chat {
 
                     let item = self.list_view.get_item(cx, item_id, template[0]).unwrap();
 
-                    item.get_label(id!(text.label))
-                        .set_label(&item_content.text);
+                    item.label(id!(text.label))
+                        .set_text(&item_content.text);
 
                     if let Some(avatar_path) = self.avatar_images_deps_path(item_content.avatar) {
-                        item.get_image(id!(avatar))
+                        item.image(id!(avatar))
                             .load_image_dep_by_path(cx, avatar_path);
                     }
 

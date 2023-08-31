@@ -1,10 +1,10 @@
-use crate::shared::clickable_frame::*;
+use crate::shared::clickable_view::*;
 use crate::shared::stack_view_action::StackViewAction;
 use makepad_widgets::widget::WidgetCache;
 use makepad_widgets::*;
 
 live_design! {
-    import makepad_widgets::frame::*;
+    import makepad_widgets::view::*;
     import makepad_widgets::label::Label;
     import makepad_widgets::button::Button;
     import makepad_draw::shader::std::*;
@@ -13,7 +13,7 @@ live_design! {
     import crate::shared::helpers::FillerX;
     import crate::shared::helpers::Divider;
     import crate::shared::styles::*;
-    import crate::shared::clickable_frame::ClickableFrame
+    import crate::shared::clickable_view::ClickableView
 
     IMG_DEFAULT_AVATAR = dep("crate://self/resources/img/default_avatar.png")
     IMG_FAVORITES = dep("crate://self/resources/img/favorites.png")
@@ -23,33 +23,33 @@ live_design! {
     IMG_QR = dep("crate://self/resources/img/qr_icon.png")
 
     ActionIcon = <Label> {
-        walk: {width: Fit, height: Fit}
-        label: ">"
-        draw_label: {
+        width: Fit, height: Fit
+        text: ">"
+        draw_text:{
             color: #b4,
             text_style: <REGULAR_TEXT>{font_size: 16},
         }
     }
 
-    OptionsItem = <Frame> {
-        walk: {width: Fill, height: Fit}
-        layout: {padding: {left: 10., top: 10., right: 10. bottom: 2.}, spacing: 8., flow: Down}
+    OptionsItem = <View> {
+        width: Fill, height: Fit
+        padding: {left: 10., top: 10., right: 10. bottom: 2.}, spacing: 8., flow: Down
         show_bg: true
         draw_bg: {
             color: #fff
         }
 
-        content = <Frame> {
-            walk: {width: Fill, height: Fit}
-            layout: {padding: 0, align: {x: 0.0, y: 0.5}, spacing: 10., flow: Right}
+        content = <View> {
+            width: Fill, height: Fit
+            padding: 0, align: {x: 0.0, y: 0.5}, spacing: 10., flow: Right
 
             icon = <Image> {
-                walk: {width: 36., height: 36.}
+                width: 36., height: 36.
             }
 
             label = <Label> {
-                walk: {width: Fit, height: Fit}
-                draw_label: {
+                width: Fit, height: Fit
+                draw_text:{
                     color: #000,
                     text_style: <REGULAR_TEXT>{},
                 },
@@ -61,92 +61,92 @@ live_design! {
         }
 
         divider = <Divider> {
-            walk: {margin: {left: 42.0}}
+            margin: {left: 42.0}
         }
     }
 
-    Options = <Frame> {
-        walk: {width: Fill, height: Fit}
-        layout: {padding: 0, spacing: 0., flow: Down}
+    Options = <View> {
+        width: Fill, height: Fit
+        padding: 0, spacing: 0., flow: Down
     }
 
     Profile = {{Profile}} {
-        frame: {
-            walk: {width: Fill, height: Fill}
-            layout: {flow: Down, spacing: 10.}
+        view: {
+            width: Fill, height: Fill
+            flow: Down, spacing: 10.
 
             show_bg: true,
             draw_bg: {
                 color: #ddd
             }
 
-            ProfileInfo = <Frame> {
-                walk: {width: Fill, height: Fit}
-                layout: {flow: Right, spacing: 10., padding: {top: 100., bottom: 30., right: 10., left: 20.}}
+            ProfileInfo = <View> {
+                width: Fill, height: Fit
+                flow: Right, spacing: 10., padding: {top: 100., bottom: 30., right: 10., left: 20.}
 
                 show_bg: true
                 draw_bg: {
                     color: #fff
                 }
 
-                <Frame> {
-                    walk: {width: Fit, height: Fit}
-                    layout: {flow: Down, align: {y: 0}}
+                <View> {
+                    width: Fit, height: Fit
+                    flow: Down, align: {y: 0}
                     avatar = <Image> {
                         source: (IMG_DEFAULT_AVATAR),
-                        walk: {width: 80., height: 80.}
+                        width: 80., height: 80.
                     }
                 }
 
-                <Frame> {
-                    walk: {width: Fill, height: Fit}
-                    layout: {flow: Down, align: {x: 0, y: 0.5}, padding: {top: 5., left: 10.}, spacing: 20.}
+                <View> {
+                    width: Fill, height: Fit
+                    flow: Down, align: {x: 0, y: 0.5}, padding: {top: 5., left: 10.}, spacing: 20.
 
                     username = <Label> {
-                        draw_label: {
+                        draw_text:{
                             color: #000,
                             text_style: <TEXT_SUB>{font_size: 20.},
                         }
-                        label: "facu"
+                        text:"facu"
                     }
 
-                    <Frame> {
-                        walk: {width: Fill, height: Fit}
-                        layout: {flow: Right, spacing: 5., align: {y: 0.5}}
+                    <View> {
+                        width: Fill, height: Fit
+                        flow: Right, spacing: 5., align: {y: 0.5}
 
-                        <Frame> {
-                            walk: {width: Fill, height: Fit}
-                            layout: {flow: Down, spacing: 5.}
+                        <View> {
+                            width: Fill, height: Fit
+                            flow: Down, spacing: 5.
 
                             wechat_id_prefix = <Label> {
-                                draw_label: {
+                                draw_text: {
                                     color: #6a6a6a,
                                     text_style: <REGULAR_TEXT>{font_size: 11.},
                                 }
-                                label: "WeChat ID:"
+                                text: "WeChat ID:"
                             }
 
                             wechat_id = <Label> {
-                                draw_label: {
+                                draw_text: {
                                     color: #6a6a6a,
                                     text_style: <REGULAR_TEXT>{font_size: 11.},
                                 }
-                                label: "wxid_123n43kjl123hjg"
+                                text: "wxid_123n43kjl123hjg"
                             }
                         }
 
-                        my_profile_frame = <ClickableFrame> {
-                            walk: {width: Fit, height: Fit}
-                            layout: {align: {y: 0.5}, spacing: 15}
+                        my_profile_frame = <ClickableView> {
+                            width: Fit, height: Fit
+                            align: {y: 0.5}, spacing: 15
                             qr_icon = <Image> {
                                 source: (IMG_QR),
-                                walk: {width: 20., height: 20.}
+                                width: 20., height: 20.
                             }
 
                             <Label> {
-                                walk: {width: Fit, height: Fit}
-                                label: ">"
-                                draw_label: {
+                                width: Fit, height: Fit
+                                text: ">"
+                                draw_text: {
                                     text_style: <REGULAR_TEXT>{font_size: 16},
                                     fn get_color(self) -> vec4 {
                                         return #b4
@@ -156,14 +156,14 @@ live_design! {
                         }
                     }
 
-                    <Frame> {
-                        walk: {width: Fit, height: Fit}
-                        layout: {flow: Right}
+                    <View> {
+                        width: Fit, height: Fit
+                        flow: Right
 
                         status_button = <Button> {
-                            walk: {width: Fit, height: 34.}
-                            label: "+ Status"
-                            draw_label: {
+                            width: Fit, height: 34.
+                            text: "+ Status"
+                            draw_text: {
                                 text_style: <REGULAR_TEXT>{font_size: 12.},
                                 fn get_color(self) -> vec4 {
                                     return #6a
@@ -196,9 +196,9 @@ live_design! {
                         }
 
                         meatball_menu_button = <Button> {
-                            walk: {width: Fit, height: 34}
-                            label: "..."
-                            draw_label: {
+                            width: Fit, height: 34
+                            text: "..."
+                            draw_text: {
                                 text_style: <TEXT_SUB>{font_size: 14.},
                                 fn get_color(self) -> vec4 {
                                     return #6a
@@ -238,7 +238,7 @@ live_design! {
                         }
 
                         label = {
-                            label: "Favorites"
+                            text: "Favorites"
                         }
                     }
                 }
@@ -250,7 +250,7 @@ live_design! {
                         }
 
                         label = {
-                            label: "My Posts"
+                            text: "My Posts"
                         }
                     }
                 }
@@ -262,12 +262,12 @@ live_design! {
                         }
 
                         label = {
-                            label: "Stickers"
+                            text: "Stickers"
                         }
 
                     }
 
-                    divider = <Frame> {}
+                    divider = <View> {}
                 }
             }
 
@@ -279,18 +279,18 @@ live_design! {
                         }
 
                         label = {
-                            label: "Settings"
+                            text: "Settings"
                         }
                     }
 
-                    divider = <Frame> {}
+                    divider = <View> {}
                 }
             }
         }
     }
 
-    ProfileScreen = <Frame> {
-        walk: {width: Fill, height: Fill}
+    ProfileScreen = <View> {
+        width: Fill, height: Fill
         <Profile> {}
     }
 }
@@ -298,7 +298,7 @@ live_design! {
 #[derive(Live)]
 pub struct Profile {
     #[live]
-    frame: Frame,
+    view:View,
 }
 
 impl LiveHook for Profile {
@@ -321,15 +321,15 @@ impl Widget for Profile {
     }
 
     fn redraw(&mut self, cx: &mut Cx) {
-        self.frame.redraw(cx);
+        self.view.redraw(cx);
     }
 
     fn find_widgets(&mut self, path: &[LiveId], cached: WidgetCache, results: &mut WidgetSet) {
-        self.frame.find_widgets(path, cached, results);
+        self.view.find_widgets(path, cached, results);
     }
 
     fn draw_walk_widget(&mut self, cx: &mut Cx2d, walk: Walk) -> WidgetDraw {
-        let _ = self.frame.draw_walk_widget(cx, walk);
+        let _ = self.view.draw_walk_widget(cx, walk);
         WidgetDraw::done()
     }
 }
@@ -341,11 +341,11 @@ impl Profile {
         event: &Event,
         dispatch_action: &mut dyn FnMut(&mut Cx, StackViewAction),
     ) {
-        let actions = self.frame.handle_widget_event(cx, event);
+        let actions = self.view.handle_widget_event(cx, event);
 
         if self
-            .frame
-            .get_clickable_frame(id!(my_profile_frame))
+            .view
+            .clickable_view(id!(my_profile_frame))
             .clicked(&actions)
         {
             dispatch_action(cx, StackViewAction::ShowMyProfile);

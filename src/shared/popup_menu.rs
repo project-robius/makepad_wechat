@@ -40,15 +40,11 @@ live_design! {
     }
 
     MenuItem = {{MenuItem}} {
-        layout: {
-            align: {y: 0.5},
-            padding: {left: 5., top: 10., bottom: 10., right: 5.},
-            spacing: 5.,
-        }
-        walk: {
-            width: Fill,
-            height: Fit
-        }
+        align: {y: 0.5},
+        padding: {left: 5., top: 10., bottom: 10., right: 5.},
+        spacing: 5.,
+        width: Fill,
+        height: Fit
 
         icon_walk: {width: 15., height: Fit, margin: 0.}
         draw_icon: {
@@ -56,7 +52,7 @@ live_design! {
             brightness: 0.8;
         }
 
-        state: {
+        animator: {
             hover = {
                 default: off
                 off = {
@@ -99,14 +95,10 @@ live_design! {
 
     PopupMenu = {{PopupMenu}} {
         menu_item: <MenuItem> {}
-        layout: {
-            flow: Down,
-            padding: 5.
-        }
-        walk:{
-            width:140.,
-            height:Fit
-        }
+        flow: Down,
+        padding: 5.,
+        width: 140.,
+        height: Fit,
 
         icon_walk: {width: 20., height: Fit}
         draw_icon:{
@@ -194,9 +186,9 @@ pub struct PopupMenu {
     #[live]
     icon_walk: Walk,
 
-    #[live]
+    #[layout]
     layout: Layout,
-    #[live]
+    #[walk]
     walk: Walk,
 
     #[live]
@@ -248,7 +240,7 @@ impl Widget for PopupMenu {
         WidgetDraw::done()
     }
 
-    fn get_walk(&self) -> Walk {
+    fn walk(&self) -> Walk {
         self.walk
     }
 
@@ -313,11 +305,11 @@ impl PopupMenu {
     fn select_item_state(&mut self, cx: &mut Cx, which_id: MenuItemId) {
         for (id, item) in &mut *self.menu_items {
             if *id == which_id {
-                item.cut_state(cx, id!(select.on));
-                item.cut_state(cx, id!(hover.on));
+                item.animator_cut(cx, id!(select.on));
+                item.animator_cut(cx, id!(hover.on));
             } else {
-                item.cut_state(cx, id!(select.off));
-                item.cut_state(cx, id!(hover.off));
+                item.animator_cut(cx, id!(select.off));
+                item.animator_cut(cx, id!(hover.off));
             }
         }
     }
@@ -354,9 +346,9 @@ impl PopupMenu {
 
 #[derive(Live, LiveHook)]
 pub struct MenuItem {
-    #[live]
+    #[layout]
     layout: Layout,
-    #[live]
+    #[walk]
     walk: Walk,
 
     #[live]
@@ -372,8 +364,8 @@ pub struct MenuItem {
     #[live]
     indent_width: f32,
 
-    #[state]
-    state: LiveState,
+    #[animator]
+    animator: Animator,
     #[live]
     opened: f32,
     #[live]
@@ -418,7 +410,7 @@ impl MenuItem {
         sweep_area: Area,
         dispatch_action: &mut dyn FnMut(&mut Cx, MenuItemAction),
     ) {
-        if self.state_handle_event(cx, event).must_redraw() {
+        if self.animator_handle_event(cx, event).must_redraw() {
             self.draw_bg.area().redraw(cx);
         }
 
@@ -428,22 +420,22 @@ impl MenuItem {
             HitOptions::new().with_sweep_area(sweep_area),
         ) {
             Hit::FingerHoverIn(_) => {
-                self.animate_state(cx, id!(hover.on));
+                self.animator_play(cx, id!(hover.on));
             }
             Hit::FingerHoverOut(_) => {
-                self.animate_state(cx, id!(hover.off));
+                self.animator_play(cx, id!(hover.off));
             }
             Hit::FingerDown(_) => {
                 dispatch_action(cx, MenuItemAction::WasSweeped);
-                self.animate_state(cx, id!(hover.on));
-                self.animate_state(cx, id!(select.on));
+                self.animator_play(cx, id!(hover.on));
+                self.animator_play(cx, id!(select.on));
             }
             Hit::FingerUp(se) => {
                 if !se.is_sweep {
                     dispatch_action(cx, MenuItemAction::WasSelected);
                 } else {
-                    self.animate_state(cx, id!(hover.off));
-                    self.animate_state(cx, id!(select.off));
+                    self.animator_play(cx, id!(hover.off));
+                    self.animator_play(cx, id!(select.off));
                 }
             }
             _ => {}

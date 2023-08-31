@@ -2,7 +2,7 @@ use crate::contacts::contact_info::*;
 use makepad_widgets::*;
 
 live_design! {
-    import makepad_widgets::frame::*;
+    import makepad_widgets::view::*;
     import makepad_widgets::label::Label;
     import makepad_widgets::image::*;
 
@@ -15,30 +15,36 @@ live_design! {
         font: {path: dep("crate://makepad-widgets/resources/IBMPlexSans-Text.ttf")}
     }
 
-    Divider = <Frame> {
-        walk: {width: Fill, height: Fit}
-        layout: {flow: Down}
-        <Box> {
-            walk: {width: Fill, height: 1.}
+    Divider = <View> {
+        width: Fill,
+        height: Fit,
+        flow: Down
+        <RoundedView> {
+            width: Fill,
+            height: 1.,
             draw_bg: {color: (#ddd)}
         }
     }
 
-    ContactItem = <Frame> {
-        walk: {width: Fill, height: Fit}
-        layout: {padding: {left: 10., top: 10., bottom: 4.}, flow: Down}
+    ContactItem = <View> {
+        width: Fill,
+        height: Fit,
+        padding: {left: 10., top: 10., bottom: 4.}, flow: Down
 
-        content = <Frame> {
-            walk: {width: Fill, height: Fit}
-            layout: {padding: {top: 4., bottom: 6.}, align: {x: 0.0, y: 0.5}, spacing: 10., flow: Right}
+        content = <View> {
+            width: Fill,
+            height: Fit,
+            padding: {top: 4., bottom: 6.}, align: {x: 0.0, y: 0.5}, spacing: 10., flow: Right
             avatar = <Image> {
                 source: (IMG_DEFAULT_AVATAR),
-                walk: {width: 36., height: 36.}
+                width: 36.,
+                height: 36.
             }
 
             label = <Label> {
-                walk: {width: Fit, height: Fit}
-                draw_label: {
+                width: Fit,
+                height: Fit
+                draw_text: {
                     color: #000,
                     text_style: <REGULAR_TEXT>{},
                 }
@@ -49,18 +55,20 @@ live_design! {
     }
 
     ContactsGroup = {{ContactsGroup}} {
-        walk: {width: Fill, height: Fit, margin: {left: 6.0}}
-        layout: {padding: {top: 20.}, spacing: 0., flow: Down}
+        width: Fill,
+        height: Fit,
+        margin: {left: 6.0},
+        padding: {top: 20.}, spacing: 0., flow: Down
 
-        header: <Frame> {
-            walk: {width: Fit, height: Fit}
-            layout: {
-                padding: {left: 10., top: 10., bottom: 0.}
-            }
+        header: <View> {
+            width: Fit,
+            height: Fit,
+            padding: {left: 10., top: 10., bottom: 0.}
 
             label = <Label> {
-                walk: {width: Fit, height: Fit}
-                draw_label: {
+                width: Fit,
+                height: Fit,
+                draw_text: {
                     color: #777,
                     text_style: <REGULAR_TEXT>{font_size: 10.},
                 }
@@ -92,12 +100,12 @@ pub struct ContactItemId(pub LiveId);
 
 #[derive(Live)]
 pub struct ContactsGroup {
-    #[live]
+    #[walk]
     walk: Walk,
-    #[live]
+    #[layout]
     layout: Layout,
     #[live]
-    header: Frame,
+    header:View,
 
     #[live]
     people_contact_template: Option<LivePtr>,
@@ -109,7 +117,7 @@ pub struct ContactsGroup {
     #[rust]
     data: Vec<ContactInfo>,
     #[rust]
-    contacts: ComponentMap<ContactItemId, FrameRef>,
+    contacts: ComponentMap<ContactItemId,ViewRef>,
 }
 
 impl LiveHook for ContactsGroup {
@@ -119,7 +127,7 @@ impl LiveHook for ContactsGroup {
 }
 
 impl Widget for ContactsGroup {
-    fn get_walk(&self) -> Walk {
+    fn walk(&self) -> Walk {
         self.walk
     }
 
@@ -146,20 +154,20 @@ impl ContactsGroup {
                     ContactKind::FileTransfer => self.file_transfer_template,
                     ContactKind::WeChat => self.wechat_template,
                 };
-                FrameRef::new_from_ptr(cx, template)
+               ViewRef::new_from_ptr(cx, template)
             });
 
             current_contact
-                .get_label(id!(content.label))
-                .set_label(&contact.name);
+                .label(id!(content.label))
+                .set_text(&contact.name);
             let _ = current_contact.draw_walk_widget(cx, walk);
         }
         cx.end_turtle();
     }
 
     pub fn set_header_label(&mut self, text: &str) {
-        let label = self.header.get_label(id!(label));
-        label.set_label(text);
+        let label = self.header.label(id!(label));
+        label.set_text(text);
     }
 
     pub fn set_contacts(&mut self, data: Vec<ContactInfo>) {

@@ -1,13 +1,13 @@
-use crate::shared::clickable_frame::*;
+use crate::shared::clickable_view::*;
 use crate::shared::stack_view_action::StackViewAction;
 use makepad_widgets::widget::WidgetCache;
 use makepad_widgets::*;
 
 live_design! {
-    import makepad_widgets::frame::*;
+    import makepad_widgets::view::*;
     import makepad_widgets::label::Label;
 
-    import crate::shared::clickable_frame::ClickableFrame;
+    import crate::shared::clickable_view::ClickableView;
     import crate::shared::styles::*;
     import crate::shared::helpers::*;
     import crate::shared::header::HeaderDropDownMenu;
@@ -21,29 +21,29 @@ live_design! {
     IMG_MINI_PROGRAMS = dep("crate://self/resources/img/mini_programs.png")
 
     ActionIcon = <Label> {
-        walk: {width: Fit, height: Fit}
-        label: ">"
-        draw_label: {
+        width: Fit, height: Fit
+        text:">"
+        draw_text:{
             color: #b4
             text_style: <REGULAR_TEXT>{font_size: 16},
         }
     }
 
-    OptionsItem = <Frame> {
-        walk: {width: Fill, height: Fit}
-        layout: {padding: {left: 10., top: 10., right: 20. bottom: 2.}, spacing: 8., flow: Down}
+    OptionsItem = <View> {
+        width: Fill, height: Fit
 
-        content = <Frame> {
-            walk: {width: Fill, height: Fit}
-            layout: {padding: 0, align: {x: 0.0, y: 0.5}, spacing: 10., flow: Right}
+
+        content = <View> {
+            width: Fill, height: Fit
+            padding: 0, align: {x: 0.0, y: 0.5}, spacing: 10., flow: Right
 
             icon = <Image> {
-                walk: {width: 24., height: 24.}
+                width: 24., height: 24.
             }
 
             label = <Label> {
-                walk: {width: Fit, height: Fit}
-                draw_label: {
+                width: Fit, height: Fit
+                draw_text:{
                     color: #000,
                     text_style: <REGULAR_TEXT>{},
                 },
@@ -55,9 +55,9 @@ live_design! {
         }
     }
 
-    Options = <Frame> {
-        walk: {width: Fill, height: Fit, margin: {top: 10., bottom: 10.}}
-        layout: {padding: {bottom: 10.}, spacing: 0., flow: Down}
+    Options = <View> {
+        width: Fill, height: Fit, margin: {top: 10., bottom: 10.}
+        padding: {bottom: 10.}, spacing: 0., flow: Down
 
         show_bg: true
         draw_bg: {
@@ -65,15 +65,15 @@ live_design! {
         }
     }
 
-    ClickableOptions = <ClickableFrame> {
-        walk: {width: Fill, height: Fit, margin: {top: 10., bottom: 10.}}
-        layout: {padding: {bottom: 10.}, spacing: 0., flow: Down}
+    ClickableOptions = <ClickableView> {
+        width: Fill, height: Fit, margin: {top: 10., bottom: 10.}
+        padding: {bottom: 10.}, spacing: 0., flow: Down
     }
 
     Discover = {{Discover}} {
-        frame: <Frame> {
-            walk: {width: Fill, height: Fit}
-            layout: {flow: Down, spacing: 0.0}
+        view: <View> {
+            width: Fill, height: Fit
+            flow: Down, spacing: 0.0
 
             moments_link = <ClickableOptions> {
                 <OptionsItem> {
@@ -83,7 +83,7 @@ live_design! {
                         }
 
                         label = {
-                            label: "Moments"
+                            text:"Moments"
                         }
                     }
                 }
@@ -97,12 +97,12 @@ live_design! {
                         }
 
                         label = {
-                            label: "Scan"
+                            text:"Scan"
                         }
                     }
 
                     divider = <Divider> {
-                        walk: {margin: {left: 42.0}}
+                        margin: {left: 42.0}
                     }
                 }
 
@@ -113,7 +113,7 @@ live_design! {
                         }
 
                         label = {
-                            label: "Shake"
+                            text:"Shake"
                         }
 
                     }
@@ -128,7 +128,7 @@ live_design! {
                         }
 
                         label = {
-                            label: "Search"
+                            text:"Search"
                         }
                     }
                 }
@@ -142,7 +142,7 @@ live_design! {
                         }
 
                         label = {
-                            label: "People Nearby"
+                            text:"People Nearby"
                         }
                     }
                 }
@@ -156,7 +156,7 @@ live_design! {
                         }
 
                         label = {
-                            label: "Mini Programs"
+                            text:"Mini Programs"
                         }
                     }
                 }
@@ -164,9 +164,9 @@ live_design! {
         }
     }
 
-    DiscoverScreen = <Frame> {
-        walk: {width: Fill, height: Fill}
-        layout: {flow: Down, spacing: 0.0}
+    DiscoverScreen = <View> {
+        width: Fill, height: Fill
+        flow: Down, spacing: 0.0
 
         show_bg: true
         draw_bg: {
@@ -177,7 +177,7 @@ live_design! {
             content = {
                 title_container = {
                     title = {
-                        label: "发现"
+                        text:"发现"
                     }
                 }
             }
@@ -190,7 +190,7 @@ live_design! {
 #[derive(Live)]
 pub struct Discover {
     #[live]
-    frame: Frame,
+    view:View,
 }
 
 impl LiveHook for Discover {
@@ -213,15 +213,15 @@ impl Widget for Discover {
     }
 
     fn redraw(&mut self, cx: &mut Cx) {
-        self.frame.redraw(cx);
+        self.view.redraw(cx);
     }
 
     fn find_widgets(&mut self, path: &[LiveId], cached: WidgetCache, results: &mut WidgetSet) {
-        self.frame.find_widgets(path, cached, results);
+        self.view.find_widgets(path, cached, results);
     }
 
     fn draw_walk_widget(&mut self, cx: &mut Cx2d, walk: Walk) -> WidgetDraw {
-        let _ = self.frame.draw_walk_widget(cx, walk);
+        let _ = self.view.draw_walk_widget(cx, walk);
         WidgetDraw::done()
     }
 }
@@ -233,10 +233,10 @@ impl Discover {
         event: &Event,
         dispatch_action: &mut dyn FnMut(&mut Cx, StackViewAction),
     ) {
-        let actions = self.frame.handle_widget_event(cx, event);
+        let actions = self.view.handle_widget_event(cx, event);
 
         if self
-            .get_clickable_frame(id!(moments_link))
+            .clickable_view(id!(moments_link))
             .clicked(&actions)
         {
             dispatch_action(cx, StackViewAction::ShowMoments);

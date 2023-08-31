@@ -3,7 +3,7 @@ use makepad_widgets::*;
 live_design! {
     import makepad_draw::shader::std::*;
     import makepad_widgets::scroll_bars::ScrollBars;
-    import makepad_widgets::frame::*;
+    import makepad_widgets::view::*;
     import makepad_widgets::label::Label;
     import makepad_widgets::button::Button;
     import makepad_widgets::text_input::TextInput;
@@ -24,7 +24,7 @@ live_design! {
         content = {
             title_container = {
                 title = {
-                    label: "通讯录"
+                    text:"通讯录"
                 }
             }
         }
@@ -32,19 +32,20 @@ live_design! {
 
     <SearchBar> {}
 
-    Divider = <Frame> {
-        walk: {width: Fill, height: Fit}
-        layout: {flow: Down}
-        <Box> {
-            walk: {width: Fill, height: 1.}
+    Divider = <View> {
+        width: Fill, height: Fit
+        flow: Down
+        <RoundedView> {
+            width: Fill,
+            height: 1.,
             draw_bg: {color: (#ddd)}
         }
     }
 
-    ContactsBody = <Frame> {
+    ContactsBody = <View> {
         show_bg: true
-        walk: {width: Fill, height: Fill}
-        layout: {flow: Down, spacing: 0.0}
+        width: Fill, height: Fill
+        flow: Down, spacing: 0.0
 
         draw_bg: {
             color: #fff
@@ -54,14 +55,14 @@ live_design! {
         <ContactsList> {}
     }
 
-    Contacts = <Frame> {
-        walk: {width: Fill, height: Fill}
-        layout: {flow: Down, spacing: 0.0}
+    Contacts = <View> {
+        width: Fill, height: Fill
+        flow: Down, spacing: 0.0
         <ContactsBody> {}
     }
 
-    ContactsScreen = <Frame> {
-        walk: {width: Fill, height: Fill}
+    ContactsScreen = <View> {
+        width: Fill, height: Fill
         <Contacts> {}
     }
 }

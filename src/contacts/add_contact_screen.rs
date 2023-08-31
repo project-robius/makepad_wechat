@@ -1,7 +1,7 @@
 use makepad_widgets::*;
 
 live_design! {
-    import makepad_widgets::frame::*;
+    import makepad_widgets::view::*;
     import makepad_widgets::label::Label;
     import makepad_widgets::image::*;
 
@@ -19,41 +19,50 @@ live_design! {
     IMG_WECOM_CONTACTS = dep("crate://self/resources/img/wecom_contacts.png")
 
     ActionIcon = <Label> {
-        walk: {width: Fit, height: Fit}
-        label: ">"
-        draw_label: {
+        width: Fit,
+        height: Fit,
+        text: ">"
+        draw_text: {
             color: #b4
             text_style: <REGULAR_TEXT>{font_size: 16},
         }
     }
 
-    OptionsItem = <Frame> {
-        walk: {width: Fill, height: Fit}
-        layout: {padding: {left: 10., top: 10., right: 0, bottom: 2.}, spacing: 8., flow: Down}
+    OptionsItem = <View> {
+        width: Fill,
+        height: Fit,
+        padding: {left: 10., top: 10., right: 0, bottom: 2.}, spacing: 8., flow: Down
 
-        content = <Frame> {
-            walk: {width: Fill, height: Fit, margin: {left: 5., top: 6., bottom: 6., right: 0}}
-            layout: {padding: 0, align: {x: 0.0, y: 0.0}, spacing: 10., flow: Right}
+        content = <View> {
+            width: Fill,
+            height: Fit,
+            margin: {left: 5., top: 6., bottom: 6., right: 0}
+            padding: 0, align: {x: 0.0, y: 0.0}, spacing: 10., flow: Right
 
             icon = <Image> {
-                walk: {width: 24., height: 24., margin: {right: 10.}}
+                width: 24.,
+                height: 24.,
+                margin: {right: 10.}
             }
 
-            labels = <Frame> {
-                walk: {width: Fill, height: Fit}
-                layout: {padding: 0, spacing: 10., flow: Down}
+            labels = <View> {
+                width: Fill,
+                height: Fit,
+                padding: 0, spacing: 10., flow: Down
 
                 main = <Label> {
-                    walk: {width: Fill, height: Fit}
-                    draw_label: {
+                    width: Fill
+                    height: Fit,
+                    draw_text: {
                         color: #000,
                         text_style: <REGULAR_TEXT>{},
                     },
                 }
 
                 secondary = <Label> {
-                    walk: {width: Fill, height: Fit}
-                    draw_label: {
+                    width: Fill,
+                    height: Fit,
+                    draw_text: {
                         color: #9c9c9c,
                         text_style: <REGULAR_TEXT>{font_size: 10.},
                     },
@@ -61,7 +70,7 @@ live_design! {
             }
 
             action_icon = <ActionIcon> {
-                walk: {margin: {right: 20.}}
+                margin: {right: 20.}
             }
         }
 
@@ -70,18 +79,20 @@ live_design! {
             color: #fff
         }
         divider = <Divider> {
-            walk: {margin: {left: 42.0}}
+            margin: {left: 42.0}
         }
     }
 
-    Options = <Frame> {
-        walk: {width: Fill, height: Fit}
-        layout: {padding: 0, spacing: 0., flow: Down}
+    Options = <View> {
+        width: Fill,
+        height: Fit,
+        padding: 0, spacing: 0., flow: Down
     }
 
-    AddContactScreen = <Frame> {
-        walk: {width: Fill, height: Fill}
-        layout: {flow: Down, spacing: 10.}
+    AddContactScreen = <View> {
+        width: Fill,
+        height: Fill,
+        flow: Down, spacing: 10.
 
         show_bg: true
         draw_bg: {
@@ -94,21 +105,24 @@ live_design! {
             }
         }
 
-        <Frame> {
-            walk: {width: Fill, height: Fit, margin: {bottom: 20.}}
-            layout: {align: {x: 0.5, y: 0.5}, spacing: 10.}
+        <View> {
+            width: Fill,
+            height: Fit,
+            margin: {bottom: 20.}
+            align: {x: 0.5, y: 0.5}, spacing: 10.
 
             <Label> {
-                draw_label: {
+                draw_text: {
                     color: #000,
                     text_style: <REGULAR_TEXT>{font_size: 11.},
                 }
-                label: "My WeChat ID: wxid_123n43kjl123hjg"
+                text: "My WeChat ID: wxid_123n43kjl123hjg"
             }
 
             <Image> {
                 source: (IMG_QR),
-                walk: {width: 20., height: 20.}
+                width: 20.,
+                height: 20.
             }
         }
 
@@ -120,8 +134,8 @@ live_design! {
                     }
 
                     labels = {
-                        main = { label: "Invite Friends" }
-                        secondary = { label: "Invite friends to chat using the app!" }
+                        main = { text: "Invite Friends" }
+                        secondary = { text: "Invite friends to chat using the app!" }
                     }
                 }
             }
@@ -133,8 +147,8 @@ live_design! {
                     }
 
                     labels = {
-                        main = { label: "Friend Radar" }
-                        secondary = { label: "Quickly add friends nearly" }
+                        main = { text: "Friend Radar" }
+                        secondary = { text: "Quickly add friends nearly" }
                     }
                 }
             }
@@ -146,8 +160,8 @@ live_design! {
                     }
 
                     labels = {
-                        main = { label: "Join Private Group" }
-                        secondary = { label: "Join a group with friends nearby" }
+                        main = { text: "Join Private Group" }
+                        secondary = { text: "Join a group with friends nearby" }
                     }
                 }
             }
@@ -159,8 +173,8 @@ live_design! {
                     }
 
                     labels = {
-                        main = { label: "Scan QR Code" }
-                        secondary = { label: "Scan a friend's QR code" }
+                        main = { text: "Scan QR Code" }
+                        secondary = { text: "Scan a friend's QR code" }
                     }
                 }
             }
@@ -172,8 +186,8 @@ live_design! {
                     }
 
                     labels = {
-                        main = { label: "Mobile Contacts" }
-                        secondary = { label: "Add from your mobile address book" }
+                        main = { text: "Mobile Contacts" }
+                        secondary = { text: "Add from your mobile address book" }
                     }
                 }
             }
@@ -185,8 +199,8 @@ live_design! {
                     }
 
                     labels = {
-                        main = { label: "Official Accounts" }
-                        secondary = { label: "Get more services and information" }
+                        main = { text: "Official Accounts" }
+                        secondary = { text: "Get more services and information" }
                     }
                 }
             }
@@ -198,12 +212,12 @@ live_design! {
                     }
 
                     labels = {
-                        main = { label: "WeCom Contacts" }
-                        secondary = { label: "Find WeCom user by phone number" }
+                        main = { text: "WeCom Contacts" }
+                        secondary = { text: "Find WeCom user by phone number" }
                     }
                 }
 
-                divider = <Frame> {}
+                divider = <View> {}
             }
         }
     }
