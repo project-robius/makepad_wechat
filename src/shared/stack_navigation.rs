@@ -239,10 +239,12 @@ impl Widget for StackNavigation {
 
 impl StackNavigation {
     pub fn show_stack_view_by_id(&mut self, stack_view_id: LiveId, cx: &mut Cx) {
-        let mut stack_view_ref = self.stack_navigation_view(&[stack_view_id]);
-        stack_view_ref.show(cx);
-        self.active_stack_view = ActiveStackView::Active(stack_view_id);
-        self.redraw(cx);
+        if let ActiveStackView::None = self.active_stack_view {
+            let mut stack_view_ref = self.stack_navigation_view(&[stack_view_id]);
+            stack_view_ref.show(cx);
+            self.active_stack_view = ActiveStackView::Active(stack_view_id);
+            self.redraw(cx);
+        }
     }
 
     fn get_active_views(&mut self, cx: &mut Cx) -> Vec<WidgetRef> {
