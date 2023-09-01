@@ -69,21 +69,10 @@ impl ClickableView {
         event: &Event,
         dispatch_action: &mut dyn FnMut(&mut Cx, ClickableViewAction),
     ) {
-        match event.hits(cx, self.view.area()) {
-            Hit::FingerUp(fe) => {
-                if fe.is_over {
-                    dispatch_action(cx, ClickableViewAction::Click);
-                }
+        if let Hit::FingerUp(fe) = event.hits(cx, self.view.area()) {
+            if fe.was_tap() {
+                dispatch_action(cx, ClickableViewAction::Click);
             }
-            Hit::FingerHoverIn(_) => {
-                cx.set_cursor(MouseCursor::Hand);
-                //self.animator_play(cx, id!(hover.on));
-            }
-            Hit::FingerHoverOut(_) => {
-                cx.set_cursor(MouseCursor::Arrow);
-                //self.animator_play(cx, id!(hover.off));
-            }
-            _ => (),
         }
     }
 }
