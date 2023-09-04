@@ -299,11 +299,11 @@ impl AppMain for App {
             match action.action() {
                 StackViewAction::ShowMoments => {
                     ui.stack_navigation(id!(navigation))
-                        .show_stack_view_by_id(LiveId::from_str("moments_stack_view"), cx);
+                        .show_stack_view_by_id(live_id!(moments_stack_view), cx);
                 }
                 StackViewAction::ShowMyProfile => {
                     ui.stack_navigation(id!(navigation))
-                        .show_stack_view_by_id(LiveId::from_str("my_profile_stack_view"), cx);
+                        .show_stack_view_by_id(live_id!(my_profile_stack_view), cx);
                 }
                 _ => {}
             }
@@ -311,7 +311,7 @@ impl AppMain for App {
             if let DropDownAction::Select(_id, value) = action.action() {
                 if LiveValue::Bool(true) == value.enum_eq(id!(AddContact)) {
                     ui.stack_navigation(id!(navigation))
-                        .show_stack_view_by_id(LiveId::from_str("add_contact_stack_view"), cx);
+                        .show_stack_view_by_id(live_id!(add_contact_stack_view), cx);
                 }
             }
 
@@ -330,7 +330,7 @@ impl AppMain for App {
                     .chat(id!(chat));
                 chat_ref.set_chat_id(id);
 
-                stack_navigation.show_stack_view_by_id(LiveId::from_str("chat_stack_view"), cx);
+                stack_navigation.show_stack_view_by_id(live_id!(chat_stack_view), cx);
             }
         }
     }

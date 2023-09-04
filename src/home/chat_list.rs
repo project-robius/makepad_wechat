@@ -215,20 +215,21 @@ impl ChatList {
     }
 
     fn avatar_images_deps_path(&self, id: LiveId) -> Option<&str> {
-        if id == LiveId::from_str("rikarends") {
-            Some(self.avatar_images_deps[0].as_str())
-        } else if id == LiveId::from_str("jorgebejar") {
-            Some(self.avatar_images_deps[1].as_str())
-        } else if id == LiveId::from_str("julianmontesdeoca") {
-            Some(self.avatar_images_deps[2].as_str())
-        } else if id == LiveId::from_str("johndoe") {
-            Some(self.avatar_images_deps[3].as_str())
-        } else if id == LiveId::from_str("edwardtan") {
-            Some(self.avatar_images_deps[4].as_str())
-        } else if id == LiveId::from_str("wechatteam") {
-            Some(self.avatar_images_deps[5].as_str())
-        } else {
-            None
+        match id {
+            live_id!(rikarends) =>
+                Some(self.avatar_images_deps[0].as_str()),
+            live_id!(jorgebejar) =>
+                Some(self.avatar_images_deps[1].as_str()),
+            live_id!(julianmontesdeoca) =>
+                Some(self.avatar_images_deps[2].as_str()),
+            live_id!(johndoe) =>
+                Some(self.avatar_images_deps[3].as_str()),
+            live_id!(edwardtan) =>
+                Some(self.avatar_images_deps[4].as_str()),
+            live_id!(wechatteam) =>
+                Some(self.avatar_images_deps[5].as_str()),
+            _ =>
+                None
         }
     }
 }
