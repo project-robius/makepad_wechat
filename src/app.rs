@@ -295,36 +295,33 @@ impl AppMain for App {
             ),
         );
 
-        let mut navigation = ui.stack_navigation(id!(navigation));
-        let mut navigation_destinations = HashMap::new();
-        navigation_destinations.insert(StackViewAction::ShowAddContact, live_id!(add_contact_stack_view));
-        navigation_destinations.insert(StackViewAction::ShowMoments, live_id!(moments_stack_view));
-        navigation_destinations.insert(StackViewAction::ShowMyProfile, live_id!(my_profile_stack_view));
-
-        navigation.handle_stack_view_actions(
-            cx,
-            &actions,
-            &navigation_destinations
-        );
-
-        for action in actions {
-            if let ChatListAction::Click(id) = action.action() {
+        for action in &actions {
+            if let ChatListAction::Selected(id) = action.action() {
                 let db = Db::new();
 
-                let mut stack_navigation = ui.stack_navigation(id!(navigation));
+                let stack_navigation = ui.stack_navigation(id!(navigation));
                 if let Some(chat_entry) = db.get_chat(id) {
-                    stack_navigation
-                        .label(id!(chat_stack_view.title))
-                        .set_text(&chat_entry.username);
+                    stack_navigation.set_title(live_id!(chat_stack_view), &chat_entry.username);
                 }
 
                 let chat_ref = stack_navigation
                     .view(id!(chat_stack_view.chat_screen))
                     .chat(id!(chat));
                 chat_ref.set_chat_id(id);
-
-                stack_navigation.show_stack_view_by_id(live_id!(chat_stack_view), cx);
             }
         }
+
+        let mut navigation = ui.stack_navigation(id!(navigation));
+        let mut navigation_destinations = HashMap::new();
+        navigation_destinations.insert(StackViewAction::ShowAddContact, live_id!(add_contact_stack_view));
+        navigation_destinations.insert(StackViewAction::ShowMoments, live_id!(moments_stack_view));
+        navigation_destinations.insert(StackViewAction::ShowMyProfile, live_id!(my_profile_stack_view));
+        navigation_destinations.insert(StackViewAction::ShowChat, live_id!(chat_stack_view));
+
+        navigation.handle_stack_view_actions(
+            cx,
+            &actions,
+            &navigation_destinations
+        );
     }
 }

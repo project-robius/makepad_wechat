@@ -6,4 +6,5 @@ pub enum StackViewAction {
     ShowAddContact,
     ShowMoments,
     ShowMyProfile,
+    ShowChat,
 }

@@ -1,8 +1,9 @@
 use std::collections::HashMap;
 
+use makepad_widgets::*;
 use crate::api::{ChatEntry, Db};
 use crate::shared::clickable_view::*;
-use makepad_widgets::*;
+use crate::shared::stack_view_action::StackViewAction;
 
 live_design! {
     import makepad_widgets::view::*;
@@ -87,7 +88,7 @@ pub type ChatId = u64;
 
 #[derive(Debug, Clone, WidgetAction)]
 pub enum ChatListAction {
-    Click(ChatId),
+    Selected(ChatId),
     None,
 }
 
@@ -127,9 +128,8 @@ impl Widget for ChatList {
         event: &Event,
         dispatch_action: &mut dyn FnMut(&mut Cx, WidgetActionItem),
     ) {
-        let widget_uid = self.widget_uid();
         self.handle_event_with(cx, event, &mut |cx, action| {
-            dispatch_action(cx, WidgetActionItem::new(action.into(), widget_uid));
+            dispatch_action(cx, action);
         });
     }
 
@@ -152,7 +152,7 @@ impl ChatList {
         &mut self,
         cx: &mut Cx,
         event: &Event,
-        dispatch_action: &mut dyn FnMut(&mut Cx, ChatListAction),
+        dispatch_action: &mut dyn FnMut(&mut Cx, WidgetActionItem),
     ) {
         let mut actions = Vec::new();
         self.list_view
@@ -162,9 +162,17 @@ impl ChatList {
                 }
             });
 
+        let widget_uid = self.widget_uid();
         for (chat_id, action) in actions {
             if let ClickableViewAction::Click = action.action() {
-                dispatch_action(cx, ChatListAction::Click(*chat_id))
+                dispatch_action(
+                    cx,
+                    WidgetActionItem::new(ChatListAction::Selected(*chat_id).into(), widget_uid)
+                );
+                dispatch_action(
+                    cx,
+                    WidgetActionItem::new(StackViewAction::ShowChat.into(), widget_uid)
+                );
             }
         }
     }
