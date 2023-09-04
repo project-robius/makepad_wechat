@@ -2,10 +2,8 @@ use makepad_widgets::*;
 use std::iter;
 
 live_design! {
-    import makepad_widgets::view::*;
-    import makepad_widgets::label::*;
-    import makepad_widgets::list_view::ListView;
-    import makepad_widgets::image::*;
+    import makepad_widgets::base::*;
+    import makepad_widgets::theme_desktop_dark::*;
 
     import crate::shared::styles::*;
     import crate::shared::helpers::*;

@@ -7,9 +7,8 @@ use crate::shared::stack_view_action::StackViewAction;
 use makepad_widgets::*;
 
 live_design! {
-    import makepad_widgets::desktop_window::DesktopWindow
-    import makepad_widgets::view::*
-    import makepad_widgets::radio_button::RadioButton
+    import makepad_widgets::base::*;
+    import makepad_widgets::theme_desktop_dark::*;
 
     import crate::home::home_screen::HomeScreen
     import crate::home::chat_screen::ChatScreen
@@ -235,7 +234,6 @@ impl App {}
 
 impl LiveHook for App {
     fn before_live_design(cx: &mut Cx) {
-        // TODO: should we make each module call live_design on its submodules (instead of here)?
         makepad_widgets::live_design(cx);
 
         // shared

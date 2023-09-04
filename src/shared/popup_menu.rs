@@ -4,7 +4,8 @@ use makepad_widgets::widget::*;
 
 live_design! {
     import makepad_draw::shader::std::*;
-    import makepad_widgets::theme::*;
+    import makepad_widgets::theme_desktop_dark::*;
+    import crate::shared::styles::*;
 
     DrawBg = {{DrawBg}} {
         instance color: #4
@@ -26,14 +27,16 @@ live_design! {
     }
 
     DrawName = {{DrawName}} {
+        text_style: <REGULAR_TEXT>{font_size: 9},
+
         fn get_color(self) -> vec4 {
             return mix(
                 mix(
-                    COLOR_TEXT_DEFAULT,
-                    COLOR_TEXT_SELECTED,
+                    THEME_COLOR_TEXT_DEFAULT,
+                    THEME_COLOR_TEXT_SELECTED,
                     self.selected
                 ),
-                COLOR_TEXT_HOVER,
+                THEME_COLOR_TEXT_HOVER,
                 self.hover
             )
         }
@@ -46,7 +49,7 @@ live_design! {
         width: Fill,
         height: Fit
 
-        icon_walk: {width: 15., height: Fit, margin: 0.}
+        icon_walk: {width: 15., height: Fit, margin: {bottom: 3.}}
         draw_icon: {
             color: #f2f2f2;
             brightness: 0.8;
@@ -397,7 +400,6 @@ impl MenuItem {
         self.draw_bg.begin(cx, self.walk, self.layout);
         self.draw_icon.svg_file = icon;
         self.draw_icon.draw_walk(cx, self.icon_walk);
-
         self.draw_name
             .draw_walk(cx, Walk::fit(), Align { x: 0., y: 0.5 }, label);
         self.draw_bg.end(cx);

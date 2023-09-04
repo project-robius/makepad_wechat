@@ -9,7 +9,7 @@ use crate::shared::popup_menu::*;
 
 live_design! {
     import makepad_draw::shader::std::*;
-    import makepad_widgets::theme::*;
+    import makepad_widgets::theme_desktop_dark::*;
     import crate::shared::popup_menu::*;
 
     DropDown = {{DropDown}} {

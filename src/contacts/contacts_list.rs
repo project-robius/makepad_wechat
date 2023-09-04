@@ -4,12 +4,8 @@ use makepad_widgets::*;
 
 live_design! {
     import makepad_draw::shader::std::*;
-    import makepad_widgets::view::*;
-    import makepad_widgets::label::Label;
-    import makepad_widgets::button::Button;
-    import makepad_widgets::text_input::TextInput;
-    import makepad_widgets::list_view::ListView;
-    import makepad_widgets::image::*;
+    import makepad_widgets::base::*;
+    import makepad_widgets::theme_desktop_dark::*;
 
     import crate::shared::styles::*;
     import crate::shared::helpers::Divider;

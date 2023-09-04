@@ -2,9 +2,8 @@ use crate::contacts::contact_info::*;
 use makepad_widgets::*;
 
 live_design! {
-    import makepad_widgets::view::*;
-    import makepad_widgets::label::Label;
-    import makepad_widgets::image::*;
+    import makepad_widgets::base::*;
+    import makepad_widgets::theme_desktop_dark::*;
 
     IMG_DEFAULT_AVATAR = dep("crate://self/resources/img/default_avatar.png")
     IMG_FILE_TRANSFER_AVATAR = dep("crate://self/resources/img/file_transfer_avatar.png")
