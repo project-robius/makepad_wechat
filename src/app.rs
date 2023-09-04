@@ -228,9 +228,20 @@ app_main!(App);
 pub struct App {
     #[live]
     ui: WidgetRef,
+
+    #[rust]
+    navigation_destinations: HashMap<StackViewAction, LiveId>,
 }
 
-impl App {}
+impl App {
+    fn init_navigation_destinations(&mut self) {
+        self.navigation_destinations = HashMap::new();
+        self.navigation_destinations.insert(StackViewAction::ShowAddContact, live_id!(add_contact_stack_view));
+        self.navigation_destinations.insert(StackViewAction::ShowMoments, live_id!(moments_stack_view));
+        self.navigation_destinations.insert(StackViewAction::ShowMyProfile, live_id!(my_profile_stack_view));
+        self.navigation_destinations.insert(StackViewAction::ShowChat, live_id!(chat_stack_view));
+    }
+}
 
 impl LiveHook for App {
     fn before_live_design(cx: &mut Cx) {
@@ -265,6 +276,10 @@ impl LiveHook for App {
         // profile
         crate::profile::profile_screen::live_design(cx);
         crate::profile::my_profile_screen::live_design(cx);
+    }
+
+    fn after_new_from_doc(&mut self, _cx: &mut Cx) {
+        self.init_navigation_destinations();
     }
 }
 
@@ -320,7 +335,7 @@ impl AppMain for App {
         navigation.handle_stack_view_actions(
             cx,
             &actions,
-            &navigation_destinations
+            &self.navigation_destinations
         );
     }
 }
