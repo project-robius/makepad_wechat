@@ -1,7 +1,7 @@
 use makepad_widgets::widget::WidgetCache;
 use makepad_widgets::*;
 use crate::shared::stack_view_action::StackViewAction;
-use crate::shared::dropdown_menu::DropDownAction;
+use crate::shared::dropdown_menu::*;
 
 live_design! {
     import makepad_draw::shader::std::*;
@@ -216,13 +216,9 @@ impl HeaderDropDownMenu {
         dispatch_action: &mut dyn FnMut(&mut Cx, StackViewAction),
     ) {
         let actions = self.view.handle_widget_event(cx, event);
-        for action in actions {
-            if let DropDownAction::Select(_id, value) = action.action() {
-                if LiveValue::Bool(true) == value.enum_eq(id!(AddContact)) {
-                    dispatch_action(cx, StackViewAction::ShowAddContact);
-                    break;
-                }
-            }
+
+        if self.wechat_drop_down(id!(menu)).item_clicked(id!(AddContact), &actions) {
+            dispatch_action(cx, StackViewAction::ShowAddContact);
         }
     }
 }
