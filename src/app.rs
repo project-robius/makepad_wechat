@@ -274,10 +274,9 @@ impl AppMain for App {
             return self.ui.draw_widget_all(&mut Cx2d::new(cx, event));
         }
 
-        let ui = self.ui.clone();
-        let actions = ui.handle_widget_event(cx, event);
+        let actions = self.ui.handle_widget_event(cx, event);
 
-        ui.radio_button_set(ids!(
+        self.ui.radio_button_set(ids!(
             mobile_modes.tab1,
             mobile_modes.tab2,
             mobile_modes.tab3,
@@ -285,7 +284,7 @@ impl AppMain for App {
         ))
         .selected_to_visible(
             cx,
-            &ui,
+            &self.ui,
             &actions,
             ids!(
                 application_pages.tab1_frame,
@@ -299,7 +298,7 @@ impl AppMain for App {
             if let ChatListAction::Selected(id) = action.action() {
                 let db = Db::new();
 
-                let stack_navigation = ui.stack_navigation(id!(navigation));
+                let stack_navigation = self.ui.stack_navigation(id!(navigation));
                 if let Some(chat_entry) = db.get_chat(id) {
                     stack_navigation.set_title(live_id!(chat_stack_view), &chat_entry.username);
                 }
@@ -311,7 +310,7 @@ impl AppMain for App {
             }
         }
 
-        let mut navigation = ui.stack_navigation(id!(navigation));
+        let mut navigation = self.ui.stack_navigation(id!(navigation));
         let mut navigation_destinations = HashMap::new();
         navigation_destinations.insert(StackViewAction::ShowAddContact, live_id!(add_contact_stack_view));
         navigation_destinations.insert(StackViewAction::ShowMoments, live_id!(moments_stack_view));
