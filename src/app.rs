@@ -1,10 +1,10 @@
 use crate::api::Db;
 use crate::home::chat_list::ChatListAction;
 use crate::home::chat_screen::*;
-use crate::shared::dropdown_menu::DropDownAction;
 use crate::shared::stack_navigation::*;
 use crate::shared::stack_view_action::StackViewAction;
 use makepad_widgets::*;
+use std::collections::HashMap;
 
 live_design! {
     import makepad_widgets::base::*;
@@ -295,26 +295,19 @@ impl AppMain for App {
             ),
         );
 
+        let mut navigation = ui.stack_navigation(id!(navigation));
+        let mut navigation_destinations = HashMap::new();
+        navigation_destinations.insert(StackViewAction::ShowAddContact, live_id!(add_contact_stack_view));
+        navigation_destinations.insert(StackViewAction::ShowMoments, live_id!(moments_stack_view));
+        navigation_destinations.insert(StackViewAction::ShowMyProfile, live_id!(my_profile_stack_view));
+
+        navigation.handle_stack_view_actions(
+            cx,
+            &actions,
+            &navigation_destinations
+        );
+
         for action in actions {
-            match action.action() {
-                StackViewAction::ShowMoments => {
-                    ui.stack_navigation(id!(navigation))
-                        .show_stack_view_by_id(live_id!(moments_stack_view), cx);
-                }
-                StackViewAction::ShowMyProfile => {
-                    ui.stack_navigation(id!(navigation))
-                        .show_stack_view_by_id(live_id!(my_profile_stack_view), cx);
-                }
-                _ => {}
-            }
-
-            if let DropDownAction::Select(_id, value) = action.action() {
-                if LiveValue::Bool(true) == value.enum_eq(id!(AddContact)) {
-                    ui.stack_navigation(id!(navigation))
-                        .show_stack_view_by_id(live_id!(add_contact_stack_view), cx);
-                }
-            }
-
             if let ChatListAction::Click(id) = action.action() {
                 let db = Db::new();
 

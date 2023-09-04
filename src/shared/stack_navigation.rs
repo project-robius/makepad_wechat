@@ -1,5 +1,7 @@
 use makepad_widgets::widget::WidgetCache;
 use makepad_widgets::*;
+use crate::shared::stack_view_action::StackViewAction;
+use std::collections::HashMap;
 
 live_design! {
     import makepad_widgets::base::*;
@@ -279,6 +281,16 @@ impl StackNavigationRef {
     pub fn show_stack_view_by_id(&mut self, stack_view_id: LiveId, cx: &mut Cx) {
         if let Some(mut inner) = self.borrow_mut() {
             inner.show_stack_view_by_id(stack_view_id, cx);
+        }
+    }
+
+    pub fn handle_stack_view_actions(&mut self, cx: &mut Cx, actions: &WidgetActions, destinations: &HashMap<StackViewAction, LiveId>) {
+        for action in actions {
+            let stack_view_action = action.action();
+            if let Some(stack_view_id) = destinations.get(&stack_view_action) {
+                self.show_stack_view_by_id(*stack_view_id, cx);
+                break;
+            }
         }
     }
 }
