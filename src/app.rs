@@ -233,16 +233,6 @@ pub struct App {
     navigation_destinations: HashMap<StackViewAction, LiveId>,
 }
 
-impl App {
-    fn init_navigation_destinations(&mut self) {
-        self.navigation_destinations = HashMap::new();
-        self.navigation_destinations.insert(StackViewAction::ShowAddContact, live_id!(add_contact_stack_view));
-        self.navigation_destinations.insert(StackViewAction::ShowMoments, live_id!(moments_stack_view));
-        self.navigation_destinations.insert(StackViewAction::ShowMyProfile, live_id!(my_profile_stack_view));
-        self.navigation_destinations.insert(StackViewAction::ShowChat, live_id!(chat_stack_view));
-    }
-}
-
 impl LiveHook for App {
     fn before_live_design(cx: &mut Cx) {
         makepad_widgets::live_design(cx);
@@ -309,33 +299,44 @@ impl AppMain for App {
             ),
         );
 
-        for action in &actions {
+
+        self.update_chat_list_info(&actions);
+
+        let mut navigation = self.ui.stack_navigation(id!(navigation));
+        navigation.handle_stack_view_actions(
+            cx,
+            &actions,
+            &self.navigation_destinations
+        );
+    }
+}
+
+impl App {
+    fn init_navigation_destinations(&mut self) {
+        self.navigation_destinations = HashMap::new();
+        self.navigation_destinations.insert(StackViewAction::ShowAddContact, live_id!(add_contact_stack_view));
+        self.navigation_destinations.insert(StackViewAction::ShowMoments, live_id!(moments_stack_view));
+        self.navigation_destinations.insert(StackViewAction::ShowMyProfile, live_id!(my_profile_stack_view));
+        self.navigation_destinations.insert(StackViewAction::ShowChat, live_id!(chat_stack_view));
+    }
+
+    fn update_chat_list_info(&mut self, actions: &WidgetActions) {
+        for action in actions {
             if let ChatListAction::Selected(id) = action.action() {
                 let db = Db::new();
 
+                // Update the title of the chat screen
                 let stack_navigation = self.ui.stack_navigation(id!(navigation));
                 if let Some(chat_entry) = db.get_chat(id) {
                     stack_navigation.set_title(live_id!(chat_stack_view), &chat_entry.username);
                 }
 
+                // Set the chat data into the view
                 let chat_ref = stack_navigation
                     .view(id!(chat_stack_view.chat_screen))
                     .chat(id!(chat));
                 chat_ref.set_chat_id(id);
             }
         }
-
-        let mut navigation = self.ui.stack_navigation(id!(navigation));
-        let mut navigation_destinations = HashMap::new();
-        navigation_destinations.insert(StackViewAction::ShowAddContact, live_id!(add_contact_stack_view));
-        navigation_destinations.insert(StackViewAction::ShowMoments, live_id!(moments_stack_view));
-        navigation_destinations.insert(StackViewAction::ShowMyProfile, live_id!(my_profile_stack_view));
-        navigation_destinations.insert(StackViewAction::ShowChat, live_id!(chat_stack_view));
-
-        navigation.handle_stack_view_actions(
-            cx,
-            &actions,
-            &self.navigation_destinations
-        );
     }
 }
