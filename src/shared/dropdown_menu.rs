@@ -12,7 +12,7 @@ live_design! {
     import makepad_widgets::theme_desktop_dark::*;
     import crate::shared::popup_menu::*;
 
-    DropDown = {{DropDown}} {
+    DropDown = {{WechatDropDown}} {
         width: Fit,
         height: Fit,
         margin: {left: 1.0, right: 1.0, top: 1.0, bottom: 1.0},
@@ -82,7 +82,7 @@ live_design! {
 }
 
 #[derive(Live)]
-pub struct DropDown {
+pub struct WechatDropDown {
     #[animator]
     animator: Animator,
 
@@ -123,9 +123,9 @@ pub struct DropDown {
     selected_item: usize,
 }
 
-impl LiveHook for DropDown {
+impl LiveHook for WechatDropDown {
     fn before_live_design(cx: &mut Cx) {
-        register_widget!(cx, DropDown)
+        register_widget!(cx, WechatDropDown)
     }
 
     fn after_apply(&mut self, cx: &mut Cx, from: ApplyFrom, _index: usize, _nodes: &[LiveNode]) {
@@ -144,8 +144,8 @@ impl LiveHook for DropDown {
         });
     }
 }
-#[derive(Clone, WidgetAction)]
-pub enum DropDownAction {
+#[derive(Clone, WidgetAction, Debug)]
+pub enum WechatDropDownAction {
     Select(usize, LiveValue),
     None,
 }
@@ -155,7 +155,7 @@ struct PopupMenuGlobal {
     map: Rc<RefCell<ComponentMap<LivePtr, PopupMenu>>>,
 }
 
-impl DropDown {
+impl WechatDropDown {
     pub fn toggle_open(&mut self, cx: &mut Cx) {
         if self.is_open {
             self.set_closed(cx);
@@ -185,7 +185,7 @@ impl DropDown {
         &mut self,
         cx: &mut Cx,
         event: &Event,
-        dispatch_action: &mut dyn FnMut(&mut Cx, DropDownAction),
+        dispatch_action: &mut dyn FnMut(&mut Cx, WechatDropDownAction),
     ) {
         self.animator_handle_event(cx, event);
 
@@ -202,7 +202,7 @@ impl DropDown {
                     self.selected_item = node_id.0 .0 as usize;
                     dispatch_action(
                         cx,
-                        DropDownAction::Select(
+                        WechatDropDownAction::Select(
                             self.selected_item,
                             self.values
                                 .get(self.selected_item)
@@ -239,7 +239,7 @@ impl DropDown {
                         self.selected_item -= 1;
                         dispatch_action(
                             cx,
-                            DropDownAction::Select(
+                            WechatDropDownAction::Select(
                                 self.selected_item,
                                 self.values[self.selected_item].clone(),
                             ),
@@ -253,7 +253,7 @@ impl DropDown {
                         self.selected_item += 1;
                         dispatch_action(
                             cx,
-                            DropDownAction::Select(
+                            WechatDropDownAction::Select(
                                 self.selected_item,
                                 self.values[self.selected_item].clone(),
                             ),
@@ -317,7 +317,8 @@ impl DropDown {
     }
 }
 
-impl Widget for DropDown {
+// It is named WechatDropDown because DropDown is already a widget in makepad_widgets
+impl Widget for WechatDropDown {
     fn widget_to_data(
         &self,
         _cx: &mut Cx,
@@ -326,7 +327,7 @@ impl Widget for DropDown {
         path: &[LiveId],
     ) -> bool {
         match actions.single_action(self.widget_uid()) {
-            DropDownAction::Select(_, value) => {
+            WechatDropDownAction::Select(_, value) => {
                 nodes.write_field_value(path, value.clone());
                 true
             }
@@ -374,4 +375,15 @@ impl Widget for DropDown {
 }
 
 #[derive(Clone, PartialEq, WidgetRef)]
-pub struct DropDownRef(WidgetRef);
+pub struct WechatDropDownRef(WidgetRef);
+
+impl WechatDropDownRef {
+    pub fn item_clicked(&mut self, item_id: &[LiveId], actions: &WidgetActions) -> bool {
+        if let Some(item) = actions.find_single_action(self.widget_uid()) {
+            if let WechatDropDownAction::Select(_id, value) = item.action() {
+                return LiveValue::Bool(true) == value.enum_eq(item_id)
+            }
+        }
+        return false
+    }
+}

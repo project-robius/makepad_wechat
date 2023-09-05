@@ -1,4 +1,7 @@
+use makepad_widgets::widget::WidgetCache;
 use makepad_widgets::*;
+use crate::shared::stack_view_action::StackViewAction;
+use crate::shared::dropdown_menu::*;
 
 live_design! {
     import makepad_draw::shader::std::*;
@@ -9,6 +12,27 @@ live_design! {
     import crate::shared::helpers::FillerX;
     import crate::shared::dropdown_menu::DropDown;
 
+    SimpleHeaderContent = <View> {
+        width: Fill, height: Fit
+        flow: Right, align: {x: 0.5, y: 0.5}
+
+        <FillerX> {}
+
+        title_container = <View> {
+            width: Fill, height: Fit
+            align: {x: 0.5, y: 0.5}
+
+            title = <Label> {
+                width: Fit, height: Fit
+                draw_text: {
+                    color: #000,
+                    text_style: <TITLE_TEXT>{},
+                },
+                text: "微信"
+            }
+        }
+    }
+
     SimpleHeader = <View> {
         width: Fill , height: Fit, margin: 0
         padding: {bottom: 7., top: 50.}, align: {x: 0.5, y: 0.0}, spacing: 0.0, flow: Overlay
@@ -17,26 +41,7 @@ live_design! {
             color: #EDEDED
         }
 
-        content = <View> {
-            width: Fill, height: Fit
-            flow: Right, align: {x: 0.5, y: 0.5}
-
-            <FillerX> {}
-
-            title_container = <View> {
-                width: Fill, height: Fit
-                align: {x: 0.5, y: 0.5}
-
-                title = <Label> {
-                    width: Fit, height: Fit
-                    draw_text: {
-                        color: #000,
-                        text_style: <TITLE_TEXT>{},
-                    },
-                    text: "微信"
-                }
-            }
-        }
+        content = <SimpleHeaderContent> {}
     }
 
     HeaderWithLeftActionButton = <SimpleHeader> {
@@ -105,8 +110,15 @@ live_design! {
         }
     }
 
-    HeaderDropDownMenu = <SimpleHeader> {
-        content = {
+    HeaderDropDownMenu = {{HeaderDropDownMenu}} {
+        width: Fill, height: Fit, margin: 0
+        padding: {bottom: 7., top: 50.}, align: {x: 0.5, y: 0.0}, spacing: 0.0, flow: Overlay
+        show_bg: true
+        draw_bg: {
+            color: #EDEDED
+        }
+
+        content = <SimpleHeaderContent> {
             width: Fill, height: Fit
             flow: Right, align: {x: 0.5, y: 0.5}
 
@@ -149,6 +161,64 @@ live_design! {
                     ]
                 }
             }
+        }
+    }
+}
+
+#[derive(Live)]
+pub struct HeaderDropDownMenu {
+    #[deref]
+    view: View,
+}
+
+impl LiveHook for HeaderDropDownMenu {
+    fn before_live_design(cx: &mut Cx) {
+        register_widget!(cx, HeaderDropDownMenu);
+    }
+}
+
+impl Widget for HeaderDropDownMenu {
+    fn handle_widget_event_with(
+        &mut self,
+        cx: &mut Cx,
+        event: &Event,
+        dispatch_action: &mut dyn FnMut(&mut Cx, WidgetActionItem),
+    ) {
+        let uid = self.widget_uid();
+        self.handle_event_with(cx, event, &mut |cx, action: StackViewAction| {
+            dispatch_action(cx, WidgetActionItem::new(action.into(), uid));
+        });
+    }
+
+    fn redraw(&mut self, cx: &mut Cx) {
+        self.view.redraw(cx);
+    }
+
+    fn walk(&self) -> Walk {
+        self.view.walk()
+    }
+
+    fn find_widgets(&mut self, path: &[LiveId], cached: WidgetCache, results: &mut WidgetSet) {
+        self.view.find_widgets(path, cached, results);
+    }
+
+    fn draw_walk_widget(&mut self, cx: &mut Cx2d, walk: Walk) -> WidgetDraw {
+        let _ = self.view.draw_walk_widget(cx, walk);
+        WidgetDraw::done()
+    }
+}
+
+impl HeaderDropDownMenu {
+    pub fn handle_event_with(
+        &mut self,
+        cx: &mut Cx,
+        event: &Event,
+        dispatch_action: &mut dyn FnMut(&mut Cx, StackViewAction),
+    ) {
+        let actions = self.view.handle_widget_event(cx, event);
+
+        if self.wechat_drop_down(id!(menu)).item_clicked(id!(AddContact), &actions) {
+            dispatch_action(cx, StackViewAction::ShowAddContact);
         }
     }
 }

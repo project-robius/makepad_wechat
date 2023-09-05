@@ -1,10 +1,10 @@
 use crate::api::Db;
 use crate::home::chat_list::ChatListAction;
 use crate::home::chat_screen::*;
-use crate::shared::dropdown_menu::DropDownAction;
 use crate::shared::stack_navigation::*;
 use crate::shared::stack_view_action::StackViewAction;
 use makepad_widgets::*;
+use std::collections::HashMap;
 
 live_design! {
     import makepad_widgets::base::*;
@@ -228,9 +228,10 @@ app_main!(App);
 pub struct App {
     #[live]
     ui: WidgetRef,
-}
 
-impl App {}
+    #[rust]
+    navigation_destinations: HashMap<StackViewAction, LiveId>,
+}
 
 impl LiveHook for App {
     fn before_live_design(cx: &mut Cx) {
@@ -266,6 +267,10 @@ impl LiveHook for App {
         crate::profile::profile_screen::live_design(cx);
         crate::profile::my_profile_screen::live_design(cx);
     }
+
+    fn after_new_from_doc(&mut self, _cx: &mut Cx) {
+        self.init_navigation_destinations();
+    }
 }
 
 impl AppMain for App {
@@ -274,10 +279,9 @@ impl AppMain for App {
             return self.ui.draw_widget_all(&mut Cx2d::new(cx, event));
         }
 
-        let ui = self.ui.clone();
-        let actions = ui.handle_widget_event(cx, event);
+        let actions = self.ui.handle_widget_event(cx, event);
 
-        ui.radio_button_set(ids!(
+        self.ui.radio_button_set(ids!(
             mobile_modes.tab1,
             mobile_modes.tab2,
             mobile_modes.tab3,
@@ -285,7 +289,7 @@ impl AppMain for App {
         ))
         .selected_to_visible(
             cx,
-            &ui,
+            &self.ui,
             &actions,
             ids!(
                 application_pages.tab1_frame,
@@ -295,42 +299,43 @@ impl AppMain for App {
             ),
         );
 
+
+        self.update_chat_list_info(&actions);
+
+        let mut navigation = self.ui.stack_navigation(id!(navigation));
+        navigation.handle_stack_view_actions(
+            cx,
+            &actions,
+            &self.navigation_destinations
+        );
+    }
+}
+
+impl App {
+    fn init_navigation_destinations(&mut self) {
+        self.navigation_destinations = HashMap::new();
+        self.navigation_destinations.insert(StackViewAction::ShowAddContact, live_id!(add_contact_stack_view));
+        self.navigation_destinations.insert(StackViewAction::ShowMoments, live_id!(moments_stack_view));
+        self.navigation_destinations.insert(StackViewAction::ShowMyProfile, live_id!(my_profile_stack_view));
+        self.navigation_destinations.insert(StackViewAction::ShowChat, live_id!(chat_stack_view));
+    }
+
+    fn update_chat_list_info(&mut self, actions: &WidgetActions) {
         for action in actions {
-            match action.action() {
-                StackViewAction::ShowMoments => {
-                    ui.stack_navigation(id!(navigation))
-                        .show_stack_view_by_id(LiveId::from_str("moments_stack_view"), cx);
-                }
-                StackViewAction::ShowMyProfile => {
-                    ui.stack_navigation(id!(navigation))
-                        .show_stack_view_by_id(LiveId::from_str("my_profile_stack_view"), cx);
-                }
-                _ => {}
-            }
-
-            if let DropDownAction::Select(_id, value) = action.action() {
-                if LiveValue::Bool(true) == value.enum_eq(id!(AddContact)) {
-                    ui.stack_navigation(id!(navigation))
-                        .show_stack_view_by_id(LiveId::from_str("add_contact_stack_view"), cx);
-                }
-            }
-
-            if let ChatListAction::Click(id) = action.action() {
+            if let ChatListAction::Selected(id) = action.action() {
                 let db = Db::new();
 
-                let mut stack_navigation = ui.stack_navigation(id!(navigation));
+                // Update the title of the chat screen
+                let stack_navigation = self.ui.stack_navigation(id!(navigation));
                 if let Some(chat_entry) = db.get_chat(id) {
-                    stack_navigation
-                        .label(id!(chat_stack_view.title))
-                        .set_text(&chat_entry.username);
+                    stack_navigation.set_title(live_id!(chat_stack_view), &chat_entry.username);
                 }
 
+                // Set the chat data into the view
                 let chat_ref = stack_navigation
                     .view(id!(chat_stack_view.chat_screen))
                     .chat(id!(chat));
                 chat_ref.set_chat_id(id);
-
-                stack_navigation.show_stack_view_by_id(LiveId::from_str("chat_stack_view"), cx);
             }
         }
     }
