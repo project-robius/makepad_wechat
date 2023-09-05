@@ -256,9 +256,6 @@ impl Chat {
     pub fn draw_walk(&mut self, cx: &mut Cx2d, walk: Walk) {
         let messages_entries_count = self.messages.len() as u64;
 
-        // TODO: when it's implemented, flag ListView to render/scroll upwards
-        // currently we'd rely on workarounds for scrolling to the latest item and limiting extra bottom space
-
         cx.begin_turtle(walk, self.layout);
 
         let range_end = if messages_entries_count > 0 {
@@ -266,7 +263,7 @@ impl Chat {
         } else {
             0
         };
-        self.list_view.set_item_range(0, range_end, 1);
+        self.list_view.set_item_range(cx, 0, range_end);
 
         while self.list_view.draw_widget(cx).hook_widget().is_some() {
             while let Some(item_id) = self.list_view.next_visible_item(cx) {

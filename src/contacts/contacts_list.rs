@@ -100,6 +100,7 @@ live_design! {
         flow: Down
 
         list_view: <ListView> {
+            tail_range: false,
             width: Fill,
             height: Fill,
             flow: Down, spacing: 0.0
@@ -209,7 +210,7 @@ impl ContactsList {
         let groups_count: u64 = grouped_data.len() as u64;
 
         cx.begin_turtle(walk, self.layout);
-        self.list_view.set_item_range(0, groups_count + 3, 1);
+        self.list_view.set_item_range(cx, 0, groups_count + 3);
 
         while self.list_view.draw_widget(cx).hook_widget().is_some() {
             while let Some(item_id) = self.list_view.next_visible_item(cx) {

@@ -124,6 +124,8 @@ live_design! {
         width: Fill, height: Fill
         flow: Down
         list_view: <ListView> {
+            tail_range: false,
+
             width: Fill, height: Fill
             flow: Down, spacing: 0.0
 
@@ -220,7 +222,7 @@ impl MomentList {
 
         cx.begin_turtle(walk, self.layout);
         self.list_view
-            .set_item_range(0, moment_entries_count + 1, 1);
+            .set_item_range(cx, 0, moment_entries_count + 1);
 
         while self.list_view.draw_widget(cx).hook_widget().is_some() {
             while let Some(item_id) = self.list_view.next_visible_item(cx) {
