@@ -144,6 +144,8 @@ live_design! {
         ]
 
         list_view: <ListView> {
+            auto_tail: true,
+
             width: Fill, height: Fill
             flow: Down, spacing: 0.
 

@@ -75,8 +75,6 @@ live_design! {
         width: Fill, height: Fill
         flow: Down
         list_view: <ListView> {
-            tail_range: false,
-
             width: Fill, height: Fill
             flow: Down, spacing: 0.0
 
