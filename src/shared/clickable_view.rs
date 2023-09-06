@@ -70,10 +70,14 @@ impl ClickableView {
         event: &Event,
         dispatch_action: &mut dyn FnMut(&mut Cx, ClickableViewAction),
     ) {
-        if let Hit::FingerUp(fe) = event.hits(cx, self.view.area()) {
-            if fe.was_tap() {
+        match event.hits(cx, self.view.area()){
+            Hit::FingerDown(_fe) => {
+                cx.set_key_focus(self.view.area());
+            }
+            Hit::FingerUp(fe) => if fe.was_tap() {
                 dispatch_action(cx, ClickableViewAction::Click);
             }
+            _ =>()
         }
     }
 }
