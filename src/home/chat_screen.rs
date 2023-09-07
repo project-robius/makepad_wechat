@@ -178,7 +178,7 @@ live_design! {
                 show_bg: false
                 input = {
                     width: Fill, height: Fit, margin: 0
-                    text: " "
+                    empty_message: " "
                     draw_text:{
                         text_style:<REGULAR_TEXT>{font_size: 11},
 

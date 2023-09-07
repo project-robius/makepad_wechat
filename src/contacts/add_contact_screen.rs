@@ -100,7 +100,7 @@ live_design! {
 
         <SearchBar> {
             input = {
-                text: "Account/Mobile"
+                empty_message: "Account/Mobile"
             }
         }
 

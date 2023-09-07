@@ -19,7 +19,7 @@ live_design! {
             clip_x: true,
             clip_y: true,
             align: {y: 0.5}
-            text: "Search"
+            empty_message: "Search"
             draw_bg: {
                 color: #fff
             }

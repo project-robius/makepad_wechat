@@ -75,6 +75,7 @@ live_design! {
         width: Fill, height: Fill
         flow: Down
         list_view: <ListView> {
+            keep_invisible: true
             width: Fill, height: Fill
             flow: Down, spacing: 0.0
 
