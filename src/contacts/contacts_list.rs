@@ -156,15 +156,15 @@ impl LiveHook for ContactsList {
                 kind: ContactKind::People,
             },
             ContactInfo {
-                name: "Jorge Bejar".to_string(),
+                name: "Chris P. Bacon".to_string(),
                 kind: ContactKind::People,
             },
             ContactInfo {
-                name: "Julian Montes de Oca".to_string(),
+                name: "Marsha Mellow".to_string(),
                 kind: ContactKind::People,
             },
             ContactInfo {
-                name: "Rik Arends".to_string(),
+                name: "Olive Yew".to_string(),
                 kind: ContactKind::People,
             },
             ContactInfo {

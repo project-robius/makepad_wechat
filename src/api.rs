@@ -116,7 +116,7 @@ impl Db {
             chats: vec![
             ChatEntry {
                 id: 1,
-                username: "Rik Arends".to_string(),
+                username: "Olive Yew".to_string(),
                 avatar: live_id!(rikarends),
                 latest_message: MessagePreview::Text("Hi!".to_string()),
                 timestamp: "14:09".to_string(),
@@ -130,21 +130,21 @@ impl Db {
             },
             ChatEntry {
                 id: 3,
-                username: "Jorge Bejar".to_string(),
+                username: "Peg Legge".to_string(),
                 avatar: live_id!(jorgebejar),
                 latest_message: MessagePreview::Audio,
                 timestamp: "friday".to_string(),
             },
             ChatEntry {
                 id: 4,
-                username: "Julian Montes de Oca".to_string(),
+                username: "Barb Akew".to_string(),
                 avatar: live_id!(julianmontesdeoca),
                 latest_message: MessagePreview::Video,
                 timestamp: "friday".to_string(),
             },
             ChatEntry {
                 id: 5,
-                username: "Edward Tan".to_string(),
+                username: "Chris P. Bacon".to_string(),
                 avatar: live_id!(edwardtan),
                 latest_message: MessagePreview::Text("thanks ed, see you there.".to_string()),
                 timestamp: "thursday".to_string(),
