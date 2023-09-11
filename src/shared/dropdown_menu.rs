@@ -364,7 +364,7 @@ impl Widget for WechatDropDown {
         });
     }
 
-    fn walk(&self) -> Walk {
+    fn walk(&mut self, _cx: &mut Cx) -> Walk {
         self.walk
     }
 

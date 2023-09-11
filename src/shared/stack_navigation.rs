@@ -86,8 +86,8 @@ impl LiveHook for StackNavigationView {
 }
 
 impl Widget for StackNavigationView {
-    fn walk(&self) -> Walk {
-        self.view.walk()
+    fn walk(&mut self, cx: &mut Cx) -> Walk {
+        self.view.walk(cx)
     }
 
     fn redraw(&mut self, cx: &mut Cx) {

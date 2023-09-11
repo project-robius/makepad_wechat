@@ -116,7 +116,7 @@ pub struct ContactsGroup {
     #[rust]
     data: Vec<ContactInfo>,
     #[rust]
-    contacts: ComponentMap<ContactItemId,ViewRef>,
+    contacts: ComponentMap<ContactItemId,WidgetRef>,
 }
 
 impl LiveHook for ContactsGroup {
@@ -126,7 +126,7 @@ impl LiveHook for ContactsGroup {
 }
 
 impl Widget for ContactsGroup {
-    fn walk(&self) -> Walk {
+    fn walk(&mut self, _cx: &mut Cx) -> Walk {
         self.walk
     }
 
@@ -153,7 +153,7 @@ impl ContactsGroup {
                     ContactKind::FileTransfer => self.file_transfer_template,
                     ContactKind::WeChat => self.wechat_template,
                 };
-               ViewRef::new_from_ptr(cx, template)
+                WidgetRef::new_from_ptr(cx, template)
             });
 
             current_contact

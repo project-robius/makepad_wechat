@@ -194,8 +194,8 @@ impl Widget for HeaderDropDownMenu {
         self.view.redraw(cx);
     }
 
-    fn walk(&self) -> Walk {
-        self.view.walk()
+    fn walk(&mut self, cx: &mut Cx) -> Walk {
+        self.view.walk(cx)
     }
 
     fn find_widgets(&mut self, path: &[LiveId], cached: WidgetCache, results: &mut WidgetSet) {

@@ -134,7 +134,7 @@ impl Widget for ChatList {
         });
     }
 
-    fn walk(&self) -> Walk {
+    fn walk(&mut self, _cx: &mut Cx) -> Walk {
         self.walk
     }
 
