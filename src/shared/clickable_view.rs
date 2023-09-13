@@ -58,8 +58,7 @@ impl Widget for ClickableView {
     }
 
     fn draw_walk_widget(&mut self, cx: &mut Cx2d, walk: Walk) -> WidgetDraw {
-        let _ = self.view.draw_walk_widget(cx, walk);
-        WidgetDraw::done()
+        self.view.draw_walk_widget(cx, walk)
     }
 }
 
