@@ -64,158 +64,159 @@ live_design! {
     }
 
     App = {{App}} {
-        ui: <DesktopWindow> {
+        ui: <Window> {
             window: {position: vec2(0, 0), inner_size: vec2(400, 800)},
             pass: {clear_color: #2A}
-            block_signal_event: true;
 
-            navigation = <StackNavigation> {
-                root_view = {
-                    width: Fill,
-                    height: Fill,
-                    padding: 0, align: {x: 0.0, y: 0.0}, spacing: 0., flow: Down
-
-                    application_pages = <View> {
-                        margin: 0.0,
-                        padding: 0.0
-
-                        tab1_frame = <HomeScreen> {visible: true}
-                        tab2_frame = <ContactsScreen> {visible: false}
-                        tab3_frame = <DiscoverScreen> {visible: false}
-                        tab4_frame = <ProfileScreen> {visible: false}
-                    }
-
-                    mobile_menu = <RoundedView> {
+            body = {
+                navigation = <StackNavigation> {
+                    root_view = {
                         width: Fill,
-                        height: 80,
-                        flow: Right, spacing: 6.0, padding: 10
-                        draw_bg: {
-                            instance radius: 0.0,
-                            instance border_width: 1.0,
-                            instance border_color: #aaa,
-                            color: #fff
+                        height: Fill,
+                        padding: 0, align: {x: 0.0, y: 0.0}, spacing: 0., flow: Down
+
+                        application_pages = <View> {
+                            margin: 0.0,
+                            padding: 0.0
+
+                            tab1_frame = <HomeScreen> {visible: true}
+                            tab2_frame = <ContactsScreen> {visible: false}
+                            tab3_frame = <DiscoverScreen> {visible: false}
+                            tab4_frame = <ProfileScreen> {visible: false}
                         }
 
-                        mobile_modes = <View> {
-                            tab1 = <AppTab> {
-                                animator: {selected = {default: on}}
-                                label: "Chat"
-                                draw_icon: {
-                                    svg_file: (ICON_CHAT),
-                                    fn get_color(self) -> vec4 {
-                                        return mix(
-                                            #000,
-                                            #0b0,
-                                            self.selected
-                                        )
+                        mobile_menu = <RoundedView> {
+                            width: Fill,
+                            height: 80,
+                            flow: Right, spacing: 6.0, padding: 10
+                            draw_bg: {
+                                instance radius: 0.0,
+                                instance border_width: 1.0,
+                                instance border_color: #aaa,
+                                color: #fff
+                            }
+
+                            mobile_modes = <View> {
+                                tab1 = <AppTab> {
+                                    animator: {selected = {default: on}}
+                                    label: "Chat"
+                                    draw_icon: {
+                                        svg_file: (ICON_CHAT),
+                                        fn get_color(self) -> vec4 {
+                                            return mix(
+                                                #000,
+                                                #0b0,
+                                                self.selected
+                                            )
+                                        }
+                                    }
+                                    width: Fill,
+                                    icon_walk: {width: 20, height: 20}
+                                    flow: Down, spacing: 5.0, align: {x: 0.5, y: 0.5}
+                                }
+                                tab2 = <AppTab> {
+                                    label: "Contacts",
+                                    draw_icon: {
+                                        svg_file: (ICON_CONTACTS),
+                                        fn get_color(self) -> vec4 {
+                                            return mix(
+                                                #000,
+                                                #0b0,
+                                                self.selected
+                                            )
+                                        }
+                                    }
+                                    width: Fill
+                                    icon_walk: {width: 20, height: 20}
+                                    flow: Down, spacing: 5.0, align: {x: 0.5, y: 0.5}
+                                }
+                                tab3 = <AppTab> {
+                                    label: "Discover",
+                                    draw_icon: {
+                                        svg_file: (ICON_DISCOVER),
+                                        fn get_color(self) -> vec4 {
+                                            return mix(
+                                                #000,
+                                                #0b0,
+                                                self.selected
+                                            )
+                                        }
+                                    }
+                                    width: Fill
+                                    icon_walk: {width: 20, height: 20}
+                                    flow: Down, spacing: 5.0, align: {x: 0.5, y: 0.5}
+                                }
+                                tab4 = <AppTab> {
+                                    label: "Me",
+                                    draw_icon: {
+                                        svg_file: (ICON_ME),
+                                        fn get_color(self) -> vec4 {
+                                            return mix(
+                                                #000,
+                                                #0b0,
+                                                self.selected
+                                            )
+                                        }
+                                    }
+                                    width: Fill
+                                    icon_walk: {width: 20, height: 20}
+                                    flow: Down, spacing: 5.0, align: {x: 0.5, y: 0.5}
+                                }
+                            }
+                        }
+                    }
+
+                    moments_stack_view = <StackNavigationView> {
+                        header = {
+                            content = {
+                                title_container = {
+                                    title = {
+                                        text: "Moments"
                                     }
                                 }
-                                width: Fill,
-                                icon_walk: {width: 20, height: 20}
-                                flow: Down, spacing: 5.0, align: {x: 0.5, y: 0.5}
                             }
-                            tab2 = <AppTab> {
-                                label: "Contacts",
-                                draw_icon: {
-                                    svg_file: (ICON_CONTACTS),
-                                    fn get_color(self) -> vec4 {
-                                        return mix(
-                                            #000,
-                                            #0b0,
-                                            self.selected
-                                        )
+                        }
+                        <MomentsScreen> {}
+                    }
+
+                    add_contact_stack_view = <StackNavigationView> {
+                        header = {
+                            content = {
+                                title_container = {
+                                    title = {
+                                        text: "Add Contact"
                                     }
                                 }
-                                width: Fill
-                                icon_walk: {width: 20, height: 20}
-                                flow: Down, spacing: 5.0, align: {x: 0.5, y: 0.5}
                             }
-                            tab3 = <AppTab> {
-                                label: "Discover",
-                                draw_icon: {
-                                    svg_file: (ICON_DISCOVER),
-                                    fn get_color(self) -> vec4 {
-                                        return mix(
-                                            #000,
-                                            #0b0,
-                                            self.selected
-                                        )
+                        }
+                        <AddContactScreen> {}
+                    }
+
+                    my_profile_stack_view = <StackNavigationView> {
+                        header = {
+                            content = {
+                                title_container = {
+                                    title = {
+                                        text: "My Profile"
                                     }
                                 }
-                                width: Fill
-                                icon_walk: {width: 20, height: 20}
-                                flow: Down, spacing: 5.0, align: {x: 0.5, y: 0.5}
                             }
-                            tab4 = <AppTab> {
-                                label: "Me",
-                                draw_icon: {
-                                    svg_file: (ICON_ME),
-                                    fn get_color(self) -> vec4 {
-                                        return mix(
-                                            #000,
-                                            #0b0,
-                                            self.selected
-                                        )
+                        }
+                        <MyProfileScreen> {}
+                    }
+
+                    chat_stack_view = <StackNavigationView> {
+                        header = {
+                            content = {
+                                title_container = {
+                                    title = {
+                                        text: " "
                                     }
                                 }
-                                width: Fill
-                                icon_walk: {width: 20, height: 20}
-                                flow: Down, spacing: 5.0, align: {x: 0.5, y: 0.5}
                             }
                         }
+                        chat_screen = <ChatScreen> {}
                     }
-                }
-
-                moments_stack_view = <StackNavigationView> {
-                    header = {
-                        content = {
-                            title_container = {
-                                title = {
-                                    text: "Moments"
-                                }
-                            }
-                        }
-                    }
-                    <MomentsScreen> {}
-                }
-
-                add_contact_stack_view = <StackNavigationView> {
-                    header = {
-                        content = {
-                            title_container = {
-                                title = {
-                                    text: "Add Contact"
-                                }
-                            }
-                        }
-                    }
-                    <AddContactScreen> {}
-                }
-
-                my_profile_stack_view = <StackNavigationView> {
-                    header = {
-                        content = {
-                            title_container = {
-                                title = {
-                                    text: "My Profile"
-                                }
-                            }
-                        }
-                    }
-                    <MyProfileScreen> {}
-                }
-
-                chat_stack_view = <StackNavigationView> {
-                    header = {
-                        content = {
-                            title_container = {
-                                title = {
-                                    text: " "
-                                }
-                            }
-                        }
-                    }
-                    chat_screen = <ChatScreen> {}
                 }
             }
         }
