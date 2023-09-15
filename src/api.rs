@@ -1,4 +1,4 @@
-use makepad_platform::*;
+use makepad_widgets::makepad_platform::{LiveId, live_id};
 use std::iter;
 
 #[derive(Clone, Debug)]

@@ -49,20 +49,6 @@ live_design! {
         }
     }
 
-    Screen3 = <View> {
-        show_bg: true,
-        width: Fill,
-        height: Fill,
-        draw_bg: {
-            fn pixel(self) -> vec4 {
-                // Gradient color effect starting from a yellow tone
-                // The final color would be black, however the x value is divided to 3
-                // so the color gets darker slower.
-                return mix(#xffaa44, #0, self.geom_pos.x / 3);
-            }
-        }
-    }
-
     App = {{App}} {
         ui: <Window> {
             window: {position: vec2(0, 0), inner_size: vec2(400, 800)},
