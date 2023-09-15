@@ -187,7 +187,7 @@ enum ActiveStackView {
 #[derive(Live)]
 pub struct StackNavigation {
     #[deref]
-    view:View,
+    view: View,
     #[rust]
     active_stack_view: ActiveStackView,
 }

@@ -145,6 +145,7 @@ live_design! {
 
         list_view: <ListView> {
             auto_tail: true,
+            grab_key_focus: true,
 
             width: Fill, height: Fill
             flow: Down, spacing: 0.
@@ -154,7 +155,7 @@ live_design! {
         }
     }
 
-    ChatScreen = <View> {
+    ChatScreen = <KeyboardView> {
         width: Fill, height: Fill
         flow: Down
         show_bg: true,
