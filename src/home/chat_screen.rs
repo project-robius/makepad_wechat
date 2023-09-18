@@ -143,9 +143,10 @@ live_design! {
             dep("crate://self/resources/img/avatars/user6.png"),
         ]
 
-        list_view: <ListView> {
+        list: <PortalList> {
             auto_tail: true,
             grab_key_focus: true,
+            allow_empty: false,
 
             width: Fill, height: Fill
             flow: Down, spacing: 0.
@@ -214,7 +215,7 @@ pub struct Chat {
     #[rust]
     messages: Vec<MessageEntry>,
     #[live]
-    list_view: ListView,
+    list: PortalList,
 }
 
 impl LiveHook for Chat {
@@ -234,7 +235,7 @@ impl Widget for Chat {
         event: &Event,
         dispatch_action: &mut dyn FnMut(&mut Cx, WidgetActionItem),
     ) {
-        let _actions = self.list_view.handle_widget_event(cx, event);
+        let _actions = self.list.handle_widget_event(cx, event);
 
         for action in _actions {
             dispatch_action(cx, action);
@@ -242,11 +243,11 @@ impl Widget for Chat {
     }
 
     fn redraw(&mut self, cx: &mut Cx) {
-        self.list_view.redraw(cx);
+        self.list.redraw(cx);
     }
 
     fn find_widgets(&mut self, path: &[LiveId], cached: WidgetCache, results: &mut WidgetSet) {
-        self.list_view.find_widgets(path, cached, results);
+        self.list.find_widgets(path, cached, results);
     }
 
     fn draw_walk_widget(&mut self, cx: &mut Cx2d, walk: Walk) -> WidgetDraw {
@@ -266,10 +267,10 @@ impl Chat {
         } else {
             0
         };
-        self.list_view.set_item_range(cx, 0, range_end);
+        self.list.set_item_range(cx, 0, range_end);
 
-        while self.list_view.draw_widget(cx).hook_widget().is_some() {
-            while let Some(item_id) = self.list_view.next_visible_item(cx) {
+        while self.list.draw_widget(cx).hook_widget().is_some() {
+            while let Some(item_id) = self.list.next_visible_item(cx) {
                 if item_id < messages_entries_count {
                     let item_index = item_id as usize;
                     let item_content = &self.messages[item_index];
@@ -279,7 +280,7 @@ impl Chat {
                         MessageDirection::Incoming => id!(message_incoming),
                     };
 
-                    let item = self.list_view.item(cx, item_id, template[0]).unwrap();
+                    let item = self.list.item(cx, item_id, template[0]).unwrap();
 
                     item.label(id!(text.label))
                         .set_text(&item_content.text);

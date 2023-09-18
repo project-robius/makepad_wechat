@@ -99,7 +99,7 @@ live_design! {
         height: Fill,
         flow: Down
 
-        list_view: <ListView> {
+        list: <PortalList> {
             width: Fill,
             height: Fill,
             flow: Down, spacing: 0.0
@@ -135,7 +135,7 @@ pub struct ContactsList {
     layout: Layout,
 
     #[live]
-    list_view: ListView,
+    list: PortalList,
     #[rust]
     data: Vec<ContactInfo>,
 }
@@ -182,7 +182,7 @@ impl Widget for ContactsList {
         event: &Event,
         dispatch_action: &mut dyn FnMut(&mut Cx, WidgetActionItem),
     ) {
-        let _actions = self.list_view.handle_widget_event(cx, event);
+        let _actions = self.list.handle_widget_event(cx, event);
 
         for action in _actions {
             dispatch_action(cx, action);
@@ -194,7 +194,7 @@ impl Widget for ContactsList {
     }
 
     fn redraw(&mut self, cx: &mut Cx) {
-        self.list_view.redraw(cx)
+        self.list.redraw(cx)
     }
 
     fn draw_walk_widget(&mut self, cx: &mut Cx2d, walk: Walk) -> WidgetDraw {
@@ -209,17 +209,17 @@ impl ContactsList {
         let groups_count: u64 = grouped_data.len() as u64;
 
         cx.begin_turtle(walk, self.layout);
-        self.list_view.set_item_range(cx, 0, groups_count + 3);
+        self.list.set_item_range(cx, 0, groups_count + 3);
 
-        while self.list_view.draw_widget(cx).hook_widget().is_some() {
-            while let Some(item_id) = self.list_view.next_visible_item(cx) {
+        while self.list.draw_widget(cx).hook_widget().is_some() {
+            while let Some(item_id) = self.list.next_visible_item(cx) {
                 let template = match item_id {
                     0 => id!(search_bar),
                     1 => id!(options),
                     x if x == groups_count + 2 => id!(bottom),
                     _ => id!(contacts_group),
                 };
-                let item = self.list_view.item(cx, item_id, template[0]).unwrap();
+                let item = self.list.item(cx, item_id, template[0]).unwrap();
 
                 if item_id >= 2 && item_id < groups_count + 2 {
                     let group = &grouped_data[(item_id - 2) as usize];

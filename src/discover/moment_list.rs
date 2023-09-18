@@ -123,7 +123,7 @@ live_design! {
     MomentList = {{MomentList}} {
         width: Fill, height: Fill
         flow: Down
-        list_view: <ListView> {
+        list: <PortalList> {
             width: Fill, height: Fill
             flow: Down, spacing: 0.0
 
@@ -147,7 +147,7 @@ pub struct MomentList {
     layout: Layout,
 
     #[live]
-    list_view: ListView,
+    list: PortalList,
     #[rust]
     moment_entries: Vec<MomentEntry>,
 }
@@ -193,7 +193,7 @@ impl Widget for MomentList {
         event: &Event,
         dispatch_action: &mut dyn FnMut(&mut Cx, WidgetActionItem),
     ) {
-        let _actions = self.list_view.handle_widget_event(cx, event);
+        let _actions = self.list.handle_widget_event(cx, event);
 
         for action in _actions {
             dispatch_action(cx, action);
@@ -205,7 +205,7 @@ impl Widget for MomentList {
     }
 
     fn redraw(&mut self, cx: &mut Cx) {
-        self.list_view.redraw(cx)
+        self.list.redraw(cx)
     }
 
     fn draw_walk_widget(&mut self, cx: &mut Cx2d, walk: Walk) -> WidgetDraw {
@@ -219,18 +219,18 @@ impl MomentList {
         let moment_entries_count = self.moment_entries.len() as u64;
 
         cx.begin_turtle(walk, self.layout);
-        self.list_view
+        self.list
             .set_item_range(cx, 0, moment_entries_count + 1);
 
-        while self.list_view.draw_widget(cx).hook_widget().is_some() {
-            while let Some(item_id) = self.list_view.next_visible_item(cx) {
+        while self.list.draw_widget(cx).hook_widget().is_some() {
+            while let Some(item_id) = self.list.next_visible_item(cx) {
                 let template = match item_id {
                     0 => id!(hero),
                     x if x % 2 == 0 => id!(text_post),
                     _ => id!(image_post),
                 };
 
-                let item = self.list_view.item(cx, item_id, template[0]).unwrap();
+                let item = self.list.item(cx, item_id, template[0]).unwrap();
 
                 if item_id >= 1 && item_id < moment_entries_count + 1 {
                     let post = &self.moment_entries[item_id as usize - 1]; // offset by 1 to account for the hero

@@ -74,7 +74,7 @@ live_design! {
 
         width: Fill, height: Fill
         flow: Down
-        list_view: <ListView> {
+        list: <PortalList> {
             keep_invisible: true
             width: Fill, height: Fill
             flow: Down, spacing: 0.0
@@ -101,14 +101,14 @@ pub struct ChatList {
     layout: Layout,
 
     #[live]
-    list_view: ListView,
+    list: PortalList,
     #[live]
     avatar_images_deps: Vec<LiveDependency>,
 
     #[rust]
     chat_entries: Vec<ChatEntry>,
     #[rust]
-    chat_list_view_map: HashMap<u64, u64>,
+    chat_list_map: HashMap<u64, u64>,
 }
 
 impl LiveHook for ChatList {
@@ -139,7 +139,7 @@ impl Widget for ChatList {
     }
 
     fn redraw(&mut self, cx: &mut Cx) {
-        self.list_view.redraw(cx)
+        self.list.redraw(cx)
     }
 
     fn draw_walk_widget(&mut self, cx: &mut Cx2d, walk: Walk) -> WidgetDraw {
@@ -156,9 +156,9 @@ impl ChatList {
         dispatch_action: &mut dyn FnMut(&mut Cx, WidgetActionItem),
     ) {
         let mut actions = Vec::new();
-        self.list_view
+        self.list
             .handle_widget_event_with(cx, event, &mut |_, action| {
-                if let Some(chat_id) = self.chat_list_view_map.get(&action.widget_uid.0) {
+                if let Some(chat_id) = self.chat_list_map.get(&action.widget_uid.0) {
                     actions.push((chat_id, action));
                 }
             });
@@ -185,22 +185,22 @@ impl ChatList {
         let chat_entries_count = self.chat_entries.len() as u64;
 
         cx.begin_turtle(walk, self.layout);
-        self.list_view.set_item_range(cx, 0, chat_entries_count + 1);
+        self.list.set_item_range(cx, 0, chat_entries_count + 1);
 
-        while self.list_view.draw_widget(cx).hook_widget().is_some() {
-            while let Some(item_id) = self.list_view.next_visible_item(cx) {
+        while self.list.draw_widget(cx).hook_widget().is_some() {
+            while let Some(item_id) = self.list.next_visible_item(cx) {
                 let template = match item_id {
                     0 => id!(search_bar),
                     _ => id!(chat),
                 };
 
-                let item = self.list_view.item(cx, item_id, template[0]).unwrap();
+                let item = self.list.item(cx, item_id, template[0]).unwrap();
 
                 if item_id >= 1 && item_id < chat_entries_count + 1 {
                     let item_index = item_id as usize - 1; // offset by 1 to account for the search bar
                     let item_content = &self.chat_entries[item_index];
 
-                    self.chat_list_view_map
+                    self.chat_list_map
                         .insert(item.widget_uid().0, self.chat_entries[item_index].id);
 
                     item.label(id!(preview.username))
