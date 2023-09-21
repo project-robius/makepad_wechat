@@ -22,7 +22,7 @@ checksum = "17febce684fd15d89027105661fec94afb475cb995fbc59d2865198446ba2eea"
 
 [[package]]
 name = "makepad-derive-live"
-version = "0.3.0"
+version = "0.4.0"
 dependencies = [
  "makepad-live-id",
  "makepad-micro-proc-macro",
@@ -30,14 +30,14 @@ dependencies = [
 
 [[package]]
 name = "makepad-derive-wasm-bridge"
-version = "0.3.0"
+version = "0.4.0"
 dependencies = [
  "makepad-micro-proc-macro",
 ]
 
 [[package]]
 name = "makepad-derive-widget"
-version = "0.3.0"
+version = "0.4.0"
 dependencies = [
  "makepad-live-id",
  "makepad-micro-proc-macro",
@@ -45,7 +45,7 @@ dependencies = [
 
 [[package]]
 name = "makepad-draw"
-version = "0.3.0"
+version = "0.6.0"
 dependencies = [
  "makepad-platform",
  "makepad-vector",
@@ -55,19 +55,19 @@ dependencies = [
 
 [[package]]
 name = "makepad-error-log"
-version = "0.3.0"
+version = "0.4.0"
 
 [[package]]
 name = "makepad-futures"
-version = "0.1.0"
+version = "0.4.0"
 
 [[package]]
 name = "makepad-futures-legacy"
-version = "0.3.0"
+version = "0.7.0"
 
 [[package]]
 name = "makepad-live-compiler"
-version = "0.3.0"
+version = "0.5.0"
 dependencies = [
  "makepad-derive-live",
  "makepad-live-tokenizer",
@@ -76,7 +76,7 @@ dependencies = [
 
 [[package]]
 name = "makepad-live-id"
-version = "0.3.0"
+version = "0.4.0"
 dependencies = [
  "makepad-error-log",
  "makepad-live-id-macros",
@@ -84,14 +84,14 @@ dependencies = [
 
 [[package]]
 name = "makepad-live-id-macros"
-version = "0.3.0"
+version = "0.4.0"
 dependencies = [
  "makepad-micro-proc-macro",
 ]
 
 [[package]]
 name = "makepad-live-tokenizer"
-version = "0.3.0"
+version = "0.4.0"
 dependencies = [
  "makepad-live-id",
  "makepad-math",
@@ -100,33 +100,33 @@ dependencies = [
 
 [[package]]
 name = "makepad-math"
-version = "0.3.0"
+version = "0.4.0"
 
 [[package]]
 name = "makepad-micro-proc-macro"
-version = "0.3.0"
+version = "0.4.0"
 
 [[package]]
 name = "makepad-micro-serde"
-version = "0.3.0"
+version = "0.4.0"
 dependencies = [
  "makepad-micro-serde-derive",
 ]
 
 [[package]]
 name = "makepad-micro-serde-derive"
-version = "0.3.0"
+version = "0.4.0"
 dependencies = [
  "makepad-micro-proc-macro",
 ]
 
 [[package]]
 name = "makepad-objc-sys"
-version = "0.3.0"
+version = "0.4.0"
 
 [[package]]
 name = "makepad-platform"
-version = "0.3.0"
+version = "0.6.0"
 dependencies = [
  "makepad-futures",
  "makepad-futures-legacy",
@@ -139,21 +139,21 @@ dependencies = [
 
 [[package]]
 name = "makepad-shader-compiler"
-version = "0.3.0"
+version = "0.5.0"
 dependencies = [
  "makepad-live-compiler",
 ]
 
 [[package]]
 name = "makepad-vector"
-version = "0.3.0"
+version = "0.4.0"
 dependencies = [
  "ttf-parser",
 ]
 
 [[package]]
 name = "makepad-wasm-bridge"
-version = "0.3.0"
+version = "0.4.0"
 dependencies = [
  "makepad-derive-wasm-bridge",
  "makepad-live-id",
@@ -161,7 +161,7 @@ dependencies = [
 
 [[package]]
 name = "makepad-widgets"
-version = "0.3.0"
+version = "0.6.0"
 dependencies = [
  "makepad-derive-widget",
  "makepad-draw",
