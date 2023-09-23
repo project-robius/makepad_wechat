@@ -161,15 +161,15 @@ impl LiveHook for MomentList {
         let entries: Vec<MomentEntry> = vec![
             MomentEntry {
                 username: "John Doe".to_string(),
-                text: "消再中野誰強心無嶋可済日政中実玉全示餌".to_string(),
+                text: "無嶋可済野誰実玉全示餌強".to_string(),
             },
             MomentEntry {
                 username: "Andrew Lin".to_string(),
-                text: "俳権竹減活乗治外進梨詰鉄掲動中覇予載".to_string(),
+                text: "俳権竹減活乗治外進梨詰鉄掲動覇予載".to_string(),
             },
             MomentEntry {
                 username: "Chris Huxley".to_string(),
-                text: "犯福併中読併棋一御質慰".to_string(),
+                text: "犯福併読併棋一御質慰".to_string(),
             },
             MomentEntry {
                 username: "Adam Adler".to_string(),
