@@ -27,7 +27,7 @@ cargo install --path ./tools/cargo_makepad
 
 ### Clone the makepad_wechat repo
 ```
-git clone https://github.com/mobilerust/makepad_wechat
+git clone https://github.com/project-robius/makepad_wechat
 ```
 
 ## 3. Android Build
@@ -85,7 +85,7 @@ This is the same value used to setup the initial skeleton app above. For this ex
 `--app`
 
 The name of the application or the project. This is the same as the Product Name used to setup the initial skeleton app above. In this case:
->    `WeChat`
+> `WeChat`
     
 `--ios-version` (optional)
     
