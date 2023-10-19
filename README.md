@@ -1,6 +1,8 @@
 # makepad_wechat
 
 WeChat-like application implemented with Makepad
+* currently it is mostly UI screens
+* actual business logic is not implemented
 
 ## Build Instructions
 
@@ -111,4 +113,11 @@ cargo makepad ios --ios-version=16 --org-id=<ORGIDVALUE> --org=rs.robius --app=W
 ## 5. WASM Build
 
 *Coming Soon*
+
+## 6. MacOS / PC
+Although it is a mobile app, Makepad cross-platform means you may run it on desktops if you wish.
+```
+cd ~/makepad_wechat
+cargo run
+```
 
