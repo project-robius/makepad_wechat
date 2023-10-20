@@ -113,7 +113,7 @@ live_design! {
                 height: Fit,
                 padding: {top: 14., bottom: 50.}, align: {x: 0.5, y: 0.}
 
-                <Label> {
+                friends = <Label> {
                     width: Fit,
                     height: Fit,
                     draw_text: {
@@ -136,6 +136,8 @@ pub struct ContactsList {
 
     #[live]
     list: PortalList,
+    #[live]
+    friends: Label,
     #[rust]
     data: Vec<ContactInfo>,
 }
@@ -207,10 +209,9 @@ impl ContactsList {
     pub fn draw_walk(&mut self, cx: &mut Cx2d, walk: Walk) {
         let grouped_data = self.group_by_first_letter();
         let groups_count: u64 = grouped_data.len() as u64;
-
+        let friends_count = self.data.iter().filter(|f| f.kind == ContactKind::People).count();
         cx.begin_turtle(walk, self.layout);
         self.list.set_item_range(cx, 0, groups_count + 3);
-
         while self.list.draw_widget(cx).hook_widget().is_some() {
             while let Some(item_id) = self.list.next_visible_item(cx) {
                 let template = match item_id {
@@ -220,12 +221,15 @@ impl ContactsList {
                     _ => id!(contacts_group),
                 };
                 let item = self.list.item(cx, item_id, template[0]).unwrap();
-
                 if item_id >= 2 && item_id < groups_count + 2 {
                     let group = &grouped_data[(item_id - 2) as usize];
                     if let Some(mut group_widget) = item.borrow_mut::<ContactsGroup>() {
                         group_widget.set_header_label(&group[0].name[0..1]);
                         group_widget.set_contacts(group.to_vec());
+                    }
+                } else if item_id == groups_count + 2 {
+                    if let Some(mut friends_widget) = item.widget(id!(friends)).borrow_mut::<Label>() {
+                        friends_widget.set_text(format!("{} friends", friends_count).as_str());
                     }
                 }
 
