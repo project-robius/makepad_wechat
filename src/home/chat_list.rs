@@ -74,7 +74,7 @@ live_design! {
 
         width: Fill, height: Fill
         flow: Down
-        list: <PortalList> {
+        list = <PortalList> {
             keep_invisible: true
             width: Fill, height: Fill
             flow: Down, spacing: 0.0
@@ -87,21 +87,17 @@ live_design! {
 
 pub type ChatId = u64;
 
-#[derive(Debug, Clone, WidgetAction)]
+#[derive(Clone, DefaultNone, Debug)]
 pub enum ChatListAction {
     Selected(ChatId),
     None,
 }
 
-#[derive(Live)]
+#[derive(Live, Widget)]
 pub struct ChatList {
-    #[walk]
-    walk: Walk,
-    #[layout]
-    layout: Layout,
+    #[deref]
+    view: View,
 
-    #[live]
-    list: PortalList,
     #[live]
     avatar_images_deps: Vec<LiveDependency>,
 
@@ -112,10 +108,6 @@ pub struct ChatList {
 }
 
 impl LiveHook for ChatList {
-    fn before_live_design(cx: &mut Cx) {
-        register_widget!(cx, ChatList);
-    }
-
     fn after_new_from_doc(&mut self, _cx: &mut Cx) {
         let db = Db::new();
         self.chat_entries = db.get_all_chats().clone();
@@ -123,106 +115,82 @@ impl LiveHook for ChatList {
 }
 
 impl Widget for ChatList {
-    fn handle_widget_event_with(
-        &mut self,
-        cx: &mut Cx,
-        event: &Event,
-        dispatch_action: &mut dyn FnMut(&mut Cx, WidgetActionItem),
-    ) {
-        self.handle_event_with(cx, event, &mut |cx, action| {
-            dispatch_action(cx, action);
-        });
-    }
-
-    fn walk(&mut self, _cx: &mut Cx) -> Walk {
-        self.walk
-    }
-
-    fn redraw(&mut self, cx: &mut Cx) {
-        self.list.redraw(cx)
-    }
-
-    fn draw_walk_widget(&mut self, cx: &mut Cx2d, walk: Walk) -> WidgetDraw {
-        self.draw_walk(cx, walk);
-        WidgetDraw::done()
-    }
-}
-
-impl ChatList {
-    fn handle_event_with(
-        &mut self,
-        cx: &mut Cx,
-        event: &Event,
-        dispatch_action: &mut dyn FnMut(&mut Cx, WidgetActionItem),
-    ) {
-        let mut actions = Vec::new();
-        self.list
-            .handle_widget_event_with(cx, event, &mut |_, action| {
-                if let Some(chat_id) = self.chat_list_map.get(&action.widget_uid.0) {
-                    actions.push((chat_id, action));
-                }
-            });
-
+    fn handle_event(&mut self, cx: &mut Cx, event: &Event, scope: &mut Scope) {
         let widget_uid = self.widget_uid();
-        for (chat_id, action) in actions {
-            if let ClickableViewAction::Click = action.action() {
-                dispatch_action(
-                    cx,
-                    WidgetActionItem::new(ChatListAction::Selected(*chat_id).into(), widget_uid)
-                );
-                dispatch_action(
-                    cx,
-                    WidgetActionItem::new(StackViewAction::ShowChat.into(), widget_uid)
-                );
+        for list_action in cx.scope_actions(|cx| self.view.handle_event(cx, event, scope)) {
+            match list_action.as_widget_action().cast() {
+                ClickableViewAction::Click => {
+                    // TODO improve this!!
+                    if let Some(chat_id) = 
+                        self.chat_list_map.iter()
+                        .filter(|(k, _v)| list_action.as_widget_action().widget_uid_eq(WidgetUid(**k)).is_some())
+                        .map(|(_k, v)| v)
+                        .collect::<Vec<&u64>>()
+                        .first() 
+                    { 
+                        cx.widget_action(
+                            widget_uid,
+                            &scope.path,
+                            ChatListAction::Selected(**chat_id),
+                        );
+
+                        cx.widget_action(
+                            widget_uid,
+                            &scope.path,
+                            StackViewAction::ShowChat,
+                        );
+                    }
+                }
+                _ => {}
             }
         }
     }
-}
 
-impl ChatList {
-    pub fn draw_walk(&mut self, cx: &mut Cx2d, walk: Walk) {
+    fn draw_walk(&mut self, cx: &mut Cx2d, scope: &mut Scope, walk: Walk) -> DrawStep {
         // todo: sort by newest incoming?
         let chat_entries_count = self.chat_entries.len() as u64;
 
-        cx.begin_turtle(walk, self.layout);
-        self.list.set_item_range(cx, 0, chat_entries_count + 1);
+        while let Some(list_item) = self.view.draw_walk(cx, scope, walk).step(){
+            if let Some(mut list) = list_item.as_portal_list().borrow_mut() {
+                list.set_item_range(cx, 0, chat_entries_count + 1);
+                while let Some(item_id) = list.next_visible_item(cx) {
+                    let template = match item_id {
+                        0 => live_id!(search_bar),
+                        _ => live_id!(chat),
+                    };
 
-        while self.list.draw_widget(cx).hook_widget().is_some() {
-            while let Some(item_id) = self.list.next_visible_item(cx) {
-                let template = match item_id {
-                    0 => id!(search_bar),
-                    _ => id!(chat),
-                };
+                    let mut item = list.item(cx, item_id, template).unwrap();
 
-                let item = self.list.item(cx, item_id, template[0]).unwrap();
+                    if item_id >= 1 && item_id < chat_entries_count + 1 {
+                        let item_index = item_id as usize - 1; // offset by 1 to account for the search bar
+                        let item_content = &self.chat_entries[item_index];
 
-                if item_id >= 1 && item_id < chat_entries_count + 1 {
-                    let item_index = item_id as usize - 1; // offset by 1 to account for the search bar
-                    let item_content = &self.chat_entries[item_index];
+                        self.chat_list_map
+                            .insert(item.widget_uid().0, self.chat_entries[item_index].id);
 
-                    self.chat_list_map
-                        .insert(item.widget_uid().0, self.chat_entries[item_index].id);
+                        item.label(id!(preview.username))
+                            .set_text(&item_content.username);
+                        item.label(id!(preview.content))
+                            .set_text(item_content.latest_message.text());
+                        item.label(id!(timestamp))
+                            .set_text(&item_content.timestamp);
 
-                    item.label(id!(preview.username))
-                        .set_text(&item_content.username);
-                    item.label(id!(preview.content))
-                        .set_text(item_content.latest_message.text());
-                    item.label(id!(timestamp))
-                        .set_text(&item_content.timestamp);
-
-                    if let Some(avatar_path) = self.avatar_images_deps_path(item_content.avatar) {
-                        item.image(id!(avatar))
-                            .load_image_dep_by_path(cx, avatar_path);
+                        if let Some(avatar_path) = self.avatar_images_deps_path(item_content.avatar) {
+                            item.image(id!(avatar))
+                                .load_image_dep_by_path(cx, avatar_path);
+                        }
                     }
-                }
 
-                item.draw_widget_all(cx);
+                    item.draw_all(cx, &mut Scope::empty());
+                }
             }
         }
 
-        cx.end_turtle();
+        DrawStep::done()
     }
+}
 
+impl ChatList {
     fn avatar_images_deps_path(&self, id: LiveId) -> Option<&str> {
         match id {
             live_id!(rikarends) =>

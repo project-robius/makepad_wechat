@@ -293,59 +293,29 @@ live_design! {
     }
 }
 
-#[derive(Live)]
+#[derive(Live, LiveHook, Widget)]
 pub struct Profile {
-    #[live]
-    view:View,
-}
+    #[live] #[redraw]
+    view: View,
 
-impl LiveHook for Profile {
-    fn before_live_design(cx: &mut Cx) {
-        register_widget!(cx, Profile);
-    }
+    #[walk]
+    walk: Walk,
 }
 
 impl Widget for Profile {
-    fn handle_widget_event_with(
-        &mut self,
-        cx: &mut Cx,
-        event: &Event,
-        dispatch_action: &mut dyn FnMut(&mut Cx, WidgetActionItem),
-    ) {
-        let uid = self.widget_uid();
-        self.handle_event_with(cx, event, &mut |cx, action: StackViewAction| {
-            dispatch_action(cx, WidgetActionItem::new(action.into(), uid));
-        });
-    }
-
-    fn redraw(&mut self, cx: &mut Cx) {
-        self.view.redraw(cx);
-    }
-
-    fn find_widgets(&mut self, path: &[LiveId], cached: WidgetCache, results: &mut WidgetSet) {
-        self.view.find_widgets(path, cached, results);
-    }
-
-    fn draw_walk_widget(&mut self, cx: &mut Cx2d, walk: Walk) -> WidgetDraw {
-        self.view.draw_walk_widget(cx, walk)
-    }
-}
-
-impl Profile {
-    fn handle_event_with(
-        &mut self,
-        cx: &mut Cx,
-        event: &Event,
-        dispatch_action: &mut dyn FnMut(&mut Cx, StackViewAction),
-    ) {
-        let actions = self.view.handle_widget_event(cx, event);
-
+    fn handle_event(&mut self, cx: &mut Cx, event: &Event, scope: &mut Scope) {
+        let actions = cx.scope_actions(|cx| self.view.handle_event(cx, event, scope));
         if self
             .view
             .clickable_view(id!(my_profile_frame))
             .clicked(&actions)
         {
-            dispatch_action(cx, StackViewAction::ShowMyProfile);
+            let uid = self.widget_uid();
+            cx.widget_action(uid, &scope.path, StackViewAction::ShowMyProfile);
         }
+    }
+
+    fn draw_walk(&mut self, cx: &mut Cx2d, scope: &mut Scope, walk: Walk) -> DrawStep {
+        self.view.draw_walk(cx, scope, walk)
     }
 }
