@@ -81,12 +81,6 @@ pub struct StackNavigationView {
     animator: Animator,
 }
 
-// impl LiveHook for StackNavigationView {
-//     fn before_live_design(cx: &mut Cx) {
-//         register_widget!(cx, StackNavigationView);
-//     }
-// }
-
 impl Widget for StackNavigationView {
     fn handle_event(&mut self, cx:&mut Cx, event:&Event, scope:&mut Scope) {
         if self.animator_handle_event(cx, event).is_animating() {
@@ -154,6 +148,7 @@ enum ActiveStackView {
 pub struct StackNavigation {
     #[deref]
     view: View,
+
     #[rust]
     active_stack_view: ActiveStackView,
 }

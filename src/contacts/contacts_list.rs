@@ -132,9 +132,6 @@ pub struct ContactsList {
     #[deref]
     view: View,
 
-    #[live] #[redraw]
-    list: PortalList,
-
     #[rust]
     data: Vec<ContactInfo>,
 }

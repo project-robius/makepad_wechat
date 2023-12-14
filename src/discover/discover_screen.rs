@@ -65,102 +65,95 @@ live_design! {
         }
     }
 
-    // ClickableOptions = <ClickableView> {
-    //     width: Fill, height: Fit, margin: {top: 10., bottom: 10.}
-    //     padding: {bottom: 10.}, spacing: 0., flow: Down
-    // }
-
     Discover = {{Discover}} {
-        view: <View> {
-            width: Fill, height: Fit
-            flow: Down, spacing: 0.0
+        width: Fill, height: Fit
+        flow: Down, spacing: 0.0
 
-            moments_link = <ClickableView> {
-                width: Fill, height: Fit, margin: {top: 10., bottom: 10.}
-                padding: {bottom: 10.}, spacing: 0., flow: Down
+        moments_link = <ClickableView> {
+            width: Fill, height: Fit, margin: {top: 10., bottom: 10.}
+            padding: {bottom: 10.}, spacing: 0., flow: Down
 
-                <OptionsItem> {
-                    content = {
-                        icon = {
-                            source: (IMG_MOMENTS)
-                        }
+            <OptionsItem> {
+                content = {
+                    icon = {
+                        source: (IMG_MOMENTS)
+                    }
 
-                        label = {
-                            text: "Moments"
-                        }
+                    label = {
+                        text: "Moments"
                     }
                 }
             }
+        }
 
-            <Options> {
-                <OptionsItem> {
-                    content = {
-                        icon = {
-                            source: (IMG_SCAN)
-                        }
-
-                        label = {
-                            text: "Scan"
-                        }
+        <Options> {
+            <OptionsItem> {
+                content = {
+                    icon = {
+                        source: (IMG_SCAN)
                     }
 
-                    divider = <Divider> {
-                        margin: {left: 42.0}
+                    label = {
+                        text: "Scan"
                     }
                 }
 
-                <OptionsItem> {
-                    content = {
-                        icon = {
-                            source: (IMG_SHAKE)
-                        }
-
-                        label = {
-                            text: "Shake"
-                        }
-
-                    }
+                divider = <Divider> {
+                    margin: {left: 42.0}
                 }
             }
 
-            <Options> {
-                <OptionsItem> {
-                    content = {
-                        icon = {
-                            source: (IMG_SEARCH)
-                        }
+            <OptionsItem> {
+                content = {
+                    icon = {
+                        source: (IMG_SHAKE)
+                    }
 
-                        label = {
-                            text: "Search"
-                        }
+                    label = {
+                        text: "Shake"
+                    }
+
+                }
+            }
+        }
+
+        <Options> {
+            <OptionsItem> {
+                content = {
+                    icon = {
+                        source: (IMG_SEARCH)
+                    }
+
+                    label = {
+                        text: "Search"
                     }
                 }
             }
+        }
 
-            <Options> {
-                <OptionsItem> {
-                    content = {
-                        icon = {
-                            source: (IMG_PEOPLE_NEARBY)
-                        }
+        <Options> {
+            <OptionsItem> {
+                content = {
+                    icon = {
+                        source: (IMG_PEOPLE_NEARBY)
+                    }
 
-                        label = {
-                            text: "People Nearby"
-                        }
+                    label = {
+                        text: "People Nearby"
                     }
                 }
             }
+        }
 
-            <Options> {
-                <OptionsItem> {
-                    content = {
-                        icon = {
-                            source: (IMG_MINI_PROGRAMS)
-                        }
+        <Options> {
+            <OptionsItem> {
+                content = {
+                    icon = {
+                        source: (IMG_MINI_PROGRAMS)
+                    }
 
-                        label = {
-                            text: "Mini Programs"
-                        }
+                    label = {
+                        text: "Mini Programs"
                     }
                 }
             }
@@ -192,7 +185,7 @@ live_design! {
 
 #[derive(Live, LiveHook, Widget)]
 pub struct Discover {
-    #[wrap] #[live]
+    #[deref]
     view: View
 }
 

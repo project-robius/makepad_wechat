@@ -212,8 +212,6 @@ pub struct Chat {
 
     #[rust]
     messages: Vec<MessageEntry>,
-    #[live] #[redraw]
-    list: PortalList,
 }
 
 impl LiveHook for Chat {
