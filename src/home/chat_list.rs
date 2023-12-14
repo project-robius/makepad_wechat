@@ -104,7 +104,7 @@ pub struct ChatList {
     #[rust]
     chat_entries: Vec<ChatEntry>,
     #[rust]
-    chat_list_map: HashMap<u64, u64>,
+    chat_items_to_ids: HashMap<u64, ChatId>,
 }
 
 impl LiveHook for ChatList {
@@ -121,11 +121,12 @@ impl Widget for ChatList {
             match list_action.as_widget_action().cast() {
                 ClickableViewAction::Click => {
                     let widget_action = list_action.as_widget_action();
-                    if let Some(chat_id) = 
-                        self.chat_list_map.iter()
-                            .find(|(key, _value)| widget_action.widget_uid_eq(WidgetUid(**key)).is_some())
-                            .map(|(_key, value)| value)
-                    { 
+
+                    if let Some(item_widget_id_for_action) =
+                        self.chat_items_to_ids.keys().
+                            find(|key| widget_action.widget_uid_eq(WidgetUid(**key)).is_some()) {
+
+                        let chat_id = self.chat_items_to_ids.get(item_widget_id_for_action).unwrap();
                         cx.widget_action(
                             widget_uid,
                             &scope.path,
@@ -163,7 +164,7 @@ impl Widget for ChatList {
                         let item_index = item_id as usize - 1; // offset by 1 to account for the search bar
                         let item_content = &self.chat_entries[item_index];
 
-                        self.chat_list_map
+                        self.chat_items_to_ids
                             .insert(item.widget_uid().0, self.chat_entries[item_index].id);
 
                         item.label(id!(preview.username))
