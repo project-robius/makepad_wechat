@@ -191,7 +191,7 @@ pub struct Discover {
 
 impl Widget for Discover {
     fn handle_event(&mut self, cx: &mut Cx, event: &Event, scope: &mut Scope) {
-        let actions = cx.scope_actions(|cx| self.view.handle_event(cx, event, scope));
+        let actions = cx.capture_actions(|cx| self.view.handle_event(cx, event, scope));
         let uid = self.widget_uid();
 
         if self

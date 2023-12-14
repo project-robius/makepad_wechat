@@ -117,7 +117,7 @@ impl LiveHook for ChatList {
 impl Widget for ChatList {
     fn handle_event(&mut self, cx: &mut Cx, event: &Event, scope: &mut Scope) {
         let widget_uid = self.widget_uid();
-        for list_action in cx.scope_actions(|cx| self.view.handle_event(cx, event, scope)) {
+        for list_action in cx.capture_actions(|cx| self.view.handle_event(cx, event, scope)) {
             match list_action.as_widget_action().cast() {
                 ClickableViewAction::Click => {
                     let widget_action = list_action.as_widget_action();

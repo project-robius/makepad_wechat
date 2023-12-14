@@ -87,7 +87,7 @@ impl Widget for StackNavigationView {
             self.view.redraw(cx);
         }
 
-        let actions = cx.scope_actions(|cx| self.view.handle_event(cx, event, scope));
+        let actions = cx.capture_actions(|cx| self.view.handle_event(cx, event, scope));
         if self.button(id!(left_button)).clicked(&actions) {
             self.animator_play(cx, id!(slide.hide));
         }

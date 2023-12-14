@@ -174,7 +174,7 @@ pub struct HeaderDropDownMenu {
 impl Widget for HeaderDropDownMenu {
     fn handle_event(&mut self, cx: &mut Cx, event: &Event, scope: &mut Scope) {
         let uid = self.widget_uid();
-        let actions = cx.scope_actions(|cx| self.view.handle_event(cx, event, scope));
+        let actions = cx.capture_actions(|cx| self.view.handle_event(cx, event, scope));
 
         if self.wechat_drop_down(id!(menu)).item_clicked(id!(AddContact), &actions) {
             cx.widget_action(uid, &scope.path, StackViewAction::ShowAddContact);

@@ -298,7 +298,7 @@ pub struct Profile {
 
 impl Widget for Profile {
     fn handle_event(&mut self, cx: &mut Cx, event: &Event, scope: &mut Scope) {
-        let actions = cx.scope_actions(|cx| self.view.handle_event(cx, event, scope));
+        let actions = cx.capture_actions(|cx| self.view.handle_event(cx, event, scope));
         if self
             .view
             .clickable_view(id!(my_profile_frame))
