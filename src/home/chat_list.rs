@@ -120,18 +120,16 @@ impl Widget for ChatList {
         for list_action in cx.scope_actions(|cx| self.view.handle_event(cx, event, scope)) {
             match list_action.as_widget_action().cast() {
                 ClickableViewAction::Click => {
-                    // TODO improve this!!
+                    let widget_action = list_action.as_widget_action();
                     if let Some(chat_id) = 
                         self.chat_list_map.iter()
-                        .filter(|(k, _v)| list_action.as_widget_action().widget_uid_eq(WidgetUid(**k)).is_some())
-                        .map(|(_k, v)| v)
-                        .collect::<Vec<&u64>>()
-                        .first() 
+                            .find(|(key, _value)| widget_action.widget_uid_eq(WidgetUid(**key)).is_some())
+                            .map(|(_key, value)| value)
                     { 
                         cx.widget_action(
                             widget_uid,
                             &scope.path,
-                            ChatListAction::Selected(**chat_id),
+                            ChatListAction::Selected(*chat_id),
                         );
 
                         cx.widget_action(
@@ -159,7 +157,7 @@ impl Widget for ChatList {
                         _ => live_id!(chat),
                     };
 
-                    let mut item = list.item(cx, item_id, template).unwrap();
+                    let item = list.item(cx, item_id, template).unwrap();
 
                     if item_id >= 1 && item_id < chat_entries_count + 1 {
                         let item_index = item_id as usize - 1; // offset by 1 to account for the search bar

@@ -190,7 +190,7 @@ impl Widget for ContactsList {
                         x if x == groups_count + 2 => id!(bottom),
                         _ => id!(contacts_group),
                     };
-                    let mut item = list.item(cx, item_id, template[0]).unwrap();
+                    let item = list.item(cx, item_id, template[0]).unwrap();
 
                     if item_id >= 2 && item_id < groups_count + 2 {
                         let group = &grouped_data[(item_id - 2) as usize];
