@@ -54,16 +54,16 @@ dependencies = [
 ]
 
 [[package]]
-name = "makepad-error-log"
-version = "0.4.0"
-
-[[package]]
 name = "makepad-futures"
 version = "0.4.0"
 
 [[package]]
 name = "makepad-futures-legacy"
 version = "0.7.0"
+
+[[package]]
+name = "makepad-http"
+version = "0.4.0"
 
 [[package]]
 name = "makepad-live-compiler"
@@ -78,7 +78,6 @@ dependencies = [
 name = "makepad-live-id"
 version = "0.4.0"
 dependencies = [
- "makepad-error-log",
  "makepad-live-id-macros",
 ]
 
@@ -130,6 +129,7 @@ version = "0.6.0"
 dependencies = [
  "makepad-futures",
  "makepad-futures-legacy",
+ "makepad-http",
  "makepad-objc-sys",
  "makepad-shader-compiler",
  "makepad-wasm-bridge",
