@@ -53,7 +53,7 @@ cargo makepad android run -p makepad_wechat --release
 ### Install IOS toolchain (First time)
 ```
 rustup toolchain install nightly
-cargo makepad ios install-toolchain
+cargo makepad apple ios install-toolchain
 ```
 
 ### Install app on Apple devivce or iOS simulator
@@ -72,7 +72,7 @@ For iOS, the process is slightly more complicated. The steps involved are:
 1. Once the simulator and device has the "skeleton" app installed and running properly, then it is ready for Makepad to install its application.
 
 ### Makepad Install
-We will run the `cargo makepad ios` command, similar to Android build above, but there are some 3 to 4 additional parameters that need to be filled in:
+We will run the `cargo makepad apple ios` command, similar to Android build above, but there are some 3 to 4 additional parameters that need to be filled in:
 
 `--org-id`
 
@@ -101,13 +101,13 @@ For this example, we have the Bundle Identifier of **`rs.robius.WeChat`**
 ### Install app on IOS simulator
 ```
 cd ~/makepad_wechat
-cargo makepad ios --org=rs.robius --app=WeChat run-sim -p makepad_wechat --release
+cargo makepad apple ios --org=rs.robius --app=WeChat run-sim -p makepad_wechat --release
 ```
 
 ### Install app on IOS device
 ```
 cd ~/makepad_wechat
-cargo makepad ios --ios-version=16 --org-id=<ORGIDVALUE> --org=rs.robius --app=WeChat run-device -p makepad_wechat --release
+cargo makepad apple ios --ios-version=16 --org-id=<ORGIDVALUE> --org=rs.robius --app=WeChat run-device -p makepad_wechat --release
 ```
 
 ## 5. WASM Build
