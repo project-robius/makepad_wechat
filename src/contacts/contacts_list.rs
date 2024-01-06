@@ -113,7 +113,7 @@ live_design! {
                 height: Fit,
                 padding: {top: 14., bottom: 50.}, align: {x: 0.5, y: 0.}
 
-                <Label> {
+                friends = <Label> {
                     width: Fit,
                     height: Fit,
                     draw_text: {
@@ -131,7 +131,8 @@ live_design! {
 pub struct ContactsList {
     #[deref]
     view: View,
-
+    #[live]
+    friends: Label,
     #[rust]
     data: Vec<ContactInfo>,
 }
@@ -175,6 +176,7 @@ impl Widget for ContactsList {
     fn draw_walk(&mut self, cx: &mut Cx2d, scope: &mut Scope, walk: Walk) -> DrawStep {
         let grouped_data = self.group_by_first_letter();
         let groups_count: u64 = grouped_data.len() as u64;
+        let friends_count = self.data.iter().filter(|f| f.kind == ContactKind::People).count();
 
         while let Some(list_item) = self.view.draw_walk(cx, scope, walk).step(){
             if let Some(mut list) = list_item.as_portal_list().borrow_mut() {
@@ -195,6 +197,9 @@ impl Widget for ContactsList {
                             group_widget.set_header_label(&group[0].name[0..1]);
                             group_widget.set_contacts(group.to_vec());
                         }
+                    } else if item_id == groups_count + 2 {
+                    if let Some(mut friends_widget) = item.widget(id!(friends)).borrow_mut::<Label>() {
+                        friends_widget.set_text(format!("{} friends", friends_count).as_str());
                     }
 
                     item.draw_all(cx, &mut Scope::empty());
