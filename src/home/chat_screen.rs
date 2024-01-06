@@ -143,7 +143,7 @@ live_design! {
             dep("crate://self/resources/img/avatars/user6.png"),
         ]
 
-        list: <PortalList> {
+        list = <PortalList> {
             auto_tail: true,
             grab_key_focus: true,
             allow_empty: false,
@@ -202,102 +202,70 @@ live_design! {
     }
 }
 
-#[derive(Live)]
+#[derive(Live, Widget)]
 pub struct Chat {
-    #[walk]
-    walk: Walk,
-    #[layout]
-    layout: Layout,
+    #[deref]
+    view: View,
 
     #[live]
     avatar_images_deps: Vec<LiveDependency>,
 
     #[rust]
     messages: Vec<MessageEntry>,
-    #[live]
-    list: PortalList,
 }
 
 impl LiveHook for Chat {
-    fn before_live_design(cx: &mut Cx) {
-        register_widget!(cx, Chat);
-    }
-
     fn after_new_from_doc(&mut self, _cx: &mut Cx) {
         self.messages = vec![];
     }
 }
 
 impl Widget for Chat {
-    fn handle_widget_event_with(
-        &mut self,
-        cx: &mut Cx,
-        event: &Event,
-        dispatch_action: &mut dyn FnMut(&mut Cx, WidgetActionItem),
-    ) {
-        let _actions = self.list.handle_widget_event(cx, event);
-
-        for action in _actions {
-            dispatch_action(cx, action);
-        }
+    fn handle_event(&mut self, cx: &mut Cx, event: &Event, scope: &mut Scope) {
+        self.view.handle_event(cx, event, scope)
     }
-
-    fn redraw(&mut self, cx: &mut Cx) {
-        self.list.redraw(cx);
-    }
-
-    fn find_widgets(&mut self, path: &[LiveId], cached: WidgetCache, results: &mut WidgetSet) {
-        self.list.find_widgets(path, cached, results);
-    }
-
-    fn draw_walk_widget(&mut self, cx: &mut Cx2d, walk: Walk) -> WidgetDraw {
-        self.draw_walk(cx, walk);
-        WidgetDraw::done()
-    }
-}
-
-impl Chat {
-    pub fn draw_walk(&mut self, cx: &mut Cx2d, walk: Walk) {
+    fn draw_walk(&mut self, cx: &mut Cx2d, scope: &mut Scope, walk: Walk) -> DrawStep {
         let messages_entries_count = self.messages.len() as u64;
-
-        cx.begin_turtle(walk, self.layout);
-
         let range_end = if messages_entries_count > 0 {
             messages_entries_count - 1
         } else {
             0
         };
-        self.list.set_item_range(cx, 0, range_end);
 
-        while self.list.draw_widget(cx).hook_widget().is_some() {
-            while let Some(item_id) = self.list.next_visible_item(cx) {
-                if item_id < messages_entries_count {
-                    let item_index = item_id as usize;
-                    let item_content = &self.messages[item_index];
+        while let Some(item) = self.view.draw_walk(cx, scope, walk).step(){
+            if let Some(mut list) = item.as_portal_list().borrow_mut() {
+                list.set_item_range(cx, 0, range_end);
+                while let Some(item_id) = list.next_visible_item(cx) {
+                    if item_id < messages_entries_count {
+                        let item_index = item_id as usize;
+                        let item_content = &self.messages[item_index];
 
-                    let template = match item_content.direction {
-                        MessageDirection::Outgoing => id!(message_outgoing),
-                        MessageDirection::Incoming => id!(message_incoming),
-                    };
+                        let template = match item_content.direction {
+                            MessageDirection::Outgoing => id!(message_outgoing),
+                            MessageDirection::Incoming => id!(message_incoming),
+                        };
 
-                    let item = self.list.item(cx, item_id, template[0]).unwrap();
+                        let item = list.item(cx, item_id, template[0]).unwrap();
 
-                    item.label(id!(text.label))
-                        .set_text(&item_content.text);
+                        item.label(id!(text.label))
+                            .set_text(&item_content.text);
 
-                    if let Some(avatar_path) = self.avatar_images_deps_path(item_content.avatar) {
-                        item.image(id!(avatar))
-                            .load_image_dep_by_path(cx, avatar_path);
+                        if let Some(avatar_path) = self.avatar_images_deps_path(item_content.avatar) {
+                            item.image(id!(avatar))
+                                .load_image_dep_by_path(cx, avatar_path);
+                        }
+
+                        item.draw_all(cx, &mut Scope::empty());
                     }
-
-                    item.draw_widget_all(cx);
                 }
             }
         }
 
-        cx.end_turtle();
+        DrawStep::done()
     }
+}
 
+impl Chat {
     fn avatar_images_deps_path(&self, id: LiveId) -> Option<&str> {
         match id {
             live_id!(rikarends) =>
@@ -317,9 +285,6 @@ impl Chat {
         }
     }
 }
-
-#[derive(Debug, Clone, PartialEq, WidgetRef)]
-pub struct ChatRef(WidgetRef);
 
 impl ChatRef {
     pub fn set_chat_id(&self, chat_id: u64) {
