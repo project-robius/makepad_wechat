@@ -198,8 +198,9 @@ impl Widget for ContactsList {
                             group_widget.set_contacts(group.to_vec());
                         }
                     } else if item_id == groups_count + 2 {
-                    if let Some(mut friends_widget) = item.widget(id!(friends)).borrow_mut::<Label>() {
-                        friends_widget.set_text(format!("{} friends", friends_count).as_str());
+                        if let Some(mut friends_widget) = item.widget(id!(friends)).borrow_mut::<Label>() {
+                            friends_widget.set_text(format!("{} friends", friends_count).as_str());
+                        }
                     }
 
                     item.draw_all(cx, &mut Scope::empty());
