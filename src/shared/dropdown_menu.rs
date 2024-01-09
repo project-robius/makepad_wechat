@@ -124,8 +124,8 @@ pub struct WechatDropDown {
 }
 
 impl LiveHook for WechatDropDown {
-    fn after_apply(&mut self, cx: &mut Cx, from: ApplyFrom, _index: usize, _nodes: &[LiveNode]) {
-        if self.popup_menu.is_none() || !from.is_from_doc() {
+    fn after_apply_from(&mut self, cx: &mut Cx, apply: &mut Apply) {
+        if self.popup_menu.is_none() || !apply.from.is_from_doc() {
             return;
         }
         let global = cx.global::<PopupMenuGlobal>().clone();
@@ -137,7 +137,7 @@ impl LiveHook for WechatDropDown {
         let list_box = self.popup_menu.unwrap();
         map.get_or_insert(cx, list_box, |cx| {
             PopupMenu::new_from_ptr(cx, Some(list_box))
-        });
+        });   
     }
 }
 #[derive(Clone, DefaultNone, Debug)]
