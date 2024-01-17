@@ -2,7 +2,6 @@ use crate::api::Db;
 use crate::home::chat_list::ChatListAction;
 use crate::home::chat_screen::*;
 use crate::shared::stack_navigation::*;
-use crate::shared::stack_view_action::StackViewAction;
 use makepad_widgets::*;
 use std::collections::HashMap;
 
@@ -212,13 +211,10 @@ live_design! {
 
 app_main!(App);
 
-#[derive(Live)]
+#[derive(Live, LiveHook)]
 pub struct App {
     #[live]
     ui: WidgetRef,
-
-    #[rust]
-    navigation_destinations: HashMap<StackViewAction, LiveId>,
 }
 
 impl LiveRegister for App {
@@ -257,12 +253,6 @@ impl LiveRegister for App {
     } 
 }
 
-impl LiveHook for App {
-    fn after_new_from_doc(&mut self, _cx: &mut Cx) {
-       self.init_navigation_destinations();
-    }
-}
-
 impl MatchEvent for App {
     fn handle_actions(&mut self, cx:&mut Cx, actions: &Actions){
         self.ui.radio_button_set(ids!(
@@ -286,11 +276,7 @@ impl MatchEvent for App {
         self.update_chat_list_info(&actions);
 
         let mut navigation = self.ui.stack_navigation(id!(navigation));
-        navigation.handle_stack_view_actions(
-            cx,
-            &actions,
-            &self.navigation_destinations
-        );
+        navigation.handle_stack_view_actions(cx,&actions);
     }
 }
 
@@ -302,14 +288,6 @@ impl AppMain for App {
 }
 
 impl App {
-    fn init_navigation_destinations(&mut self) {
-        self.navigation_destinations = HashMap::new();
-        self.navigation_destinations.insert(StackViewAction::ShowAddContact, live_id!(add_contact_stack_view));
-        self.navigation_destinations.insert(StackViewAction::ShowMoments, live_id!(moments_stack_view));
-        self.navigation_destinations.insert(StackViewAction::ShowMyProfile, live_id!(my_profile_stack_view));
-        self.navigation_destinations.insert(StackViewAction::ShowChat, live_id!(chat_stack_view));
-    }
-
     fn update_chat_list_info(&mut self, actions: &Actions) {
         for action in actions {
             if let ChatListAction::Selected(id) = action.as_widget_action().cast() {

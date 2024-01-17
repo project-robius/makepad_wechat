@@ -3,7 +3,7 @@ use std::collections::HashMap;
 use makepad_widgets::*;
 use crate::api::{ChatEntry, Db};
 use crate::shared::clickable_view::*;
-use crate::shared::stack_view_action::StackViewAction;
+use crate::shared::stack_navigation::StackNavigationAction;
 
 live_design! {
     import makepad_widgets::view::*;
@@ -136,7 +136,7 @@ impl Widget for ChatList {
                         cx.widget_action(
                             widget_uid,
                             &scope.path,
-                            StackViewAction::ShowChat,
+                            StackNavigationAction::NavigateTo(live_id!(chat_stack_view)),
                         );
                     }
                 }

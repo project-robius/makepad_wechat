@@ -1,7 +1,5 @@
 use makepad_widgets::widget::WidgetCache;
 use makepad_widgets::*;
-use crate::shared::stack_view_action::StackViewAction;
-use std::collections::HashMap;
 
 live_design! {
     import makepad_widgets::base::*;
@@ -67,6 +65,12 @@ live_design! {
 
         root_view = <View> {}
     }
+}
+
+#[derive(Clone, DefaultNone, Eq, Hash, PartialEq, Debug)]
+pub enum StackNavigationAction {
+    None,
+    NavigateTo(LiveId)
 }
 
 #[derive(Live, LiveHook, Widget)]
@@ -232,11 +236,10 @@ impl StackNavigationRef {
         }
     }
 
-    pub fn handle_stack_view_actions(&mut self, cx: &mut Cx, actions: &Actions, destinations: &HashMap<StackViewAction, LiveId>) {
+    pub fn handle_stack_view_actions(&mut self, cx: &mut Cx, actions: &Actions) {
         for action in actions {
-            let stack_view_action = action.as_widget_action().cast();
-            if let Some(stack_view_id) = destinations.get(&stack_view_action) {
-                self.show_stack_view_by_id(*stack_view_id, cx);
+            if let StackNavigationAction::NavigateTo(stack_view_id) = action.as_widget_action().cast() {
+                self.show_stack_view_by_id(stack_view_id, cx);
                 break;
             }
         }

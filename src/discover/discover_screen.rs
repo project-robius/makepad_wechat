@@ -1,5 +1,5 @@
 use crate::shared::clickable_view::*;
-use crate::shared::stack_view_action::StackViewAction;
+use crate::shared::stack_navigation::StackNavigationAction;
 use makepad_widgets::widget::WidgetCache;
 use makepad_widgets::*;
 
@@ -198,7 +198,7 @@ impl Widget for Discover {
             .clickable_view(id!(moments_link))
             .clicked(&actions)
         {            
-            cx.widget_action(uid, &scope.path, StackViewAction::ShowMoments);
+            cx.widget_action(uid, &scope.path, StackNavigationAction::NavigateTo(live_id!(moments_stack_view)));
         }
     }
 
