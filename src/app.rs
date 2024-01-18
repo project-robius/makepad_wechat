@@ -1,7 +1,6 @@
 use crate::api::Db;
 use crate::home::chat_list::ChatListAction;
 use crate::home::chat_screen::*;
-use crate::shared::stack_navigation::*;
 use makepad_widgets::*;
 use std::collections::HashMap;
 
@@ -18,8 +17,8 @@ live_design! {
     import crate::profile::profile_screen::ProfileScreen
     import crate::profile::my_profile_screen::MyProfileScreen
 
+    import crate::shared::styles::TITLE_TEXT;
     import crate::shared::clickable_view::ClickableView
-    import crate::shared::stack_navigation::*;
 
     ICON_CHAT = dep("crate://self/resources/icons/chat.svg")
     ICON_CONTACTS = dep("crate://self/resources/icons/contacts.svg")
@@ -228,7 +227,6 @@ impl LiveRegister for App {
         crate::shared::search_bar::live_design(cx);
         crate::shared::popup_menu::live_design(cx);
         crate::shared::dropdown_menu::live_design(cx);
-        crate::shared::stack_navigation::live_design(cx);
         crate::shared::clickable_view::live_design(cx);
 
         // home - chats
