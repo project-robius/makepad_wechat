@@ -161,7 +161,9 @@ live_design! {
                                 }
                             }
                         }
-                        <MomentsScreen> {}
+                        body = {
+                            <MomentsScreen> {}
+                        }
                     }
 
                     add_contact_stack_view = <StackNavigationView> {
@@ -174,7 +176,9 @@ live_design! {
                                 }
                             }
                         }
-                        <AddContactScreen> {}
+                        body = {
+                            <AddContactScreen> {}
+                        }
                     }
 
                     my_profile_stack_view = <StackNavigationView> {
@@ -187,7 +191,9 @@ live_design! {
                                 }
                             }
                         }
-                        <MyProfileScreen> {}
+                        body = {
+                            <MyProfileScreen> {}
+                        }
                     }
 
                     chat_stack_view = <StackNavigationView> {
@@ -200,7 +206,9 @@ live_design! {
                                 }
                             }
                         }
-                        chat_screen = <ChatScreen> {}
+                        body = {
+                            chat_screen = <ChatScreen> {}
+                        }
                     }
                 }
             }
