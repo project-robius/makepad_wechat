@@ -1,8 +1,6 @@
 use crate::api::Db;
 use crate::home::chat_list::ChatListAction;
 use crate::home::chat_screen::*;
-use crate::shared::stack_navigation::*;
-use crate::shared::stack_view_action::StackViewAction;
 use makepad_widgets::*;
 use std::collections::HashMap;
 
@@ -19,8 +17,8 @@ live_design! {
     import crate::profile::profile_screen::ProfileScreen
     import crate::profile::my_profile_screen::MyProfileScreen
 
+    import crate::shared::styles::TITLE_TEXT;
     import crate::shared::clickable_view::ClickableView
-    import crate::shared::stack_navigation::*;
 
     ICON_CHAT = dep("crate://self/resources/icons/chat.svg")
     ICON_CONTACTS = dep("crate://self/resources/icons/contacts.svg")
@@ -163,7 +161,9 @@ live_design! {
                                 }
                             }
                         }
-                        <MomentsScreen> {}
+                        body = {
+                            <MomentsScreen> {}
+                        }
                     }
 
                     add_contact_stack_view = <StackNavigationView> {
@@ -176,7 +176,9 @@ live_design! {
                                 }
                             }
                         }
-                        <AddContactScreen> {}
+                        body = {
+                            <AddContactScreen> {}
+                        }
                     }
 
                     my_profile_stack_view = <StackNavigationView> {
@@ -189,7 +191,9 @@ live_design! {
                                 }
                             }
                         }
-                        <MyProfileScreen> {}
+                        body = {
+                            <MyProfileScreen> {}
+                        }
                     }
 
                     chat_stack_view = <StackNavigationView> {
@@ -202,7 +206,9 @@ live_design! {
                                 }
                             }
                         }
-                        chat_screen = <ChatScreen> {}
+                        body = {
+                            chat_screen = <ChatScreen> {}
+                        }
                     }
                 }
             }
@@ -212,13 +218,10 @@ live_design! {
 
 app_main!(App);
 
-#[derive(Live)]
+#[derive(Live, LiveHook)]
 pub struct App {
     #[live]
     ui: WidgetRef,
-
-    #[rust]
-    navigation_destinations: HashMap<StackViewAction, LiveId>,
 }
 
 impl LiveRegister for App {
@@ -232,7 +235,6 @@ impl LiveRegister for App {
         crate::shared::search_bar::live_design(cx);
         crate::shared::popup_menu::live_design(cx);
         crate::shared::dropdown_menu::live_design(cx);
-        crate::shared::stack_navigation::live_design(cx);
         crate::shared::clickable_view::live_design(cx);
 
         // home - chats
@@ -255,12 +257,6 @@ impl LiveRegister for App {
         crate::profile::profile_screen::live_design(cx);
         crate::profile::my_profile_screen::live_design(cx);
     } 
-}
-
-impl LiveHook for App {
-    fn after_new_from_doc(&mut self, _cx: &mut Cx) {
-       self.init_navigation_destinations();
-    }
 }
 
 impl MatchEvent for App {
@@ -286,11 +282,7 @@ impl MatchEvent for App {
         self.update_chat_list_info(&actions);
 
         let mut navigation = self.ui.stack_navigation(id!(navigation));
-        navigation.handle_stack_view_actions(
-            cx,
-            &actions,
-            &self.navigation_destinations
-        );
+        navigation.handle_stack_view_actions(cx,&actions);
     }
 }
 
@@ -302,14 +294,6 @@ impl AppMain for App {
 }
 
 impl App {
-    fn init_navigation_destinations(&mut self) {
-        self.navigation_destinations = HashMap::new();
-        self.navigation_destinations.insert(StackViewAction::ShowAddContact, live_id!(add_contact_stack_view));
-        self.navigation_destinations.insert(StackViewAction::ShowMoments, live_id!(moments_stack_view));
-        self.navigation_destinations.insert(StackViewAction::ShowMyProfile, live_id!(my_profile_stack_view));
-        self.navigation_destinations.insert(StackViewAction::ShowChat, live_id!(chat_stack_view));
-    }
-
     fn update_chat_list_info(&mut self, actions: &Actions) {
         for action in actions {
             if let ChatListAction::Selected(id) = action.as_widget_action().cast() {
