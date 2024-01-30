@@ -146,7 +146,6 @@ live_design! {
         list = <PortalList> {
             auto_tail: true,
             grab_key_focus: true,
-            allow_empty: false,
 
             width: Fill, height: Fill
             flow: Down, spacing: 0.
@@ -225,7 +224,7 @@ impl Widget for Chat {
         self.view.handle_event(cx, event, scope)
     }
     fn draw_walk(&mut self, cx: &mut Cx2d, scope: &mut Scope, walk: Walk) -> DrawStep {
-        let messages_entries_count = self.messages.len() as u64;
+        let messages_entries_count = self.messages.len();
         let range_end = if messages_entries_count > 0 {
             messages_entries_count - 1
         } else {
@@ -235,17 +234,17 @@ impl Widget for Chat {
         while let Some(item) = self.view.draw_walk(cx, scope, walk).step(){
             if let Some(mut list) = item.as_portal_list().borrow_mut() {
                 list.set_item_range(cx, 0, range_end);
+
                 while let Some(item_id) = list.next_visible_item(cx) {
                     if item_id < messages_entries_count {
-                        let item_index = item_id as usize;
-                        let item_content = &self.messages[item_index];
+                        let item_content = &self.messages[item_id];
 
                         let template = match item_content.direction {
-                            MessageDirection::Outgoing => id!(message_outgoing),
-                            MessageDirection::Incoming => id!(message_incoming),
+                            MessageDirection::Outgoing => live_id!(message_outgoing),
+                            MessageDirection::Incoming => live_id!(message_incoming),
                         };
 
-                        let item = list.item(cx, item_id, template[0]).unwrap();
+                        let item = list.item(cx, item_id, template).unwrap();
 
                         item.label(id!(text.label))
                             .set_text(&item_content.text);
@@ -255,6 +254,11 @@ impl Widget for Chat {
                                 .load_image_dep_by_path(cx, avatar_path);
                         }
 
+                        item.draw_all(cx, &mut Scope::empty());
+                    } else {
+                        // TODO This is to overcome an strange behavior in PortalList when
+                        // it attempts to draw an item that is out of range. 
+                        let item = list.item(cx, item_id, live_id!(message_outgoing)).unwrap();
                         item.draw_all(cx, &mut Scope::empty());
                     }
                 }

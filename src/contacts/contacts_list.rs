@@ -175,7 +175,7 @@ impl Widget for ContactsList {
 
     fn draw_walk(&mut self, cx: &mut Cx2d, scope: &mut Scope, walk: Walk) -> DrawStep {
         let grouped_data = self.group_by_first_letter();
-        let groups_count: u64 = grouped_data.len() as u64;
+        let groups_count: usize = grouped_data.len();
         let friends_count = self.data.iter().filter(|f| f.kind == ContactKind::People).count();
 
         while let Some(list_item) = self.view.draw_walk(cx, scope, walk).step(){

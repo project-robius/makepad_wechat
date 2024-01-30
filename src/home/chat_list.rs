@@ -145,7 +145,7 @@ impl Widget for ChatList {
 
     fn draw_walk(&mut self, cx: &mut Cx2d, scope: &mut Scope, walk: Walk) -> DrawStep {
         // todo: sort by newest incoming?
-        let chat_entries_count = self.chat_entries.len() as u64;
+        let chat_entries_count = self.chat_entries.len();
 
         while let Some(list_item) = self.view.draw_walk(cx, scope, walk).step(){
             if let Some(mut list) = list_item.as_portal_list().borrow_mut() {

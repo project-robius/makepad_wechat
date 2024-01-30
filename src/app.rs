@@ -2,7 +2,6 @@ use crate::api::Db;
 use crate::home::chat_list::ChatListAction;
 use crate::home::chat_screen::*;
 use makepad_widgets::*;
-use std::collections::HashMap;
 
 live_design! {
     import makepad_widgets::base::*;
