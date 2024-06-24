@@ -47,7 +47,7 @@ live_design! {
         draw_radio: {
             radio_type: Tab,
             fn pixel(self) -> vec4 {
-                return #fff
+                return #f9f9f9
             }
         }
         draw_text: {
@@ -108,12 +108,12 @@ live_design! {
 
                         mobile_menu = <RoundedView> {
                             width: Fill,
-                            height: 80,
+                            height: 65,
                             draw_bg: {
                                 instance radius: 0.0,
-                                instance border_width: 1.0,
-                                instance border_color: #aaa,
-                                color: #fff
+                                instance border_width: 0.0,
+                                instance border_color: #f8f8f8,
+                                color: #f9f9f9
                             }
 
                             mobile_modes = <View> {
