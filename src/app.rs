@@ -83,7 +83,7 @@ live_design! {
                             mobile_modes = <View> {
                                 tab1 = <AppTab> {
                                     animator: {selected = {default: on}}
-                                    label: "Chat"
+                                    text: "Chat"
                                     draw_icon: {
                                         svg_file: (ICON_CHAT),
                                         fn get_color(self) -> vec4 {
@@ -99,7 +99,7 @@ live_design! {
                                     flow: Down, spacing: 5.0, align: {x: 0.5, y: 0.5}
                                 }
                                 tab2 = <AppTab> {
-                                    label: "Contacts",
+                                    text: "Contacts",
                                     draw_icon: {
                                         svg_file: (ICON_CONTACTS),
                                         fn get_color(self) -> vec4 {
@@ -115,7 +115,7 @@ live_design! {
                                     flow: Down, spacing: 5.0, align: {x: 0.5, y: 0.5}
                                 }
                                 tab3 = <AppTab> {
-                                    label: "Discover",
+                                    text: "Discover",
                                     draw_icon: {
                                         svg_file: (ICON_DISCOVER),
                                         fn get_color(self) -> vec4 {
@@ -131,7 +131,7 @@ live_design! {
                                     flow: Down, spacing: 5.0, align: {x: 0.5, y: 0.5}
                                 }
                                 tab4 = <AppTab> {
-                                    label: "Me",
+                                    text: "Me",
                                     draw_icon: {
                                         svg_file: (ICON_ME),
                                         fn get_color(self) -> vec4 {
