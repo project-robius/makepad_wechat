@@ -27,7 +27,7 @@ live_design! {
 
         preview = <View> {
             width: Fill, height: Fit
-            flow: Down, spacing: 7.
+            flow: Down, spacing: 2.
 
             username = <Label> {
                 width: Fill, height: Fit
@@ -41,6 +41,7 @@ live_design! {
             content = <Label> {
                 width: Fit, height: Fit
                 draw_text:{
+                    color: #a0a0a0
                     text_style: <REGULAR_TEXT>{
                         font_size: 10.5
                     },
@@ -50,8 +51,10 @@ live_design! {
         }
 
         timestamp = <Label> {
+            margin: {right: 5}
             width: Fit, height: Fit
             draw_text:{
+                color: #a0a0a0
                 text_style: <REGULAR_TEXT>{
                     font_size: 8.
                 },
@@ -173,7 +176,7 @@ impl Widget for ChatList {
                             .set_text(&item_content.timestamp);
 
                         if let Some(avatar_path) = self.avatar_images_deps_path(item_content.avatar) {
-                            item.image(id!(avatar))
+                            let _ = item.image(id!(avatar))
                                 .load_image_dep_by_path(cx, avatar_path);
                         }
                     }

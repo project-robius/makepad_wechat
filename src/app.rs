@@ -6,6 +6,7 @@ use makepad_widgets::*;
 live_design! {
     import makepad_widgets::base::*;
     import makepad_widgets::theme_desktop_dark::*;
+    import makepad_draw::shader::std::*;
 
     import crate::home::home_screen::HomeScreen
     import crate::home::chat_screen::ChatScreen
@@ -30,19 +31,68 @@ live_design! {
     }
 
     AppTab = <RadioButton> {
-        width: Fit,
-        height: Fill,
-        align: {x: 0.0, y: 0.0}
+        width: Fit, height: Fit
+        flow: Down, spacing: 7.0, align: {x: 0.5, y: 0.5}
+        align: {x: 0.5, y: 0.5}
+
+        icon_walk: { margin: { left: 0. } }
+
+        label_walk: {
+            width: Fit, height: Fit,
+        margin: { left: 0. }
+        }
+        label_align: { y: 0.0 }
+
+
         draw_radio: {
             radio_type: Tab,
-            color_active: #fff,
-            color_inactive: #fff,
+            fn pixel(self) -> vec4 {
+                return #f9f9f9
+            }
         }
         draw_text: {
             color_selected: #0b0,
             color_unselected: #000,
             color_unselected_hover: #111,
-            text_style: <H3_TEXT_REGULAR> {}
+            
+            fn get_color(self) -> vec4 {
+                return mix(
+                    mix(
+                        self.color_unselected,
+                        self.color_unselected_hover,
+                        self.hover
+                    ),
+                    self.color_selected,
+                    self.selected
+                )
+            }
+            
+            text_style: <H3_TEXT_REGULAR> {
+                font_size: 8.0,
+            }
+        }
+        draw_icon: {
+            fn get_color(self) -> vec4 {
+                return mix(
+                    #000,
+                    #0b0,
+                    self.selected
+                )
+            }
+        }
+        icon_walk: {width: 20, height: 20}
+    }
+
+    TitleContainer = <View> {
+        width: Fill, height: Fit,
+        align: {x: 0.5, y: 0.5}
+        margin: {left: 145.}
+
+        title = <H4> {
+            margin: 0.
+            draw_text: {
+                color: #000,
+            }
         }
     }
 
@@ -71,80 +121,43 @@ live_design! {
 
                         mobile_menu = <RoundedView> {
                             width: Fill,
-                            height: 80,
-                            flow: Right, spacing: 6.0, padding: 10
+                            height: 65,
                             draw_bg: {
                                 instance radius: 0.0,
-                                instance border_width: 1.0,
-                                instance border_color: #aaa,
-                                color: #fff
+                                instance border_width: 0.0,
+                                instance border_color: #f8f8f8,
+                                color: #f9f9f9
                             }
 
                             mobile_modes = <View> {
+                                align: {x: 0.5, y: 0.5}
+                                flow: Right, padding: {top: 5, bottom: 5}
+                                spacing: 60.0
+
                                 tab1 = <AppTab> {
                                     animator: {selected = {default: on}}
-                                    label: "Chat"
+                                    text: "Chat"
                                     draw_icon: {
                                         svg_file: (ICON_CHAT),
-                                        fn get_color(self) -> vec4 {
-                                            return mix(
-                                                #000,
-                                                #0b0,
-                                                self.selected
-                                            )
-                                        }
                                     }
-                                    width: Fill,
-                                    icon_walk: {width: 20, height: 20}
-                                    flow: Down, spacing: 5.0, align: {x: 0.5, y: 0.5}
                                 }
                                 tab2 = <AppTab> {
-                                    label: "Contacts",
+                                    text: "Contacts",
                                     draw_icon: {
                                         svg_file: (ICON_CONTACTS),
-                                        fn get_color(self) -> vec4 {
-                                            return mix(
-                                                #000,
-                                                #0b0,
-                                                self.selected
-                                            )
-                                        }
                                     }
-                                    width: Fill
-                                    icon_walk: {width: 20, height: 20}
-                                    flow: Down, spacing: 5.0, align: {x: 0.5, y: 0.5}
                                 }
                                 tab3 = <AppTab> {
-                                    label: "Discover",
+                                    text: "Discover",
                                     draw_icon: {
                                         svg_file: (ICON_DISCOVER),
-                                        fn get_color(self) -> vec4 {
-                                            return mix(
-                                                #000,
-                                                #0b0,
-                                                self.selected
-                                            )
-                                        }
                                     }
-                                    width: Fill
-                                    icon_walk: {width: 20, height: 20}
-                                    flow: Down, spacing: 5.0, align: {x: 0.5, y: 0.5}
                                 }
                                 tab4 = <AppTab> {
-                                    label: "Me",
+                                    text: "Me",
                                     draw_icon: {
                                         svg_file: (ICON_ME),
-                                        fn get_color(self) -> vec4 {
-                                            return mix(
-                                                #000,
-                                                #0b0,
-                                                self.selected
-                                            )
-                                        }
                                     }
-                                    width: Fill
-                                    icon_walk: {width: 20, height: 20}
-                                    flow: Down, spacing: 5.0, align: {x: 0.5, y: 0.5}
                                 }
                             }
                         }
@@ -153,7 +166,7 @@ live_design! {
                     moments_stack_view = <StackNavigationView> {
                         header = {
                             content = {
-                                title_container = {
+                                title_container = <TitleContainer> {
                                     title = {
                                         text: "Moments"
                                     }
@@ -168,7 +181,7 @@ live_design! {
                     add_contact_stack_view = <StackNavigationView> {
                         header = {
                             content = {
-                                title_container = {
+                                title_container = <TitleContainer> {
                                     title = {
                                         text: "Add Contact"
                                     }
@@ -183,7 +196,7 @@ live_design! {
                     my_profile_stack_view = <StackNavigationView> {
                         header = {
                             content = {
-                                title_container = {
+                                title_container = <TitleContainer> {
                                     title = {
                                         text: "My Profile"
                                     }
@@ -198,7 +211,7 @@ live_design! {
                     chat_stack_view = <StackNavigationView> {
                         header = {
                             content = {
-                                title_container = {
+                                title_container = <TitleContainer> {
                                     title = {
                                         text: " "
                                     }
@@ -235,6 +248,7 @@ impl LiveRegister for App {
         crate::shared::popup_menu::live_design(cx);
         crate::shared::dropdown_menu::live_design(cx);
         crate::shared::clickable_view::live_design(cx);
+        crate::shared::text_input::live_design(cx);
 
         // home - chats
         crate::home::home_screen::live_design(cx);

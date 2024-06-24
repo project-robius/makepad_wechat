@@ -6,6 +6,7 @@ live_design! {
     import makepad_widgets::theme_desktop_dark::*;
 
     import crate::shared::styles::*;
+    import crate::shared::text_input::*;
 
     SearchBar = <View> {
         width: Fill, height: Fit
@@ -13,8 +14,7 @@ live_design! {
         draw_bg: {
             color: #EDEDED;
         }
-
-        input = <TextInput> {
+        input = <CustomTextInput> {
             width: Fill, height: Fit, margin: {left: 5.0, right: 5.0, top: 5.0, bottom: 15.0}
             clip_x: true,
             clip_y: true,
