@@ -173,7 +173,7 @@ impl Widget for ChatList {
                             .set_text(&item_content.timestamp);
 
                         if let Some(avatar_path) = self.avatar_images_deps_path(item_content.avatar) {
-                            item.image(id!(avatar))
+                            let _ = item.image(id!(avatar))
                                 .load_image_dep_by_path(cx, avatar_path);
                         }
                     }
