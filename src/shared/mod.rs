@@ -5,3 +5,4 @@ pub mod helpers;
 pub mod popup_menu;
 pub mod search_bar;
 pub mod styles;
+pub mod text_input;

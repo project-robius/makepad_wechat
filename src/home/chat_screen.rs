@@ -11,6 +11,7 @@ live_design! {
     import crate::shared::styles::*;
     import crate::shared::helpers::*;
     import crate::shared::search_bar::SearchBar;
+    import crate::shared::text_input::CustomTextInput;
 
     IMG_DEFAULT_AVATAR = dep("crate://self/resources/img/default_avatar.png")
     IMG_SMILEY_FACE_BW = dep("crate://self/resources/img/smiley_face_bw.png")
@@ -165,7 +166,9 @@ live_design! {
         chat = <Chat> {}
         <View> {
             width: Fill, height: Fit
-            flow: Right, align: {y: 0.5}, padding: 10.
+            flow: Right, align: {x: 0.5, y: 0.5}
+            padding: 4
+            spacing: 5
             show_bg: true,
             draw_bg: {
                 color: #f8
@@ -178,10 +181,10 @@ live_design! {
             message_input = <SearchBar> {
                 show_bg: false
                 input = {
-                    width: Fill, height: Fit, margin: 0
-                    empty_message: " "
+                    width: Fill, height: 30, margin: 0
+                    empty_message: ""
                     draw_text:{
-                        text_style:<REGULAR_TEXT>{font_size: 11},
+                        text_style:<REGULAR_TEXT>{font_size: 10.5},
 
                         fn get_color(self) -> vec4 {
                             return #0

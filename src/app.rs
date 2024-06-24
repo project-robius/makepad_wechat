@@ -235,6 +235,7 @@ impl LiveRegister for App {
         crate::shared::popup_menu::live_design(cx);
         crate::shared::dropdown_menu::live_design(cx);
         crate::shared::clickable_view::live_design(cx);
+        crate::shared::text_input::live_design(cx);
 
         // home - chats
         crate::home::home_screen::live_design(cx);
