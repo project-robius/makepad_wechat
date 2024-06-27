@@ -83,15 +83,17 @@ live_design! {
         icon_walk: {width: 20, height: 20}
     }
 
-    TitleContainer = <View> {
-        width: Fill, height: Fit,
-        align: {x: 0.5, y: 0.5}
-        margin: {left: 145.}
-
-        title = <H4> {
-            margin: 0.
-            draw_text: {
-                color: #000,
+    // Override the default navigation view title text color
+    WeChatNavigationView = <StackNavigationView> {
+        header = {
+            content = {
+                title_container = {
+                    title = {
+                        draw_text: {
+                            color: #000,
+                        }
+                    }
+                }
             }
         }
     }
@@ -163,10 +165,10 @@ live_design! {
                         }
                     }
 
-                    moments_stack_view = <StackNavigationView> {
+                    moments_stack_view = <WeChatNavigationView> {
                         header = {
                             content = {
-                                title_container = <TitleContainer> {
+                                title_container = {
                                     title = {
                                         text: "Moments"
                                     }
@@ -178,10 +180,10 @@ live_design! {
                         }
                     }
 
-                    add_contact_stack_view = <StackNavigationView> {
+                    add_contact_stack_view = <WeChatNavigationView> {
                         header = {
                             content = {
-                                title_container = <TitleContainer> {
+                                title_container = {
                                     title = {
                                         text: "Add Contact"
                                     }
@@ -193,10 +195,10 @@ live_design! {
                         }
                     }
 
-                    my_profile_stack_view = <StackNavigationView> {
+                    my_profile_stack_view = <WeChatNavigationView> {
                         header = {
                             content = {
-                                title_container = <TitleContainer> {
+                                title_container = {
                                     title = {
                                         text: "My Profile"
                                     }
@@ -208,10 +210,10 @@ live_design! {
                         }
                     }
 
-                    chat_stack_view = <StackNavigationView> {
+                    chat_stack_view = <WeChatNavigationView> {
                         header = {
                             content = {
-                                title_container = <TitleContainer> {
+                                title_container = {
                                     title = {
                                         text: " "
                                     }
